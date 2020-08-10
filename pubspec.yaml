@@ -22,6 +22,7 @@ dependencies:
   shared_preferences: ^0.5.8
   json_serializable: ^3.3.0
   google_fonts: ^1.1.0
+  flutter_svg: ^0.18.0
 
 dev_dependencies:
   flutter_test:
@@ -30,3 +31,5 @@ dev_dependencies:
 flutter:
 
   uses-material-design: true
+  assets:
+    - assets/logo.png
