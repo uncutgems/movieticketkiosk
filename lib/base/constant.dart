@@ -225,4 +225,5 @@ class Constant {
   static const String priceOfPosition3 = 'PriceOfPosition3';
   static const String seatDataId = 'seatDataId';
   static const String ticketNo = 'ticketNo';
+  static const String lstPlan = 'lstPlan';
 }

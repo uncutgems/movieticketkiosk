@@ -1,5 +1,11 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/pages/film_schedule/film_schedule_bloc.dart';
+import 'package:ncckios/widgets/calendar/date_helper.dart';
+import 'package:ncckios/widgets/calendar/horizontal_calendar.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
@@ -9,13 +15,34 @@ class FilmSchedulePage extends StatefulWidget {
 }
 
 class _FilmSchedulePageState extends State<FilmSchedulePage> {
-  final CalendarController _calendarController = CalendarController();
   DateTime currentDate = DateTime.now();
+  FilmScheduleBloc bloc = FilmScheduleBloc();
+
+
+  @override
+  void initState() {
+    bloc.add(FilmScheduleEventGetTime());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    print('Hello World');
+    return BlocBuilder<FilmScheduleBloc, FilmScheduleState>(
+    cubit: bloc,
+      builder: (BuildContext context, FilmScheduleState state) {
+        if (state is FilmScheduleInitial) {
+          return mainScreen(context);
+        } else if (state is FilmScheduleStateGetTime) {
+          return mainScreen(context);
+        }
+        return const Material();
+      },
+    );
+  }
 
+
+
+  Widget mainScreen(BuildContext context){
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
@@ -30,47 +57,30 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
       ),
       body: ListView(
         children: <Widget>[
-          Container(
-            color: Colors.red,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: <Widget>[
-              calendarBoxDay(context, DateTime.now()),
-              calendarBoxDay(
-                  context, DateTime.now().add(const Duration(days: 1))),
-              calendarBoxDay(
-                  context, DateTime.now().add(const Duration(days: 2))),
-              calendarBoxDay(
-                  context, DateTime.now().add(const Duration(days: 3))),
-              calendarBoxDay(
-                  context, DateTime.now().add(const Duration(days: 4))),
-              calendarBoxDay(
-                  context, DateTime.now().add(const Duration(days: 5))),
-            ],
+          HorizontalCalendar(
+            height: 32,
+            onDateSelected: (DateTime date){
+              currentDate =date;
+              print('llll $currentDate');
+            },
+            padding: const EdgeInsets.all(0),
+            labelOrder: const <LabelType>[LabelType.weekday,LabelType.date],
+            weekDayFormat: 'EEEE',
+            dateFormat: 'dd/MM',
+            dateTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+            weekDayTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+            firstDate: DateTime.now(),
+            lastDate: DateTime.now().add(const Duration(days: 6)),
+            selectedDecoration: const BoxDecoration(
+                color: AppColor.red
+            ),
           )
+
         ],
       ),
     );
   }
 
-  Widget calendarSlide(BuildContext context) {
-    return TableCalendar(
-      locale: 'vi',
-      calendarController: _calendarController,
-//        events: _events,
-//        holidays: _holidays,
-      initialCalendarFormat: CalendarFormat.month,
-
-      formatAnimation: FormatAnimation.slide,
-      startingDayOfWeek: StartingDayOfWeek.sunday,
-      availableGestures: AvailableGestures.all,
-      availableCalendarFormats: const <CalendarFormat, String>{
-        CalendarFormat.month: '',
-        CalendarFormat.week: '',
-      },
-    );
-  }
 
   Widget calendarBoxDay(BuildContext context, DateTime date) {
     String formattedDay = DateFormat('EEEE', 'vi').format(date);
