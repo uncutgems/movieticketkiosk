@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:ncckios/repository/seat_repository.dart';
 
 import '../../base/api_handler.dart';
+import '../../model/entity.dart';
 
 part 'select_seat_event.dart';
 
@@ -21,8 +22,8 @@ class SelectSeatBloc extends Bloc<SelectSeatEvent, SelectSeatState> {
     if (event is GetSeatDataSelectSeatEvent) {
       try {
         yield LoadSeatDataSelectSeatState();
-        await seatRepository.getSeat(event.planId);
-        yield ReceiveSeatDataSelectSeatState();
+        final List<Seat> seatList = await seatRepository.getSeat(event.planId);
+        yield ReceiveSeatDataSelectSeatState(seatList);
       } on APIException catch (e) {
         yield FailToReceiveSeatDataSelectSeatState();
       }

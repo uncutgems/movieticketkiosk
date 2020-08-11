@@ -5,8 +5,12 @@ abstract class SelectSeatState {}
 
 class SelectSeatInitial extends SelectSeatState {}
 
-class LoadSeatDataSelectSeatState extends SelectSeatState{}
+class LoadSeatDataSelectSeatState extends SelectSeatState {}
 
-class ReceiveSeatDataSelectSeatState extends SelectSeatState{}
+class ReceiveSeatDataSelectSeatState extends SelectSeatState {
+  ReceiveSeatDataSelectSeatState(this.seatList);
 
-class FailToReceiveSeatDataSelectSeatState extends SelectSeatState{}
+  final List<Seat> seatList;
+}
+
+class FailToReceiveSeatDataSelectSeatState extends SelectSeatState {}

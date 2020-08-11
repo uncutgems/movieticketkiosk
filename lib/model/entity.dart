@@ -323,7 +323,6 @@ class Session {
       return Session();
     }
 
-
     return Session(
       id: getInt(Constant.id, data),
       planCinemaId: getInt(Constant.planCinemaId, data),
@@ -362,10 +361,14 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3))) {
+        (isOnlineSelling == null ||
+            identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null ||
+            identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null ||
+            identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null ||
+            identical(priceOfPosition3, this.priceOfPosition3))) {
       return this;
     }
 
@@ -419,6 +422,8 @@ class Session {
 @JsonSerializable(nullable: false)
 class Seat {
   Seat({
+    this.rows,
+    this.column,
     this.seatId,
     this.code,
     this.type,
@@ -438,6 +443,8 @@ class Seat {
       status: getInt(Constant.status, data),
       seatDataId: getInt(Constant.seatDataId, data),
       price: getDouble(Constant.price, data),
+      rows: getInt(Constant.rows, data),
+      column: getInt(Constant.column, data),
     );
   }
 
@@ -448,23 +455,28 @@ class Seat {
     int status,
     int seatDataId,
     double price,
+    int column,
+    int rows,
   }) {
     if ((seatId == null || identical(seatId, this.seatId)) &&
         (code == null || identical(code, this.code)) &&
         (type == null || identical(type, this.type)) &&
         (status == null || identical(status, this.status)) &&
         (seatDataId == null || identical(seatDataId, this.seatDataId)) &&
-        (price == null || identical(price, this.price))) {
+        (price == null || identical(price, this.price)) &&
+        (column == null || identical(column, this.column)) &&
+        (rows == null || identical(rows, this.rows))) {
       return this;
     }
-
-    return Seat(
+    return  Seat(
       seatId: seatId ?? this.seatId,
       code: code ?? this.code,
       type: type ?? this.type,
       status: status ?? this.status,
       seatDataId: seatDataId ?? this.seatDataId,
       price: price ?? this.price,
+      column: column ?? this.column,
+      rows: rows ?? this.rows,
     );
   }
 
@@ -474,6 +486,8 @@ class Seat {
   final int status;
   final int seatDataId;
   final double price;
+  final int column;
+  final int rows;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -483,6 +497,8 @@ class Seat {
       Constant.status: status,
       Constant.seatDataId: seatDataId,
       Constant.price: price,
+      Constant.rows: rows,
+      Constant.column: column,
     };
   }
 }

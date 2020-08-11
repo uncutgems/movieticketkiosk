@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
 }
 
 MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
-  final dynamic data = settings.arguments;
+  //final dynamic data = settings.arguments;
   switch (settings.name) {
     case RoutesName.splashPage:
       return MaterialPageRoute<dynamic>(

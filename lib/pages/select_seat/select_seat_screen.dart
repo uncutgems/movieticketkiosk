@@ -1,6 +1,10 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
+
+import '../../model/entity.dart';
 
 class SelectSeatPage extends StatefulWidget {
   @override
@@ -9,6 +13,8 @@ class SelectSeatPage extends StatefulWidget {
 
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
+  List<Seat> finalSeatList;
+
 
   @override
   void initState() {
@@ -29,7 +35,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       builder: (BuildContext context, SelectSeatState state) {
         print(state);
         if (state is ReceiveSeatDataSelectSeatState) {
-          return _showSeat(context);
+          return _showSeat(context, state);
         } else if (state is FailToReceiveSeatDataSelectSeatState) {}
 
         return Container();
@@ -37,8 +43,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     );
   }
 
-  Widget _showSeat(BuildContext context) {
+  Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final int maximun = findMax(state.seatList);
+    print(maximun);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -59,8 +67,29 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               ),
             ),
           ),
+          GridView.count(
+            crossAxisCount: maximun,
+
+
+          ),
         ],
       ),
     );
   }
+
+
+
+
+
+  int findMax(List<Seat> myList) {
+    int maxColumnNumber = 18;
+    if (myList != null && myList.isNotEmpty) {
+      maxColumnNumber = myList.map<int>((e) => e.column).reduce(max);
+    }
+    return maxColumnNumber;
+  }
+
+
+
+
 }
