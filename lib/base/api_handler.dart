@@ -37,7 +37,7 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: jsonDecode(response.body) as Map<String, dynamic>,
+        response: jsonDecode(response.body),
       );
     } else {
       final Map<String, dynamic> jsonError = jsonDecode(response.body) as Map<String, dynamic>;
@@ -93,7 +93,7 @@ Future<AVResponse> callPOST({
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: json.decode(response.body) as Map<String, dynamic>,
+        response: json.decode(response.body),
       );
     } else {
       final Map<String, dynamic> jsonError = json.decode(response.body) as Map<String, dynamic>;
