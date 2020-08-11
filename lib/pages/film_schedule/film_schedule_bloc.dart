@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/repository/film_repository.dart';
 
 part 'film_schedule_event.dart';
@@ -15,8 +16,10 @@ class FilmScheduleBloc extends Bloc<FilmScheduleEvent, FilmScheduleState> {
     FilmScheduleEvent event,
   ) async* {
     if (event is FilmScheduleEventGetTime){
-      await filmRepository.getSchedule();
-      yield FilmScheduleStateGetTime();
+      yield FilmScheduleStateLoading();
+      final List<Session> sessionList= await filmRepository.getSchedule();
+      yield FilmScheduleStateDismissLoading();
+      yield FilmScheduleStateGetTime(sessionList);
     }
   }
 }

@@ -3,10 +3,10 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_bloc.dart';
 import 'package:ncckios/widgets/calendar/date_helper.dart';
 import 'package:ncckios/widgets/calendar/horizontal_calendar.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:intl/intl.dart';
 
 class FilmSchedulePage extends StatefulWidget {
@@ -18,6 +18,11 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   DateTime currentDate = DateTime.now();
   FilmScheduleBloc bloc = FilmScheduleBloc();
 
+  @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -28,12 +33,23 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FilmScheduleBloc, FilmScheduleState>(
-    cubit: bloc,
+      cubit: bloc,
+      buildWhen: (FilmScheduleState prev, FilmScheduleState state){
+        if(state is FilmScheduleStateLoading){
+          _showLoading();
+          return false;
+        }
+        else if(state is FilmScheduleStateDismissLoading){
+          Navigator.pop(context);
+          return false;
+        }
+        return true;
+      },
       builder: (BuildContext context, FilmScheduleState state) {
         if (state is FilmScheduleInitial) {
-          return mainScreen(context);
+          return Container();
         } else if (state is FilmScheduleStateGetTime) {
-          return mainScreen(context);
+          return mainScreen(context, state);
         }
         return const Material();
       },
@@ -42,7 +58,10 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 
 
 
-  Widget mainScreen(BuildContext context){
+
+
+
+  Widget mainScreen(BuildContext context, FilmScheduleStateGetTime state) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
@@ -59,28 +78,88 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         children: <Widget>[
           HorizontalCalendar(
             height: 32,
-            onDateSelected: (DateTime date){
-              currentDate =date;
+            onDateSelected: (DateTime date) {
+              currentDate = date;
               print('llll $currentDate');
             },
             padding: const EdgeInsets.all(0),
-            labelOrder: const <LabelType>[LabelType.weekday,LabelType.date],
+            labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
             weekDayFormat: 'EEEE',
             dateFormat: 'dd/MM',
-            dateTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
-            weekDayTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+            dateTextStyle: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.white),
+            weekDayTextStyle: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.white),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 6)),
-            selectedDecoration: const BoxDecoration(
-                color: AppColor.red
-            ),
-          )
-
+            selectedDecoration: const BoxDecoration(color: AppColor.red),
+          ),
+          sessionShowing(context, state)
         ],
       ),
     );
   }
 
+
+
+  Widget sessionShowing(BuildContext context, FilmScheduleStateGetTime state) {
+    final List<Session> session = state.sessionList;
+    final List<Session> filmSession = <Session>[];
+    for (final Session element in session) {
+      if (element.filmId == 9462) {
+        filmSession.add(element);
+      }
+    }
+    final List<Widget> listWidget = <Widget>[];
+    for (final Session element in filmSession) {
+      listWidget.add(RaisedButton(
+        onPressed: () {},
+        padding: const EdgeInsets.all(0),
+        elevation: 0,
+        child: ListTile(
+          title: Text(
+            element.projectTime.substring(11, element.projectTime.length - 3),
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ),
+      ));
+    }
+    final Widget gridView = GridView.count(
+      crossAxisCount: 4,
+      children: listWidget,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+    );
+
+    return gridView;
+  }
+
+
+
+  void _showLoading(){
+    showDialog<dynamic>(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Padding(
+            padding: const EdgeInsets.all(24.0),
+            child: Row(
+//            mainAxisSize: MainAxisSize.min,
+              children: const <Widget>[
+                CircularProgressIndicator(),
+                Text('Loading'),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   Widget calendarBoxDay(BuildContext context, DateTime date) {
     String formattedDay = DateFormat('EEEE', 'vi').format(date);
