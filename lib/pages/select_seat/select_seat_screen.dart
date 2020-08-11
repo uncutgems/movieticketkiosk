@@ -84,6 +84,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                   return Container(
                     decoration: BoxDecoration(
                       border: Border.all(),
+                      borderRadius: BorderRadius.circular(4),
                       color: AppColor.orange80,
                     ),
                     //  child: Text(e.code.toString()),
@@ -93,6 +94,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                   return Container(
                     decoration: BoxDecoration(
                       border: Border.all(),
+                      borderRadius: BorderRadius.circular(4),
+
                       color: AppColor.red100,
                     ),
                     //  child: Text(e.code.toString()),
@@ -102,6 +105,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                   return Container(
                     decoration: BoxDecoration(
                       border: Border.all(),
+                      borderRadius: BorderRadius.circular(4),
+
                       color: AppColor.white,
                     ),
                     //  child: Text(e.code.toString()),
