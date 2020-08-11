@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncckios/base/color.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
 
 import '../../model/entity.dart';
@@ -14,7 +15,6 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> finalSeatList;
-
 
   @override
   void initState() {
@@ -44,9 +44,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   }
 
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
+    final List<Seat> seatList = state.seatList;
     final double screenWidth = MediaQuery.of(context).size.width;
-    final int maximun = findMax(state.seatList);
-    print(maximun);
+    final int maximum = findMax(state.seatList) + 1;
+    print(maximum);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -67,19 +68,52 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               ),
             ),
           ),
-          GridView.count(
-            crossAxisCount: maximun,
-
-
+          Container(
+            height: 30,
+          ),
+          Padding(
+            padding: const EdgeInsets.all(24),
+            child: GridView.count(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              crossAxisCount: maximum,
+              children: seatList.map((Seat e) {
+                if (e.type == '12') {
+                  return Container();
+                } else if (e.type == '1') {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: AppColor.orange80,
+                    ),
+                    //  child: Text(e.code.toString()),
+                  );
+                }
+                else if(e.type == '2'){
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: AppColor.red100,
+                    ),
+                    //  child: Text(e.code.toString()),
+                  );
+                }
+                else {
+                  return Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(),
+                      color: AppColor.white,
+                    ),
+                    //  child: Text(e.code.toString()),
+                  );
+                }
+              }).toList(),
+            ),
           ),
         ],
       ),
     );
   }
-
-
-
-
 
   int findMax(List<Seat> myList) {
     int maxColumnNumber = 18;
@@ -88,8 +122,4 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     }
     return maxColumnNumber;
   }
-
-
-
-
 }

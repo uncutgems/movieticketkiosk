@@ -17,4 +17,7 @@ class AppColor {
   static const Color selected = Color(0xffCCE9FF);
   static const Color green = Color(0xff49D193);
   static const Color orange = Color(0xffF39B13);
+  static const Color orange80 = Color(0xffF8C371);
+  static const Color red100 = Color(0xffFF4868);
+
 }
