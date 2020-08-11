@@ -362,14 +362,10 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null ||
-            identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null ||
-            identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null ||
-            identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null ||
-            identical(priceOfPosition3, this.priceOfPosition3))) {
+        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3))) {
       return this;
     }
 
@@ -490,7 +486,6 @@ class Seat {
     };
   }
 }
-
 
 @JsonSerializable(nullable: false)
 class Ticket {
