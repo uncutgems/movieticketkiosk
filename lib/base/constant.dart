@@ -2,7 +2,7 @@ class Constant {
   static const String ok = 'ok';
   static const String code = 'code';
   static const String response = 'response';
-  static const String message = 'message';
+  static const String message = 'Message';
   static const String contentType = 'contentType';
   static const String headerDOBODY6969 = 'DOBODY6969';
   static const String results = 'results';
@@ -21,7 +21,7 @@ class Constant {
   static const String title = 'title';
   static const String content = 'content';
   static const String time = 'time';
-  static const String languageCode = 'languageCode';
+  static const String languageCode = 'LanguageCode';
   static const String isRead = 'isRead';
   static const String name = 'name';
   static const String province = 'province';
@@ -196,4 +196,23 @@ class Constant {
   static const String assistants = 'assistants';
   static const String listLockTrip = 'listLockTrip';
   static const String ticket = 'ticket';
+  static const String filmNameEn = 'FilmNameEn';
+  static const String filmName = 'FilmName';
+  static const String duration = 'Duration';
+  static const String director = 'Director';
+  static const String actors = 'Actors';
+  static const String introduction = 'Introduction';
+  static const String versionCode = 'VersionCode';
+  static const String countryName = 'CountryName';
+  static const String premieredDay = 'PremieredDay';
+  static const String description = 'Description';
+  static const String statusCode = 'StatusCode';
+  static const String videoUrl = 'VideoUrl';
+  static const String sellOnline = 'SellOnline';
+  static const String ageAboveShow = 'AgeAboveShow';
+  static const String imageUrl = 'ImageUrl';
+  static const String bannerUrl = 'BannerUrl';
+
+
+
 }

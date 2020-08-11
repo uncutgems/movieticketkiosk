@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
 import 'package:ncckios/base/url.dart';
@@ -36,16 +37,15 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: jsonDecode(response.body)[Constant.results] as Map<String, dynamic>,
+        response: jsonDecode(response.body) as Map<String, dynamic>,
       );
     } else {
-      final Map<String, dynamic> jsonError =
-          jsonDecode(response.body)[Constant.results][Constant.error] as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError = jsonDecode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
         response: jsonError,
-        message: getErrorMessage(getInt(Constant.code, jsonError)),
+        message: getString(Constant.message, jsonError),
       );
     }
     return result;
@@ -73,12 +73,10 @@ Future<AVResponse> callPOST({
   @required dynamic body,
   Map<String, String> header,
 }) async {
-  final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String _url = URL.baseURL + path;
   final Map<String, String> _headers = <String, String>{};
   _headers.addAll(header ?? <String, String>{});
   _headers[Constant.contentType] = 'application/json';
-  _headers[Constant.headerDOBODY6969] = prefs.getString(Constant.token).toString();
 
   print('Calling post data ===============================================');
   print('header: $_headers');
@@ -95,16 +93,15 @@ Future<AVResponse> callPOST({
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: json.decode(response.body)[Constant.results] as Map<String, dynamic>,
+        response: json.decode(response.body) as Map<String, dynamic>,
       );
     } else {
-      final Map<String, dynamic> jsonError =
-          json.decode(response.body)[Constant.results][Constant.error] as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError = json.decode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
         response: jsonError,
-        message: getErrorMessage(getInt(Constant.code, jsonError)),
+        message: getString(Constant.message, jsonError),
       );
     }
     return result;
