@@ -19,7 +19,7 @@ class _SplashPageState extends State<SplashPage> {
       ),
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           Container(
             color: AppColor.primaryDarkColor,
             padding: const EdgeInsets.all(4),
