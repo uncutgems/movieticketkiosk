@@ -194,6 +194,7 @@ class Film {
       bannerUrl: getString(Constant.bannerUrl, data),
     );
   }
+
   final int id;
   final String filmNameEn;
   final String filmName;
@@ -298,6 +299,227 @@ class Film {
       Constant.bannerUrl: bannerUrl,
     };
   }
+}
+
+@JsonSerializable(nullable: false)
+class Session {
+  Session({
+    this.id,
+    this.planCinemaId,
+    this.projectDate,
+    this.projectTime,
+    this.filmId,
+    this.roomId,
+    this.dayPartId,
+    this.publishDate,
+    this.isOnlineSelling,
+    this.priceOfPosition,
+    this.priceOfPosition2,
+    this.priceOfPosition3,
+  });
+
+  factory Session.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Session();
+    }
+    return Session(
+      id: getInt(Constant.id, data),
+      planCinemaId: getInt(Constant.planCinemaId, data),
+      projectDate: getString(Constant.projectDate, data),
+      projectTime: getString(Constant.projectTime, data),
+      filmId: getInt(Constant.filmId, data),
+      roomId: getInt(Constant.roomId, data),
+      dayPartId: getInt(Constant.dayPartId, data),
+      publishDate: getString(Constant.publishDate, data),
+      isOnlineSelling: getInt(Constant.isOnlineSelling, data),
+      priceOfPosition: getString(Constant.priceOfPosition, data),
+      priceOfPosition2: getString(Constant.priceOfPosition2, data),
+      priceOfPosition3: getString(Constant.priceOfPosition3, data),
+    );
+  }
+
+  Session copyWith({
+    int id,
+    int planCinemaId,
+    String projectDate,
+    String projectTime,
+    int filmId,
+    int roomId,
+    int dayPartId,
+    String publishDate,
+    int isOnlineSelling,
+    String priceOfPosition,
+    String priceOfPosition2,
+    String priceOfPosition3,
+  }) {
+    if ((id == null || identical(id, this.id)) &&
+        (planCinemaId == null || identical(planCinemaId, this.planCinemaId)) &&
+        (projectDate == null || identical(projectDate, this.projectDate)) &&
+        (projectTime == null || identical(projectTime, this.projectTime)) &&
+        (filmId == null || identical(filmId, this.filmId)) &&
+        (roomId == null || identical(roomId, this.roomId)) &&
+        (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
+        (publishDate == null || identical(publishDate, this.publishDate)) &&
+        (isOnlineSelling == null ||
+            identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null ||
+            identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null ||
+            identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null ||
+            identical(priceOfPosition3, this.priceOfPosition3))) {
+      return this;
+    }
+
+    return Session(
+      id: id ?? this.id,
+      planCinemaId: planCinemaId ?? this.planCinemaId,
+      projectDate: projectDate ?? this.projectDate,
+      projectTime: projectTime ?? this.projectTime,
+      filmId: filmId ?? this.filmId,
+      roomId: roomId ?? this.roomId,
+      dayPartId: dayPartId ?? this.dayPartId,
+      publishDate: publishDate ?? this.publishDate,
+      isOnlineSelling: isOnlineSelling ?? this.isOnlineSelling,
+      priceOfPosition: priceOfPosition ?? this.priceOfPosition,
+      priceOfPosition2: priceOfPosition2 ?? this.priceOfPosition2,
+      priceOfPosition3: priceOfPosition3 ?? this.priceOfPosition3,
+    );
+  }
+
+  final int id;
+  final int planCinemaId;
+  final String projectDate;
+  final String projectTime;
+  final int filmId;
+  final int roomId;
+  final int dayPartId;
+  final String publishDate;
+  final int isOnlineSelling;
+  final String priceOfPosition;
+  final String priceOfPosition2;
+  final String priceOfPosition3;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      Constant.id: id,
+      Constant.planCinemaId: planCinemaId,
+      Constant.projectDate: projectDate,
+      Constant.projectTime: projectTime,
+      Constant.filmId: filmId,
+      Constant.roomId: roomId,
+      Constant.dayPartId: dayPartId,
+      Constant.publishDate: publishDate,
+      Constant.isOnlineSelling: isOnlineSelling,
+      Constant.priceOfPosition: priceOfPosition,
+      Constant.priceOfPosition2: priceOfPosition2,
+      Constant.priceOfPosition3: priceOfPosition3,
+    };
+  }
+}
+
+@JsonSerializable(nullable: false)
+class Seat {
+  Seat({
+    this.seatId,
+    this.code,
+    this.type,
+    this.status,
+    this.seatDataId,
+    this.price,
+  });
+
+  factory Seat.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Seat();
+    }
+    return Seat(
+      seatId: getInt(Constant.seatId, data),
+      code: getString(Constant.code, data),
+      type: getString(Constant.type, data),
+      status: getInt(Constant.status, data),
+      seatDataId: getInt(Constant.seatDataId, data),
+      price: getDouble(Constant.price, data),
+    );
+  }
+
+  Seat copyWith({
+    int seatId,
+    String code,
+    String type,
+    int status,
+    int seatDataId,
+    double price,
+  }) {
+    if ((seatId == null || identical(seatId, this.seatId)) &&
+        (code == null || identical(code, this.code)) &&
+        (type == null || identical(type, this.type)) &&
+        (status == null || identical(status, this.status)) &&
+        (seatDataId == null || identical(seatDataId, this.seatDataId)) &&
+        (price == null || identical(price, this.price))) {
+      return this;
+    }
+
+    return Seat(
+      seatId: seatId ?? this.seatId,
+      code: code ?? this.code,
+      type: type ?? this.type,
+      status: status ?? this.status,
+      seatDataId: seatDataId ?? this.seatDataId,
+      price: price ?? this.price,
+    );
+  }
+
+  final int seatId;
+  final String code;
+  final String type;
+  final int status;
+  final int seatDataId;
+  final double price;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      Constant.seatId: seatDataId,
+      Constant.code: code,
+      Constant.type: type,
+      Constant.status: status,
+      Constant.seatDataId: seatDataId,
+      Constant.price: price,
+    };
+  }
+}
 
 
+@JsonSerializable(nullable: false)
+class Ticket {
+  Ticket({this.ticketNo});
+
+  factory Ticket.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Ticket();
+    }
+    return Ticket(
+      ticketNo: getString(Constant.ticketNo, data),
+    );
+  }
+
+  Ticket copyWith({
+    String ticketNo,
+  }) {
+    if (ticketNo == null || identical(ticketNo, this.ticketNo)) {
+      return this;
+    }
+
+    return Ticket(
+      ticketNo: ticketNo ?? this.ticketNo,
+    );
+  }
+
+  final String ticketNo;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      Constant.ticketNo: ticketNo,
+    };
+  }
 }
