@@ -320,6 +320,7 @@ class NextDay {
     return NextDay(
       location: getString(Constant.location, json),
       day: getString(Constant.day, json),
+      listFilm: parseListFilm(json[Constant.listFilm] as List<dynamic>),
     );
   }
 

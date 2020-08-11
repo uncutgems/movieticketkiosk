@@ -10,7 +10,7 @@ class SplashPage extends StatefulWidget {
 class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
-    _navigate(context);
+    _navigateToHome(context);
      super.initState();
   }
   @override
@@ -40,7 +40,7 @@ class _SplashPageState extends State<SplashPage> {
       ),
     );
   }
-  void _navigate (BuildContext context) async {
+  Future<void> _navigateToHome (BuildContext context) async {
     await Future<void>.delayed(const Duration(seconds: 3));
     Navigator.pushReplacementNamed(context, RoutesName.homePage);
 
