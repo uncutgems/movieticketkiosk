@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/default/default_page.dart';
+import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
 
 void main() {
@@ -37,6 +38,11 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => SplashPage(),
         settings: const RouteSettings(name: RoutesName.splashPage),
+      );
+      case RoutesName.homePage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => HomePage(),
+        settings: const RouteSettings(name: RoutesName.homePage),
       );
 
     default:

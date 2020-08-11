@@ -212,6 +212,11 @@ class Constant {
   static const String ageAboveShow = 'AgeAboveShow';
   static const String imageUrl = 'ImageUrl';
   static const String bannerUrl = 'BannerUrl';
+  static const String pjTime = 'pjTime';
+  static const String nextDay = 'nextday';
+  static const String listFilm = 'lstFilm';
+  static const String location = 'Location';
+  static const String day = 'Day';
 
 
 

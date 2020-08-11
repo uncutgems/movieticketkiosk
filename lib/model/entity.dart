@@ -122,6 +122,18 @@ List<String> getListString(String key, Map<String, dynamic> data) {
   return result;
 }
 
+/// List film
+List<Film> parseListFilm(List<dynamic> data) {
+  final List<Film> films = <Film>[];
+  if (data == null) {
+    return films;
+  }
+  for (final dynamic itemJson in data) {
+    films.add(Film.fromJson(itemJson as Map<String, dynamic>));
+  }
+  return films;
+}
+
 @JsonSerializable(nullable: false)
 class AVResponse {
   AVResponse({
@@ -194,6 +206,7 @@ class Film {
       bannerUrl: getString(Constant.bannerUrl, data),
     );
   }
+
   final int id;
   final String filmNameEn;
   final String filmName;
@@ -298,6 +311,19 @@ class Film {
       Constant.bannerUrl: bannerUrl,
     };
   }
+}
 
+class NextDay {
+  NextDay({this.location, this.day, this.listFilm});
 
+  factory NextDay.fromJson(final Map<String, dynamic> json) {
+    return NextDay(
+      location: getString(Constant.location, json),
+      day: getString(Constant.day, json),
+    );
+  }
+
+  final String location;
+  final String day;
+  final List<Film> listFilm;
 }
