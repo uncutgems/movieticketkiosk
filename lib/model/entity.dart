@@ -133,7 +133,7 @@ class AVResponse {
 
   final bool isOK; // check Response is OK
   final int code; // status code
-  final Map<String, dynamic> response; // data body response
+  final dynamic response; // data body response
   final String message;
 
   Map<String, dynamic> toJson() {
@@ -322,6 +322,8 @@ class Session {
     if (data == null) {
       return Session();
     }
+
+
     return Session(
       id: getInt(Constant.id, data),
       planCinemaId: getInt(Constant.planCinemaId, data),

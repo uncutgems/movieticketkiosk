@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/default/default_page.dart';
+import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
 
 void main() {
@@ -38,7 +39,11 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
         builder: (BuildContext context) => SplashPage(),
         settings: const RouteSettings(name: RoutesName.splashPage),
       );
-
+    case RoutesName.selectSeatPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => SelectSeatPage(),
+        settings: const RouteSettings(name: RoutesName.selectSeatPage),
+      );
     default:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => const DefaultPage(),
