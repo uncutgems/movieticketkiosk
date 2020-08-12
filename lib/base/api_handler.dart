@@ -28,7 +28,7 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
     print('GET ===================== ');
     print('HEADER: $_headers');
     print('URL : $url');
-    final Response response = await get(url, headers: _headers).timeout(const Duration(seconds: 30));
+    final Response response = await get(url,headers: _headers).timeout(const Duration(seconds: 30));
     if (response != null) {
       print('RESPONSE: ' + response.body);
     }
