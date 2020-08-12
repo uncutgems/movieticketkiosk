@@ -4,6 +4,7 @@ import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/default/default_page.dart';
 import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
+import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
 
 void main() {
@@ -44,6 +45,13 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
         builder: (BuildContext context) => SelectSeatPage(),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
+
+      case RoutesName.homePage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => HomePage(),
+        settings: const RouteSettings(name: RoutesName.homePage),
+      );
+
     default:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => const DefaultPage(),
