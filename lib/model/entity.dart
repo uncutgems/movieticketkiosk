@@ -315,6 +315,7 @@ class Film {
 
 class NextDay {
   NextDay({this.location, this.day, this.listFilm});
+
   factory NextDay.fromJson(final Map<String, dynamic> json) {
     return NextDay(
       location: getString(Constant.location, json),
@@ -327,10 +328,25 @@ class NextDay {
   final String day;
   final List<Film> listFilm;
 }
-@JsonSerializable(nullable: false)
-class Session{
 
- factory Session.fromJson(final Map<String, dynamic> data) {
+@JsonSerializable(nullable: false)
+class Session {
+  Session({
+    this.id,
+    this.planCinemaId,
+    this.projectDate,
+    this.projectTime,
+    this.filmId,
+    this.roomId,
+    this.dayPartId,
+    this.publishDate,
+    this.isOnlineSelling,
+    this.priceOfPosition,
+    this.priceOfPosition2,
+    this.priceOfPosition3,
+  });
+
+  factory Session.fromJson(final Map<String, dynamic> data) {
     if (data == null) {
       return Session();
     }
@@ -348,9 +364,10 @@ class Session{
       priceOfPosition: getString(Constant.priceOfPosition, data),
       priceOfPosition2: getString(Constant.priceOfPosition2, data),
       priceOfPosition3: getString(Constant.priceOfPosition3, data),
-      );
- }
-Session copyWith({
+    );
+  }
+
+  Session copyWith({
     int id,
     int planCinemaId,
     String projectDate,
@@ -372,14 +389,10 @@ Session copyWith({
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null ||
-            identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null ||
-            identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null ||
-            identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null ||
-            identical(priceOfPosition3, this.priceOfPosition3))) {
+        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3))) {
       return this;
     }
 
@@ -479,7 +492,7 @@ class Seat {
         (rows == null || identical(rows, this.rows))) {
       return this;
     }
-    return  Seat(
+    return Seat(
       seatId: seatId ?? this.seatId,
       code: code ?? this.code,
       type: type ?? this.type,
@@ -546,3 +559,4 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+}

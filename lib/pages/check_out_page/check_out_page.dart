@@ -30,7 +30,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
         ),
       ),
       body: ListView(
-        padding: EdgeInsets.all(0),
+        padding: const EdgeInsets.all(0),
         children: [
           Padding(
             padding: const EdgeInsets.only(left: 32.0, right: 32),

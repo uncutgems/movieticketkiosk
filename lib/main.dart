@@ -51,13 +51,14 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => CheckOutPage(),
         settings: const RouteSettings(name: RoutesName.checkOutPage),
+      );
     case RoutesName.selectSeatPage:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => SelectSeatPage(),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
 
-      case RoutesName.homePage:
+    case RoutesName.homePage:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => HomePage(),
         settings: const RouteSettings(name: RoutesName.homePage),

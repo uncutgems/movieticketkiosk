@@ -24,7 +24,7 @@ class SelectSeatBloc extends Bloc<SelectSeatEvent, SelectSeatState> {
         yield LoadSeatDataSelectSeatState();
         final List<Seat> seatList = await seatRepository.getSeat(event.planId);
         yield ReceiveSeatDataSelectSeatState(seatList);
-      } on APIException catch (e) {
+      } on APIException catch (error) {
         yield FailToReceiveSeatDataSelectSeatState();
       }
     }
