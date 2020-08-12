@@ -14,4 +14,8 @@ class FilmScheduleStateFail extends FilmScheduleState{
   final String errorMess;
 }
 class FilmScheduleStateEmpty extends FilmScheduleState{}
-class FilmScheduleStateToSelectSeatPage extends FilmScheduleState{}
+class FilmScheduleStateToSelectSeatPage extends FilmScheduleState{
+  FilmScheduleStateToSelectSeatPage(this.id);
+  final int id;
+
+}

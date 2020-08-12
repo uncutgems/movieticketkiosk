@@ -48,7 +48,9 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return false;
         }
         else if(state is FilmScheduleStateToSelectSeatPage){
-          Navigator.pushNamed(context, RoutesName.selectSeatPage);
+          Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
+            'sessionId': state.id,
+          });
           return false;
         }
         return true;
@@ -92,6 +94,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
       body: ListView(
         children: <Widget>[
           HorizontalCalendar(
+            initialSelectedDates: [DateTime.now()],
+
             spacingBetweenDates: 8,
             height: 32,
             onDateSelected: (DateTime date) {
@@ -113,7 +117,9 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
                 .copyWith(color: AppColor.white),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 6)),
-            selectedDecoration: const BoxDecoration(color: AppColor.red),
+//            selectedDecoration: const BoxDecoration(color: AppColor.red),
+            selectedDateTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.red),
+            selectedWeekDayTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.red),
           ),
           Container(
             height: MediaQuery.of(context).size.height * (11 / 667),
@@ -159,7 +165,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         child: RaisedButton(
           color: AppColor.white,
           onPressed: () {
-            bloc.add(FilmScheduleEventClickTimeBox());
+
+            bloc.add(FilmScheduleEventClickTimeBox(element.id));
           },
           padding: const EdgeInsets.all(10),
           elevation: 0,

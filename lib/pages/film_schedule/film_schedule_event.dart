@@ -7,4 +7,9 @@ class FilmScheduleEventGetTime extends FilmScheduleEvent{
   final String projectTime;
   final int filmId;
 }
-class FilmScheduleEventClickTimeBox extends FilmScheduleEvent{}
+class FilmScheduleEventClickTimeBox extends FilmScheduleEvent{
+  FilmScheduleEventClickTimeBox(this.id);
+  final int id;
+
+
+}
