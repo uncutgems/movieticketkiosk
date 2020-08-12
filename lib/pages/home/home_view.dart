@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncckios/base/style.dart';
+import 'package:ncckios/pages/home/futureFilm/future_film_view.dart';
 import 'package:ncckios/pages/home/home_bloc.dart';
 import 'package:ncckios/pages/home/popularFilm/popular_film_view.dart';
 
@@ -39,8 +41,14 @@ class _HomePageState extends State<HomePage> {
         children: <Widget>[
           PopularFilmWidget(),
           Image.asset('assets/divider.png'),
-          const Text('Phim sắp chiếu')
-
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              'Phim sắp chiếu',
+              style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+            ),
+          ),
+          FutureFilmWidget(),
         ],
       ),
     );

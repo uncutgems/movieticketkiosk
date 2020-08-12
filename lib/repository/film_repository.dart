@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ncckios/base/api_handler.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/url.dart';
@@ -11,20 +13,30 @@ class FilmRepository {
     if (result.isOK) {
       print(result.response);
       result.response[Constant.nextDay].forEach((final dynamic itemJson) {
-        final NextDay nextDay = NextDay.fromJson(
-            itemJson as Map<String, dynamic>);
+        final NextDay nextDay =
+            NextDay.fromJson(itemJson as Map<String, dynamic>);
 
         nextDayList.add(nextDay);
 
         itemJson[Constant.listFilm].forEach((final dynamic itemJsonFilm) {
-          final Film film = Film.fromJson(
-              itemJsonFilm as Map<String, dynamic>);
+          final Film film = Film.fromJson(itemJsonFilm as Map<String, dynamic>);
 
           listFilm.add(film);
-
         });
-
       });
+
+      return listFilm;
+    } else {
+      throw APIException(result);
+    }
+  }
+
+  Future<List<Film>> getFutureFilm() async {
+    final AVResponse result = await callGET(URL.futureFilm);
+    List<Film> listFilm = <Film>[];
+    if (result.isOK) {
+
+
 
       return listFilm;
     } else {
