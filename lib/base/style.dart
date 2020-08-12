@@ -17,7 +17,7 @@ final ThemeData themeData = ThemeData(
   iconTheme: iconThemeData,
   appBarTheme: appBarTheme,
   buttonTheme: buttonThemeData,
-  buttonColor: AppColor.primaryDarkColor,
+  buttonColor: AppColor.buttonColor,
   disabledColor: AppColor.disableColor,
   scaffoldBackgroundColor: AppColor.primaryColor,
   dialogTheme: dialogTheme,
@@ -31,7 +31,7 @@ final DialogTheme dialogTheme = DialogTheme(
 );
 const ButtonThemeData buttonThemeData = ButtonThemeData(
   disabledColor: AppColor.disableColor,
-  buttonColor: AppColor.primaryDarkColor,
+  buttonColor: AppColor.buttonColor,
   textTheme: ButtonTextTheme.primary,
 );
 
