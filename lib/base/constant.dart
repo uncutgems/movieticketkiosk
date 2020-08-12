@@ -212,12 +212,25 @@ class Constant {
   static const String ageAboveShow = 'AgeAboveShow';
   static const String imageUrl = 'ImageUrl';
   static const String bannerUrl = 'BannerUrl';
+  static const String planCinemaId = 'PlanCinemaId';
+  static const String projectDate = 'ProjectDate';
+  static const String projectTime = 'ProjectTime';
+  static const String filmId = 'FilmId';
+  static const String roomId = 'RoomId';
+  static const String dayPartId = 'DaypartId';
+  static const String publishDate = 'publishDate';
+  static const String isOnlineSelling = 'IsOnlineSelling';
+  static const String priceOfPosition = 'PriceOfPosition1';
+  static const String priceOfPosition2 = 'PriceOfPosition2';
+  static const String priceOfPosition3 = 'PriceOfPosition3';
+  static const String seatDataId = 'seatDataId';
+  static const String ticketNo = 'ticketNo';
+  static const String rows = 'rows';
+  static const String PlanId = 'PlanId';// this is the Session ID
   static const String pjTime = 'pjTime';
   static const String nextDay = 'nextday';
   static const String listFilm = 'lstFilm';
   static const String location = 'Location';
   static const String day = 'Day';
-
-
 
 }

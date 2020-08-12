@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/default/default_page.dart';
+import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
 
@@ -32,13 +33,19 @@ class MyApp extends StatelessWidget {
 }
 
 MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
-  final dynamic data = settings.arguments;
+  //final dynamic data = settings.arguments;
   switch (settings.name) {
     case RoutesName.splashPage:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => SplashPage(),
         settings: const RouteSettings(name: RoutesName.splashPage),
       );
+    case RoutesName.selectSeatPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => SelectSeatPage(),
+        settings: const RouteSettings(name: RoutesName.selectSeatPage),
+      );
+
       case RoutesName.homePage:
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => HomePage(),
