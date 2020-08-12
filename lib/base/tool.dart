@@ -306,3 +306,11 @@ String convertTimeToDisplay(String date){
   final String result = DateFormat('hh:mm - dd/MM/yyyy').format(dateTime);
   return result;
 }
+String convertLanguageCode(String languageCode){
+  if(languageCode == 'PDV'){
+    return 'Phụ đề Việt';
+  }
+  else{
+    return 'Thuyết minh';
+  }
+}
