@@ -1,6 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
+
+import '../../base/route.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -11,8 +15,9 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     _navigateToHome(context);
-     super.initState();
+    super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,9 +45,9 @@ class _SplashPageState extends State<SplashPage> {
       ),
     );
   }
-  Future<void> _navigateToHome (BuildContext context) async {
+
+  Future<void> _navigateToHome(BuildContext context) async {
     await Future<void>.delayed(const Duration(seconds: 3));
     Navigator.pushReplacementNamed(context, RoutesName.homePage);
-
   }
 }

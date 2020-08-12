@@ -22,7 +22,8 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final Map<String, String> _headers = <String, String>{};
   _headers[Constant.contentType] = 'application/json';
-  _headers[Constant.headerDOBODY6969] = prefs.getString(Constant.token).toString();
+  _headers[Constant.headerDOBODY6969] =
+      prefs.getString(Constant.token).toString();
   _headers.addAll(headers ?? <String, String>{});
   try {
     print('GET ===================== ');
@@ -37,10 +38,11 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: jsonDecode(response.body) as Map<String, dynamic>,
+        response: jsonDecode(response.body),
       );
     } else {
-      final Map<String, dynamic> jsonError = jsonDecode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError =
+          jsonDecode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
@@ -84,7 +86,8 @@ Future<AVResponse> callPOST({
   print('body: $body');
   try {
     final Response response =
-        await post(_url, headers: _headers, body: jsonEncode(body)).timeout(const Duration(seconds: 30));
+        await post(_url, headers: _headers, body: jsonEncode(body))
+            .timeout(const Duration(seconds: 30));
     if (response != null) {
       print('response: ' + response.body);
     }
@@ -93,10 +96,11 @@ Future<AVResponse> callPOST({
       result = AVResponse(
         code: response.statusCode,
         isOK: true,
-        response: json.decode(response.body) as Map<String, dynamic>,
+        response: json.decode(response.body),
       );
     } else {
-      final Map<String, dynamic> jsonError = json.decode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError =
+          json.decode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
