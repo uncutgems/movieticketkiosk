@@ -18,7 +18,7 @@ class FilmScheduleBloc extends Bloc<FilmScheduleEvent, FilmScheduleState> {
   ) async* {
     if (event is FilmScheduleEventGetTime){
       yield FilmScheduleStateLoading();
-      final List<Session> sessionList= await filmRepository.getSchedule(9460,convertDateTime(DateTime.now()));
+      final List<Session> sessionList= await filmRepository.getSchedule(9460,convertDateToInput(DateTime.now()));
       yield FilmScheduleStateDismissLoading();
       yield FilmScheduleStateGetTime(sessionList);
     }
