@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
@@ -44,10 +45,25 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   }
 
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
+    int y = 0;
+    int z = 0;
     final List<Seat> seatList = state.seatList;
     final double screenWidth = MediaQuery.of(context).size.width;
-    final int maximum = findMax(state.seatList) + 1;
-    print(maximum);
+    final int maximumColumn = findMaxColumn(state.seatList) + 1;
+    final int maximumRow = findMaxRow(state.seatList) + 1;
+    final int area = maximumColumn * maximumRow;
+    final Seat dummySeat = Seat();
+
+    for (int i = 0; i < maximumColumn; i++) {
+      seatList.insert(i, dummySeat);
+    }
+//    for (int i = 0; i < seatList.length; i++) {
+//      if (seatList[i].column == 0) {
+//        seatList.insert(i, dummySeat);
+//      }
+//    }
+
+    print(maximumColumn);
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
@@ -69,48 +85,59 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             ),
           ),
           Container(
-            height: 30,
+            height: 10,
           ),
           Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
+            child: GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: maximumColumn),
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: maximumColumn,
+              itemBuilder: (BuildContext context, int index) => Container(
+                child: Center(
+                  child: Text(
+                    (index + 1).toString(),
+                    style: const TextStyle(color: AppColor.white),
+                  ),
+                ),
+              ),
+            ),
+          ),
+
+//          ListView.builder(
+//            shrinkWrap: true,
+//            physics: const NeverScrollableScrollPhysics(),
+//            itemCount: maximumRow,
+//            itemBuilder: (BuildContext context, int index) => Container(
+//              child: Center(
+//                child: Text(
+//                  String.fromCharCode(index + 65),
+//                  style: const TextStyle(color: AppColor.white),
+//                ),
+//              ),
+//            ),
+//          ),
+
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 4),
             child: GridView.count(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              crossAxisCount: maximum,
+              crossAxisCount: maximumColumn,
               children: seatList.map((Seat e) {
                 if (e.type == '12') {
                   return Container();
                 } else if (e.type == '1') {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(4),
-                      color: AppColor.orange80,
-                    ),
-                    //  child: Text(e.code.toString()),
-                  );
-                }
-                else if(e.type == '2'){
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(4),
-
-                      color: AppColor.red100,
-                    ),
-                    //  child: Text(e.code.toString()),
-                  );
-                }
-                else {
-                  return Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(),
-                      borderRadius: BorderRadius.circular(4),
-
-                      color: AppColor.white,
-                    ),
-                    //  child: Text(e.code.toString()),
-                  );
+                  return _seatContainer(
+                      context: context, color: AppColor.orange80);
+                } else if (e.type == '2') {
+                  return _coupleSeatContainer(
+                      context: context, color: AppColor.red100);
+                } else {
+                  return _seatContainer(
+                      context: context, color: AppColor.white);
                 }
               }).toList(),
             ),
@@ -120,11 +147,45 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     );
   }
 
-  int findMax(List<Seat> myList) {
-    int maxColumnNumber = 18;
+  int findMaxColumn(List<Seat> myList) {
+    int maxColumnNumber;
     if (myList != null && myList.isNotEmpty) {
       maxColumnNumber = myList.map<int>((e) => e.column).reduce(max);
     }
     return maxColumnNumber;
+  }
+
+  int findMaxRow(List<Seat> myList) {
+    int maxColumnNumber;
+    if (myList != null && myList.isNotEmpty) {
+      maxColumnNumber = myList.map<int>((e) => e.rows).reduce(max);
+    }
+    return maxColumnNumber;
+  }
+
+  Widget _seatContainer({
+    @required BuildContext context,
+    @required Color color,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+    );
+  }
+
+  Widget _coupleSeatContainer({
+    @required BuildContext context,
+    @required Color color,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+    );
   }
 }
