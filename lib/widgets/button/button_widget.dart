@@ -26,11 +26,15 @@ class AVButtonFill extends StatelessWidget {
         color: backgroundColor ?? Theme.of(context).buttonColor,
         disabledColor: Theme.of(context).disabledColor,
         child: Text(
-          title ?? '',
-          style: Theme.of(context).textTheme.bodyText1.copyWith(color: textColor ?? AppColor.white),
+          title.toUpperCase() ?? '',
+          style: Theme.of(context).textTheme.bodyText1.copyWith(
+                color: textColor ?? AppColor.white,
+                fontWeight: FontWeight.bold,
+              ),
         ),
         onPressed: onPressed,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(radius ?? 12)),
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius ?? 12)),
       ),
     );
   }
