@@ -4,11 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_bloc.dart';
 import 'package:ncckios/widgets/calendar/date_helper.dart';
 import 'package:ncckios/widgets/calendar/horizontal_calendar.dart';
-import 'package:intl/intl.dart';
+import 'package:ncckios/widgets/shortcut/shortcut.dart';
 
 class FilmSchedulePage extends StatefulWidget {
   @override
@@ -18,6 +20,10 @@ class FilmSchedulePage extends StatefulWidget {
 class _FilmSchedulePageState extends State<FilmSchedulePage> {
   DateTime currentDate = DateTime.now();
   FilmScheduleBloc bloc = FilmScheduleBloc();
+  final Comparator<Session> comparator = (Session a, Session b) =>
+      DateTime.parse(a.projectTime)
+          .millisecondsSinceEpoch
+          .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
 
   @override
   void dispose() {
@@ -27,7 +33,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 
   @override
   void initState() {
-    bloc.add(FilmScheduleEventGetTime());
+    bloc.add(
+        FilmScheduleEventGetTime(convertDateToInput(DateTime.now()), 9460));
     super.initState();
   }
 
@@ -36,27 +43,40 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return BlocBuilder<FilmScheduleBloc, FilmScheduleState>(
       cubit: bloc,
       buildWhen: (FilmScheduleState prev, FilmScheduleState state) {
-        if (state is FilmScheduleStateLoading) {
-          _showLoading();
+        if (state is FilmScheduleStateFail) {
+          fail(state.errorMess, context);
           return false;
-        } else if (state is FilmScheduleStateDismissLoading) {
-          Navigator.pop(context);
+        }
+        else if(state is FilmScheduleStateToSelectSeatPage){
+          Navigator.pushNamed(context, RoutesName.selectSeatPage);
           return false;
         }
         return true;
       },
       builder: (BuildContext context, FilmScheduleState state) {
         if (state is FilmScheduleInitial) {
-          return initialPage(context);
+          return mainScreen(context, Container());
         } else if (state is FilmScheduleStateGetTime) {
-          return mainScreen(context, state);
+          return mainScreen(
+              context, columnSessionShowing(context, state.sessionList));
+        } else if (state is FilmScheduleStateLoading) {
+          return mainScreen(context, _loading(context));
+        } else if (state is FilmScheduleStateEmpty) {
+          return mainScreen(
+              context,
+              Container(
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  child:  Center(
+                    child: Text('Xin lỗi bạn ngày này chưa có lịch chiếu',style: Theme.of(context).textTheme.headline6,),
+
+                  )));
         }
         return const Material();
       },
     );
   }
 
-  Widget mainScreen(BuildContext context, FilmScheduleStateGetTime state) {
+  Widget mainScreen(BuildContext context, Widget widget) {
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
@@ -76,7 +96,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
             height: 32,
             onDateSelected: (DateTime date) {
               currentDate = date;
-              print('llll $currentDate');
+              bloc.add(
+                  FilmScheduleEventGetTime(convertDateToInput(date), 9460));
             },
             padding: const EdgeInsets.all(0),
             labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
@@ -94,25 +115,52 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
             lastDate: DateTime.now().add(const Duration(days: 6)),
             selectedDecoration: const BoxDecoration(color: AppColor.red),
           ),
-          sessionShowing(context, state)
+          Container(
+            height: MediaQuery.of(context).size.height * (11 / 667),
+          ),
+          gradientLine(context),
+          widget
         ],
       ),
     );
   }
 
-  Widget sessionShowing(BuildContext context, FilmScheduleStateGetTime state) {
-    final List<Session> session = state.sessionList;
+  Widget columnSessionShowing(BuildContext context, List<Session> session) {
+    return Column(
+      children: sessionShowing(context, session),
+    );
+  }
 
-    final Comparator<Session> comparator = (Session a,Session b)=>DateTime.parse(a.projectTime).millisecondsSinceEpoch.compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
-    session.sort(comparator);
+  List<Widget> sessionShowing(BuildContext context, List<Session> session) {
+//    final List<Session> session = state.sessionList;
+    final List<SessionType> sessionTypeList = categorizeSession(session);
+    final List<List<Session>> sessionLists = <List<Session>>[];
+    for (final SessionType sessionType in sessionTypeList) {
+      sessionLists.add(sessionType.sessionList);
+    }
+    final List<Widget> result = <Widget>[];
+    for (final List<Session> element in sessionLists) {
+      result.add(timeButton(context, element));
+    }
+    return result;
+  }
+
+  Widget timeButton(BuildContext context, List<Session> sessionList) {
+    sessionList.sort(comparator);
+    if (sessionList.isEmpty) {
+      return Container();
+    }
+    final String versionCode = sessionList.first.versionCode;
+    final String languageCode = sessionList.first.languageCode;
     final List<Widget> listWidget = <Widget>[];
-
-    for (final Session element in session) {
+    for (final Session element in sessionList) {
       listWidget.add(Padding(
-        padding: const EdgeInsets.only(right: 8.0, top: 16),
+        padding: const EdgeInsets.only(right: 8.0, top: 8),
         child: RaisedButton(
           color: AppColor.white,
-          onPressed: () {},
+          onPressed: () {
+            bloc.add(FilmScheduleEventClickTimeBox());
+          },
           padding: const EdgeInsets.all(10),
           elevation: 0,
           child: Text(
@@ -125,124 +173,117 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         ),
       ));
     }
-
-
-
-    final Widget gridView = GridView.count(
-      crossAxisCount: 4,
-      childAspectRatio: 2,
-      children: listWidget,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-    );
-
-    return gridView;
-  }
-
-
-  void _showLoading() {
-    showDialog<dynamic>(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(24.0),
-            child: Row(
-//            mainAxisSize: MainAxisSize.min,
-              children: const <Widget>[
-                CircularProgressIndicator(),
-                Text('Loading'),
-              ],
+    final Widget result = Column(children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.only(
+                left: MediaQuery.of(context).size.width * (16 / 360),
+                right: MediaQuery.of(context).size.width * (4 / 360),
+                top: MediaQuery.of(context).size.height * (29 / 667)),
+            padding: const EdgeInsets.all(3.0),
+            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+            child: Text(
+              versionCode,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 14, color: AppColor.red),
             ),
           ),
-        );
-      },
-    );
-  }
-
-  Widget initialPage(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColor.primaryColor,
-      appBar: AppBar(
-        elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        title: Text(
-          'Chọn suất chiếu',
-          style: Theme.of(context).textTheme.headline6.copyWith(
-              color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
-        ),
-      ),
-      body: ListView(
-        children: <Widget>[
-          HorizontalCalendar(
-            height: 32,
-            onDateSelected: (DateTime date) {
-              currentDate = date;
-              print('llll $currentDate');
-            },
-            padding: const EdgeInsets.all(0),
-            labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
-            weekDayFormat: 'EEEE',
-            dateFormat: 'dd/MM',
-            dateTextStyle: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: AppColor.white),
-            weekDayTextStyle: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: AppColor.white),
-            firstDate: DateTime.now(),
-            lastDate: DateTime.now().add(const Duration(days: 6)),
-            selectedDecoration: const BoxDecoration(color: AppColor.red),
+          Container(
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * (29 / 667)),
+            padding: const EdgeInsets.all(3.0),
+            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+            child: Text(
+              languageCode,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 14, color: AppColor.red),
+            ),
           ),
         ],
       ),
-    );
+      GridView.count(
+        crossAxisCount: 4,
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width * (16 / 360),
+            right: MediaQuery.of(context).size.width * (36 / 360)),
+        childAspectRatio: 2,
+        children: listWidget,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+      ),
+    ]);
+
+    return result;
   }
 
-  Widget calendarBoxDay(BuildContext context, DateTime date) {
-    String formattedDay = DateFormat('EEEE', 'vi').format(date);
-    final String formattedDate = DateFormat('dd/mm').format(date);
-    if (date.day == DateTime.now().day) {
-      formattedDay = 'Hôm nay';
+  List<Session> sessionType(
+      List<Session> sessionList, String versionCode, String languageCode) {
+    final List<Session> listSession = <Session>[];
+    for (final Session element in sessionList) {
+      if (element.versionCode == versionCode &&
+          element.languageCode == languageCode) {
+        listSession.add(element);
+      }
     }
-    Color color = AppColor.white;
-    if (date.day > 2 + DateTime.now().day) {
-      color = AppColor.disableColor;
-    }
+    final Comparator<Session> comparator = (Session a, Session b) =>
+        DateTime.parse(a.projectTime)
+            .millisecondsSinceEpoch
+            .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
+    listSession.sort(comparator);
+    return listSession;
+  }
 
-    return GestureDetector(
-      onTap: () {
-        color = AppColor.red;
-        currentDate = date;
-        print('Current $currentDate');
-        print('hello');
-      },
-      child: Container(
-        child: Column(children: <Widget>[
-          Text(
-            formattedDay,
-            style: Theme.of(context).textTheme.headline2.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: color,
-                ),
-          ),
-          Container(
-            height: 4,
-          ),
-          Text(
-            formattedDate,
-            style: Theme.of(context).textTheme.headline2.copyWith(
-                  fontSize: 14,
-                  color: color,
-                ),
-          )
-        ]),
+  Widget _loading(BuildContext context) {
+    return const Center(
+      child: CircularProgressIndicator(
+        valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
       ),
     );
   }
+
+  List<SessionType> categorizeSession(List<Session> sessionList) {
+    final List<SessionType> result = <SessionType>[];
+    bool check = false;
+    int index = 0;
+    for (final Session element in sessionList) {
+      if (result.isEmpty) {
+        print('not fuck');
+        final SessionType a = SessionType(
+            versionCode: element.versionCode,
+            languageCode: element.languageCode,
+            sessionList: <Session>[]);
+        a.sessionList.add(element);
+        result.add(a);
+      } else {
+        for (int i = 0; i < result.length; i++) {
+          if (result[i].versionCode != element.versionCode ||
+              result[i].languageCode != element.languageCode) {
+            check = true;
+            index = i;
+          }
+        }
+        if (check) {
+          final SessionType a = SessionType(
+              versionCode: element.versionCode,
+              languageCode: element.languageCode,
+              sessionList: <Session>[]);
+          a.sessionList.add(element);
+          print('fuck');
+          result.add(a);
+          check = false;
+        } else {
+          result[index].sessionList.add(element);
+        }
+      }
+    }
+    print('This is ${result.length}');
+    return result;
+  }
+
 }
