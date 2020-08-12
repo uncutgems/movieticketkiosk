@@ -5,13 +5,13 @@ import 'package:ncckios/base/url.dart';
 import 'package:ncckios/model/entity.dart';
 
 class FilmRepository{
-  Future<List<Session>> getSchedule() async {
-    final AVResponse response = await callGET(
-        '${URL.baseURL}${URL.filmSchedule}/?ProjectDate=08%2F10%2F2020');
+  Future<List<Session>> getSchedule(int filmId,String projectTime) async {
+    final AVResponse response = await callPOST(
+         path: '${URL.filmSchedule}?Filmid=$filmId&ProjectTime=$projectTime',body: <String,dynamic>{},);
     if (response.isOK) {
       final List<Session> sessionList =<Session>[];
-      response.response[Constant.lstPlan].forEach((final dynamic itemJson) {
-        Session session = Session.fromJson(itemJson as Map<String,dynamic>);
+      response.response.forEach((final dynamic itemJson) {
+        final Session session = Session.fromJson(itemJson as Map<String,dynamic>);
         sessionList.add(session);
         print('Hello Session ${sessionList.first.id}');
       });

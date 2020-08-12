@@ -29,7 +29,7 @@ class _SplashPageState extends State<SplashPage> {
       cubit: bloc,
       buildWhen: (SplashState prev, SplashState state) {
         if (state is SplashStateNextPage) {
-          Navigator.pushNamed(context,'/filmSchedulePage');
+          Navigator.pushNamed(context,'/checkOutPage');
           return false;
         } else {
           return true;
