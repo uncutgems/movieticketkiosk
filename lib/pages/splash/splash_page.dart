@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/pages/splash/splash_bloc.dart';
+import 'package:ncckios/base/route.dart';
+import '../../base/route.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -11,17 +15,24 @@ class SplashPage extends StatefulWidget {
 
 
 class _SplashPageState extends State<SplashPage> {
-  SplashBloc bloc = SplashBloc();
+
+
   @override
   void initState() {
-    bloc.add(SplashEventNextPage());
     super.initState();
+    Timer(
+        const Duration(seconds: 2),
+            () =>  Navigator.pushNamed(
+          context,
+          RoutesName.defaultPage,
+        ));
   }
 
   @override
-  void dispose() {
-    bloc.close();
-    super.dispose();
+  void initState() {
+    _navigateToHome(context);
+     super.initState();
+
   }
   @override
   Widget build(BuildContext context) {
@@ -69,5 +80,10 @@ class _SplashPageState extends State<SplashPage> {
         ],
       ),
     );
+  }
+  Future<void> _navigateToHome (BuildContext context) async {
+    await Future<void>.delayed(const Duration(seconds: 3));
+    Navigator.pushReplacementNamed(context, RoutesName.homePage);
+
   }
 }

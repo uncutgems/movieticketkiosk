@@ -17,7 +17,7 @@ class Constant {
   static const String firebaseKey = 'firebaseKey';
   static const String token = 'token';
   static const String userInfo = 'userInfo';
-  static const String id = 'Id';
+  static const String id = 'id';
   static const String title = 'title';
   static const String content = 'content';
   static const String time = 'time';
@@ -226,4 +226,11 @@ class Constant {
   static const String seatDataId = 'seatDataId';
   static const String ticketNo = 'ticketNo';
   static const String lstPlan = 'lstPlan';
+  static const String rows = 'rows';
+  static const String PlanId = 'PlanId';// this is the Session ID
+  static const String pjTime = 'pjTime';
+  static const String nextDay = 'nextday';
+  static const String listFilm = 'lstFilm';
+  static const String location = 'Location';
+  static const String day = 'Day';
 }
