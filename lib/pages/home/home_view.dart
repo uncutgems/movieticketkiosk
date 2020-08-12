@@ -34,11 +34,22 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Phim nổi bật'),
-      ),
+
       body: ListView(
         children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Phim nổi bật',
+                  style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+                ),
+                Image.asset('assets/iconfilm.png'),
+              ],
+            ),
+          ),
           PopularFilmWidget(),
           Image.asset('assets/divider.png'),
           Padding(

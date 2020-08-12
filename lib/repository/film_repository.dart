@@ -52,9 +52,14 @@ class FilmRepository {
 
   Future<List<Film>> getFutureFilm() async {
     final AVResponse result = await callGET(URL.futureFilm);
-    List<Film> listFilm = <Film>[];
+    final List<Film> listFilm = <Film>[];
     if (result.isOK) {
 
+      result.response.forEach((final dynamic item) {
+        final Film film = Film.fromJson(item as Map<String, dynamic>);
+
+        listFilm.add(film);
+      });
 
 
       return listFilm;

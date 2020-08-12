@@ -81,6 +81,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
             );
           },
         ),
+        Container(
+          height: screenHeight/ 667*8,
+        ),
         _filmInfo(context, filmList, state.index)
       ],
     );
@@ -102,10 +105,13 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Text(
-                  film.filmName,
-                  style: textTheme.bodyText2.copyWith(
-                      color: AppColor.white, fontWeight: FontWeight.w500),
+                SizedBox(
+                  child: Text(
+                    film.filmName,
+                    style: textTheme.bodyText2.copyWith(
+                        color: AppColor.white, fontWeight: FontWeight.w500),
+                  ),
+                  height: screenHeight / 667 * 32,
                 ),
                 Container(
                   height: screenHeight / 667 * 20,
@@ -152,12 +158,19 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
               ],
             ),
           ),
-          RaisedButton(
-            child: const Text('Đặt vé'),
-            color: AppColor.buttonColor,
-            onPressed: () {
-              print('navigate to đặt vé');
-            },
+          SizedBox(
+            width: screenWidth/ 360*117,
+            height: screenHeight/ 667*48,
+            child: RaisedButton(
+              child: const Text('ĐẶT VÉ'),
+              color: AppColor.buttonColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              onPressed: () {
+                print('navigate to đặt vé');
+              },
+            ),
           )
         ],
       ),

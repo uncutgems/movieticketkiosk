@@ -12,6 +12,7 @@ class FutureFilmWidget extends StatefulWidget {
 
 class _FutureFilmWidgetState extends State<FutureFilmWidget> {
   final FutureFilmBloc bloc = FutureFilmBloc();
+
   @override
   void initState() {
     bloc.add(GetDataFutureFilmEvent());
@@ -39,17 +40,18 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final List<Film> futureFilmList = state.listFilm;
     return Container(
-      height: screenHeight/ 667 * 310,
+      height: screenHeight / 667 * 350,
       child: ListView.separated(
-        physics: const NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             final Film futureFilm = futureFilmList[index];
             final List<String> version = futureFilm.versionCode.split('/');
             return Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Container(
+                  width: screenWidth/ 9*4 ,
+                  height: screenHeight/ 667*240,
                   decoration: filmBoxDecoration.copyWith(
                     color: AppColor.primaryDarkColor,
                     image: DecorationImage(
@@ -59,26 +61,28 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                   ),
                 ),
                 Container(
+                  height: screenHeight/ 667*8,
+                ),
+                Container(
                   width: screenWidth / 11 * 5,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      Text(
-                        futureFilm.filmName,
-                        style: textTheme.bodyText2.copyWith(
-                            color: AppColor.white, fontWeight: FontWeight.w500),
+                      SizedBox(
+                        height: screenHeight/ 667*32 ,
+                        child: Text(
+                          futureFilm.filmName.substring(0, futureFilm.filmName.indexOf('-')),
+                          style: textTheme.bodyText2.copyWith(
+                              color: AppColor.white, fontWeight: FontWeight.w500),
+                        ),
                       ),
                       Container(
                         height: screenHeight / 667 * 20,
                         width: screenWidth / 10 * 1,
                         child: ListView.separated(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
                           separatorBuilder: (BuildContext context, int index) =>
-                              const SizedBox(
-                            width: 4,
-                          ),
+                              Container(width: 4),
                           itemCount: version.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (BuildContext context, int index) {
