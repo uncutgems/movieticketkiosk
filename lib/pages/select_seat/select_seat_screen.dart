@@ -52,16 +52,18 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     final int maximumColumn = findMaxColumn(state.seatList) + 1;
     final int maximumRow = findMaxRow(state.seatList) + 1;
     final int area = maximumColumn * maximumRow;
-    final Seat dummySeat = Seat();
+    final Seat dummySeat = Seat(type: '-1');
 
-    for (int i = 0; i < maximumColumn; i++) {
+    for (int i = 0; i < seatList.length; i++) {
+      if (seatList[i].column == maximumColumn-1) {
+        seatList.insert(i, dummySeat);
+        i++;
+      }
+    }
+
+    for (int i = 0; i < maximumColumn + 1; i++) {
       seatList.insert(i, dummySeat);
     }
-//    for (int i = 0; i < seatList.length; i++) {
-//      if (seatList[i].column == 0) {
-//        seatList.insert(i, dummySeat);
-//      }
-//    }
 
     print(maximumColumn);
     return Scaffold(
@@ -125,7 +127,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             child: GridView.count(
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
-              crossAxisCount: maximumColumn,
+              crossAxisCount: maximumColumn +1 ,
               children: seatList.map((Seat e) {
                 if (e.type == '12') {
                   return Container();
@@ -135,6 +137,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 } else if (e.type == '2') {
                   return _coupleSeatContainer(
                       context: context, color: AppColor.red100);
+                } else if (e.type == '-1') {
+                  return _seatContainer(
+                      context: context, color: Colors.green);
                 } else {
                   return _seatContainer(
                       context: context, color: AppColor.white);
