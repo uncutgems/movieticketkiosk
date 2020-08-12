@@ -297,3 +297,7 @@ String convertAccent(String text) {
   }
   return result;
 }
+String convertDateTime(DateTime date) {
+  final String result = DateFormat('MM%2Fdd%2Fyyyy', 'vi').format(date);
+  return result;
+}
