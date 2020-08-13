@@ -23,10 +23,12 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
+  final int sessionId2 = 204907; //246773 //204907
 
   @override
   void initState() {
-    bloc.add(GetSeatDataSelectSeatEvent(246773)); //204907  , 246773
+    bloc.add(GetSeatDataSelectSeatEvent(sessionId2, _totalPrice(chosenSeatList),
+        chosenSeatList)); //204907  , 246773
     super.initState();
   }
 
@@ -95,7 +97,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       RaisedButton(
         color: AppColor.red100,
         onPressed: () {
-          bloc.add(GetSeatDataSelectSeatEvent(204907));
+          bloc.add(GetSeatDataSelectSeatEvent(
+              sessionId2, _totalPrice(chosenSeatList), chosenSeatList));
         },
       ),
     ]);
@@ -120,6 +123,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 seat: seat,
                 chosenList: chosenSeatList,
                 maximum: maximumColumn,
+                seatList: state.seatList,
               );
             }).toList(),
           ),
@@ -224,159 +228,206 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         Container(
           height: 30,
         ),
-        Row(children: [
-
-          Text(chosenSeatList.length.toString()),
-          const Padding(
-            padding: EdgeInsets.only(left: 16),
-            child: Text(
-             'ghế -',
+        Padding(
+          padding: const EdgeInsets.only(left: 16),
+          child: Row(children: <Widget>[
+            Text(
+              state.chosenList.length.toString(),
+              style: const TextStyle(color: AppColor.white),
+            ),
+            const Text(
+              ' ghế - ',
               style: TextStyle(color: AppColor.white),
             ),
-          ),
-          Container(),
-        ]),
-
-
-
+            Text(
+              state.totalPrice.toString(),
+              style: const TextStyle(color: AppColor.white),
+            ),
+            Container(),
+          ]),
+        ),
       ],
     );
   }
-}
 
-Widget _seatByType({
-  @required BuildContext context,
-  @required Seat seat,
-  @required List<Seat> chosenList,
-  @required int maximum,
-}) {
-  if (seat.type == SeatType.path) {
-    return Container();
-  }
-  if (seat.status == 1 || seat.status == 2) {
-    return _soldSeatContainer(
-        context: context, color: AppColor.dark60, seat: seat);
-  } else if (seat.type == SeatType.vipSeat) {
-    return _seatContainer(
-      context: context,
-      color: AppColor.orange80,
-      seat: seat,
-      chosenList: chosenList,
-    );
-  } else if (seat.type == SeatType.coupleSeat) {
-    return _seatContainer(
+  Widget _seatByType({
+    @required BuildContext context,
+    @required Seat seat,
+    @required List<Seat> chosenList,
+    @required List<Seat> seatList,
+    @required int maximum,
+  }) {
+    for (Seat s in chosenList) {
+      if (seat.code == s.code) {
+        return _selectSeatContainer(
+          context: context,
+          seat: seat,
+          chosenList: chosenList,
+          seatList: seatList,
+          color: AppColor.white,
+        );
+      }
+    }
+
+    if (seat.type == SeatType.path) {
+      return Container();
+    }
+    if (seat.status == 1 || seat.status == 2) {
+      return _soldSeatContainer(
+          context: context, color: AppColor.dark60, seat: seat);
+    } else if (seat.type == SeatType.vipSeat) {
+      return _seatContainer(
         context: context,
-        color: AppColor.red100,
+        color: AppColor.orange80,
         seat: seat,
-        chosenList: chosenList);
-  } else if (seat.type == SeatType.numberTheSeat &&
-      seat.column == (maximum - 1)) {
-    return Container();
-  } else if (seat.type == SeatType.numberTheSeat) {
-    return _numberSeatContainer(context: context, seat: seat);
-  } else if (seat.type == SeatType.alphabetSeat) {
-    return _alphabetSeatContainer(context: context, seat: seat);
-  } else {
-    return _seatContainer(
+        chosenList: chosenList,
+        seatList: seatList,
+      );
+    } else if (seat.type == SeatType.coupleSeat) {
+      return _seatContainer(
+          context: context,
+          color: AppColor.red100,
+          seat: seat,
+          chosenList: chosenList,
+          seatList: seatList);
+    } else if (seat.type == SeatType.numberTheSeat &&
+        seat.column == (maximum - 1)) {
+      return Container();
+    } else if (seat.type == SeatType.numberTheSeat) {
+      return _numberSeatContainer(context: context, seat: seat);
+    } else if (seat.type == SeatType.alphabetSeat) {
+      return _alphabetSeatContainer(context: context, seat: seat);
+    } else {
+      return _seatContainer(
         context: context,
         color: AppColor.white,
         chosenList: chosenList,
-        seat: seat);
+        seat: seat,
+        seatList: seatList,
+      );
+    }
   }
-}
 
-Widget _seatContainer({
-  @required BuildContext context,
-  @required Color color,
-  @required Seat seat,
-  @required List<Seat> chosenList,
-}) {
-  return Container(
-    child: GestureDetector(
-//      child: Text(
-////        seat.code,
-////        style: const TextStyle(color: AppColor.blue),
-////      ),
-      child: const Center(
-        child: Icon(
-         Icons.check,color: AppColor.green,
+  Widget _seatContainer({
+    @required BuildContext context,
+    @required Color color,
+    @required Seat seat,
+    @required List<Seat> chosenList,
+    @required List<Seat> seatList,
+  }) {
+    return Container(
+      child: GestureDetector(
+        child: Text(
+          seat.code,
+          style: const TextStyle(color: AppColor.blue),
+        ),
+
+        onTap: () {
+          bool check = true;
+          checkValidSeat(chosenList, seat, check);
+          bloc.add(UpdateSeatDataSelectSeatEvent(
+              seatList, _totalPrice(chosenList), chosenList));
+        },
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+    );
+  }
+
+  Widget _selectSeatContainer({
+    @required BuildContext context,
+    @required Color color,
+    @required Seat seat,
+    @required List<Seat> chosenList,
+    @required List<Seat> seatList,
+  }) {
+    return Container(
+      child: GestureDetector(
+        child: const Center(
+          child: Icon(
+            Icons.check,
+            color: AppColor.green,
+          ),
+        ),
+        onTap: () {
+          bool check = true;
+          checkValidSeat(chosenList, seat, check);
+          bloc.add(UpdateSeatDataSelectSeatEvent(
+              seatList, _totalPrice(chosenList), chosenList));
+        },
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+    );
+  }
+
+  Widget _soldSeatContainer({
+    @required BuildContext context,
+    @required Color color,
+    @required Seat seat,
+  }) {
+    return Container(
+      child: GestureDetector(
+        child: Text(
+          seat.code,
+          style: const TextStyle(color: AppColor.blue),
         ),
       ),
-
-      onTap: () {
-        bool check = true;
-        checkValidSeat(chosenList, seat, check);
-
-      },
-    ),
-    decoration: BoxDecoration(
-      border: Border.all(),
-      borderRadius: BorderRadius.circular(4),
-      color: color,
-    ),
-  );
-}
-
-Widget _soldSeatContainer({
-  @required BuildContext context,
-  @required Color color,
-  @required Seat seat,
-}) {
-  return Container(
-    child: GestureDetector(
-      child: Text(
-        seat.code,
-        style: const TextStyle(color: AppColor.blue),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
       ),
-    ),
-    decoration: BoxDecoration(
-      border: Border.all(),
-      borderRadius: BorderRadius.circular(4),
-      color: color,
-    ),
-  );
-}
+    );
+  }
 
-Widget _numberSeatContainer({
-  @required BuildContext context,
-  @required Seat seat,
-}) {
-  int index = seat.column;
-  return Container(
-    child: Center(
-        child: Text(
-      (index + 1).toString(),
-      style: const TextStyle(color: AppColor.white),
-    )),
-  );
-}
+  Widget _numberSeatContainer({
+    @required BuildContext context,
+    @required Seat seat,
+  }) {
+    int index = seat.column;
+    return Container(
+      child: Center(
+          child: Text(
+        (index + 1).toString(),
+        style: const TextStyle(color: AppColor.white),
+      )),
+    );
+  }
 
-Widget _alphabetSeatContainer({
-  @required BuildContext context,
-  @required Seat seat,
-}) {
-  return Container(
-    child: Center(
-        child: Text(
-      String.fromCharCode(seat.rows + 65),
-      style: const TextStyle(color: AppColor.white),
-    )),
-  );
-}
+  Widget _alphabetSeatContainer({
+    @required BuildContext context,
+    @required Seat seat,
+  }) {
+    return Container(
+      child: Center(
+          child: Text(
+        String.fromCharCode(seat.rows + 65),
+        style: const TextStyle(color: AppColor.white),
+      )),
+    );
+  }
 
-Widget _demoSeat({
-  @required BuildContext context,
-  @required Color color,
-}) {
-  return Container(
-    width: 26,
-    height: 26,
-    decoration: BoxDecoration(
-      border: Border.all(),
-      borderRadius: BorderRadius.circular(4),
-      color: color,
-    ),
-  );
+  Widget _demoSeat({
+    @required BuildContext context,
+    @required Color color,
+  }) {
+    return Container(
+      width: 26,
+      height: 26,
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+    );
+  }
 }
 
 int findMaxColumn(List<Seat> myList) {
@@ -416,15 +467,12 @@ void checkValidSeat(List<Seat> chosenList, Seat seat, bool check) {
   print(_totalPrice(chosenList));
 }
 
-
-double _totalPrice(List<Seat> chosenList){
+double _totalPrice(List<Seat> chosenList) {
   double totalPrice = 0;
-  if(chosenList.isNotEmpty && chosenList != null){
-    for(final Seat chosenSeat in chosenList){
+  if (chosenList.isNotEmpty && chosenList != null) {
+    for (final Seat chosenSeat in chosenList) {
       totalPrice = chosenSeat.price + totalPrice;
     }
   }
   return totalPrice;
-
-
 }
