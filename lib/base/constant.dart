@@ -233,4 +233,13 @@ class Constant {
   static const String listFilm = 'lstFilm';
   static const String location = 'Location';
   static const String day = 'Day';
+  static const String customerId = 'customerId';
+  static const String planScreenId = 'planScreenId';
+  static const String seatsF1 = 'seatsF1';
+  static const String listChairValueF1 = 'ListChairValueF1';
+  static const String customerFirstName = 'CustomerFirstName';
+  static const String customerLastName = 'CustomerLastName';
+  static const String paymentMethodSystemName = 'PaymentMethodSystemName';
+  static const String orderId='OrderId';
+  static const String orderTotal='OrderTotal';
 }

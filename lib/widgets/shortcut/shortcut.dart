@@ -68,30 +68,3 @@ void fail(String error,BuildContext context){
     },
   );
 }
-class Countdown extends AnimatedWidget {
-  const Countdown( {Key key, this.animation, this.phoneNumberController, this.animationController}) : super(key: key, listenable: animation);
-
-  final Animation<int> animation;
-  final TextEditingController phoneNumberController;
-  final AnimationController animationController;
-  @override
-  Widget build(BuildContext context) {
-    final Duration clockTimer = Duration(seconds: animation.value);
-    final String timerText =
-    clockTimer.inSeconds.remainder(10).toString().padLeft(2, '0');
-//    print('animation.value  ${animation.value} ');
-//    print('inSeconds ${clockTimer.inSeconds.toString()}');
-//    print('inSeconds.remainder ${clockTimer.inSeconds.remainder(100).toString()}');
-    if(animation.value>0) {
-      return Text(
-        ' $timerText s',
-        style: TextStyle(
-          fontSize: 14,
-          color: Theme
-              .of(context)
-              .primaryColor,
-        ),
-      );
-    }
-    }
-  }
