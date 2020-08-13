@@ -11,3 +11,9 @@ class ChangedPagePopularFilmEvent extends PopularFilmEvent {
   final List<Film> listFilm;
 
 }
+
+class ClickToDetailPopularFilmEvent extends PopularFilmEvent {
+  ClickToDetailPopularFilmEvent(this.id);
+  final int id;
+
+}

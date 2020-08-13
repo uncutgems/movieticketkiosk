@@ -14,11 +14,18 @@ class SuccessGetDataPopularFilmState extends PopularFilmState {
 
 class FailGetDataPopularFilmState extends PopularFilmState {
   FailGetDataPopularFilmState(this.error);
-  final String error;
 
+  final String error;
 }
 
 class PageChangedPopularFilmState extends PopularFilmState {
-  PageChangedPopularFilmState( this.filmList);
+  PageChangedPopularFilmState(this.filmList);
+
   final List<Film> filmList;
+}
+
+class NavigateDetailPopularFilmState extends PopularFilmState {
+  NavigateDetailPopularFilmState(this.id);
+
+  final int id;
 }

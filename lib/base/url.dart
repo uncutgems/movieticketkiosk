@@ -3,4 +3,7 @@ class URL {
   static const String filmSchedule='GetSessionByFilm';
   static const String getSeatURL = baseURL + 'GetSeats';
   static const String getFilm = baseURL + 'GetFilms';
+  static const String futureFilm = baseURL + 'FilmShowings';
+  static const String detailFilm = baseURL + 'Films';
+
 }

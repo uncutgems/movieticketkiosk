@@ -5,4 +5,5 @@ class RoutesName {
   static const String selectSeatPage = 'selectSeatPage';
   static const String homePage = 'homePage';
   static const String defaultPage = 'defaultPage';
+  static const String detailPage = 'detailPage';
 }
