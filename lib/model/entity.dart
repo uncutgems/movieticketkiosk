@@ -180,6 +180,7 @@ class Film {
     this.ageAboveShow,
     this.imageUrl,
     this.bannerUrl,
+    this.category
   });
 
   factory Film.fromJson(final Map<String, dynamic> data) {
@@ -205,6 +206,7 @@ class Film {
       ageAboveShow: getString(Constant.ageAboveShow, data),
       imageUrl: getString(Constant.imageUrl, data),
       bannerUrl: getString(Constant.bannerUrl, data),
+      category: getString(Constant.category, data)
     );
   }
 
@@ -226,6 +228,7 @@ class Film {
   final String ageAboveShow;
   final String imageUrl;
   final String bannerUrl;
+  final String category;
 
   Film copyWith({
     int id,
@@ -246,6 +249,7 @@ class Film {
     String ageAboveShow,
     String imageUrl,
     String bannerUrl,
+    String category,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (filmNameEn == null || identical(filmNameEn, this.filmNameEn)) &&
@@ -264,11 +268,12 @@ class Film {
         (sellOnline == null || identical(sellOnline, this.sellOnline)) &&
         (ageAboveShow == null || identical(ageAboveShow, this.ageAboveShow)) &&
         (imageUrl == null || identical(imageUrl, this.imageUrl)) &&
-        (bannerUrl == null || identical(bannerUrl, this.bannerUrl))) {
+        (bannerUrl == null || identical(bannerUrl, this.bannerUrl)) &&
+        (category == null || identical(category, this.category))) {
       return this;
     }
 
-    return Film(
+    return  Film(
       id: id ?? this.id,
       filmNameEn: filmNameEn ?? this.filmNameEn,
       filmName: filmName ?? this.filmName,
@@ -287,6 +292,7 @@ class Film {
       ageAboveShow: ageAboveShow ?? this.ageAboveShow,
       imageUrl: imageUrl ?? this.imageUrl,
       bannerUrl: bannerUrl ?? this.bannerUrl,
+      category: category ?? this.category,
     );
   }
 
@@ -310,6 +316,7 @@ class Film {
       Constant.ageAboveShow: ageAboveShow,
       Constant.imageUrl: imageUrl,
       Constant.bannerUrl: bannerUrl,
+      Constant.category: category,
     };
   }
 }
