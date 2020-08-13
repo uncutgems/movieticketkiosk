@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
+import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -24,9 +26,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ageAboveShow: '0',
       versionCode: '2D',
       languageCode: 'PDV');
-
+  CheckOutBloc bloc = CheckOutBloc();
   @override
   void dispose() {
+    bloc.close();
     firstNameController.dispose();
     lastNameController.dispose();
     super.dispose();
@@ -34,6 +37,24 @@ class _CheckOutPageState extends State<CheckOutPage> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocBuilder<CheckOutBloc,CheckOutState>(
+      cubit: bloc,
+      builder: (BuildContext context, CheckOutState state){
+        if (state is CheckOutInitial){
+          return mainScreen(context, bottomHalf(context));
+        }
+        else if (state is CheckOutStateQR){
+          return mainScreen(context,bottomQR(context));
+        }
+        return const Material();
+      },
+
+
+    );
+  }
+
+
+  Widget mainScreen(BuildContext context, Widget widget){
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
@@ -70,85 +91,18 @@ class _CheckOutPageState extends State<CheckOutPage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.036,
           ),
-         gradientLine(context),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.036,
-          ),
-          Center(
-            child: Text(
-              'Vui lòng nhập thông tin đặt vé',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(color: AppColor.white),
-            ),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * (24 / 667),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: nameBox(context, lastNameController, 'Họ'),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * (24 / 667),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: nameBox(context, firstNameController, 'Tên'),
-          ),
-          Container(
-            height: MediaQuery.of(context).size.height * 0.036,
-          ),
           gradientLine(context),
           Container(
-            height: MediaQuery.of(context).size.height * (24 / 667),
+            height: MediaQuery.of(context).size.height * 0.036,
           ),
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: InkWell(
-              onTap: () =>
-                  launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
-              child: RichText(
-                text: TextSpan(
-                  text: 'Tôi đồng ý với ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(color: AppColor.white),
-                  children: <TextSpan>[
-                    TextSpan(
-                        text: 'điều khoản sử dụng',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText2
-                            .copyWith(color: AppColor.red)),
-                    TextSpan(
-                      text: ' và đang mua vé cho người có độ tuổi phù hợp',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(color: AppColor.white),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Container(height: MediaQuery.of(context).size.height * (17 / 667),),
-          Padding(
-            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
-            child: AVButtonFill(
-              onPressed: () {
-
-              },
-              title: 'Tiến hành thanh toán',
-            ),
-          ),
+          widget
         ],
       ),
     );
   }
+
+
+
 
   Widget filmInfo(BuildContext context) {
     return Padding(
@@ -204,6 +158,93 @@ class _CheckOutPageState extends State<CheckOutPage> {
           )
         ],
       ),
+    );
+  }
+
+  Widget bottomHalf(BuildContext context){
+    return ListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: <Widget>[
+        Center(
+          child: Text(
+            'Vui lòng nhập thông tin đặt vé',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.white),
+          ),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * (24 / 667),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: nameBox(context, lastNameController, 'Họ'),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * (24 / 667),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: nameBox(context, firstNameController, 'Tên'),
+        ),
+        Container(
+          height: MediaQuery.of(context).size.height * 0.036,
+        ),
+        gradientLine(context),
+        Container(
+          height: MediaQuery.of(context).size.height * (24 / 667),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: InkWell(
+            onTap: () =>
+                launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
+            child: RichText(
+              text: TextSpan(
+                text: 'Tôi đồng ý với ',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(color: AppColor.white),
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'điều khoản sử dụng',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(color: AppColor.red)),
+                  TextSpan(
+                    text: ' và đang mua vé cho người có độ tuổi phù hợp',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(color: AppColor.white),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+        Container(height: MediaQuery.of(context).size.height * (17 / 667),),
+        Padding(
+          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          child: AVButtonFill(
+            onPressed: () {
+              bloc.add(CheckOutEventClickButton());
+            },
+            title: 'Tiến hành thanh toán',
+          ),
+        ),
+      ],
+    );
+  }
+  Widget bottomQR(BuildContext context){
+    return Column(
+      children: <Widget>[
+        Center(child: Text('Vui lòng quét mã QR để tiến hành thanh toán',style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),))
+      ],
     );
   }
 }

@@ -69,6 +69,10 @@ class DateWidget extends StatelessWidget {
 //      dateStyle=dateTextStyle.copyWith(color: AppColor.disableColor);
 //      dayStyle=weekDayTextStyle.copyWith(color: AppColor.disableColor);
 //    }
+    bool today=false;
+    if(date.day==DateTime.now().day){
+     today=true;
+    }
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
       onLongPress: isDisabled ? null : onLongTap,
@@ -96,7 +100,7 @@ class DateWidget extends StatelessWidget {
                     break;
 
                   case LabelType.weekday:
-                    text = Text(
+                    text = Text(today?'Hôm nay':
                       DateFormat(weekDayFormat ?? defaultWeekDayFormat,'vi').format(date),
                       style: dayStyle,
                     );
