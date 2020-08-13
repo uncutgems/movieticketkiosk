@@ -16,9 +16,8 @@ class FilmRepository {
         final Session session =
             Session.fromJson(itemJson as Map<String, dynamic>);
         sessionList.add(session);
-        print('Hello Session ${sessionList.first.id}');
+        print('Hello Session ${sessionList.first.languageCode}');
       });
-
       return sessionList;
     } else {
       throw APIException(response);
@@ -32,11 +31,10 @@ class FilmRepository {
     if (result.isOK) {
       print(result.response);
       result.response[Constant.nextDay].forEach((final dynamic itemJson) {
-        final NextDay nextDay =
+         final NextDay nextDay =
             NextDay.fromJson(itemJson as Map<String, dynamic>);
 
         nextDayList.add(nextDay);
-
         itemJson[Constant.listFilm].forEach((final dynamic itemJsonFilm) {
           final Film film = Film.fromJson(itemJsonFilm as Map<String, dynamic>);
 

@@ -65,10 +65,10 @@ class DateWidget extends StatelessWidget {
         isSelected ? selectedDateTextStyle ?? dateTextStyle ?? textStyle : dateTextStyle ?? textStyle;
      TextStyle dayStyle =
         isSelected ? selectedWeekDayTextStyle ?? weekDayTextStyle ?? subtextStyle : weekDayTextStyle ?? subtextStyle;
-    if(date.day>DateTime.now().day+2){
-      dateStyle=dateTextStyle.copyWith(color: AppColor.disableColor);
-      dayStyle=weekDayTextStyle.copyWith(color: AppColor.disableColor);
-    }
+//    if(date.day>DateTime.now().day+2){
+//      dateStyle=dateTextStyle.copyWith(color: AppColor.disableColor);
+//      dayStyle=weekDayTextStyle.copyWith(color: AppColor.disableColor);
+//    }
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
       onLongPress: isDisabled ? null : onLongTap,

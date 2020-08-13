@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
+import 'package:ncckios/widgets/button/button_widget.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -23,12 +24,14 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ageAboveShow: '0',
       versionCode: '2D',
       languageCode: 'PDV');
+
   @override
   void dispose() {
     firstNameController.dispose();
     lastNameController.dispose();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +48,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
       body: ListView(
         padding: const EdgeInsets.all(0),
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 32.0, right: 32),
             child: Row(
@@ -67,23 +70,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.036,
           ),
-          Container(
-            height: 1,
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: <double>[
-                  0,
-                  0.52,
-                  1
-                ],
-                    colors: [
-                  Color.fromARGB(32, 36, 68, 0),
-                  Color(0xff5D65AA),
-                  Color.fromARGB(32, 36, 68, 0),
-                ])),
-          ),
+         gradientLine(context),
           Container(
             height: MediaQuery.of(context).size.height * 0.036,
           ),
@@ -113,45 +100,51 @@ class _CheckOutPageState extends State<CheckOutPage> {
           Container(
             height: MediaQuery.of(context).size.height * 0.036,
           ),
-          Container(
-            height: 1,
-            decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                    stops: <double>[
-                  0,
-                  0.52,
-                  1
-                ],
-                    colors: [
-                  Color.fromARGB(32, 36, 68, 0),
-                  Color(0xff5D65AA),
-                  Color.fromARGB(32, 36, 68, 0),
-                ])),
-          ),
+          gradientLine(context),
           Container(
             height: MediaQuery.of(context).size.height * (24 / 667),
           ),
-
-          
-          Expanded(
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
             child: InkWell(
-              onTap: () => launch(
-                  'https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
+              onTap: () =>
+                  launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
               child: RichText(
-                text:  TextSpan(
+                text: TextSpan(
                   text: 'Tôi đồng ý với ',
-                  style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText2
+                      .copyWith(color: AppColor.white),
                   children: <TextSpan>[
-                    TextSpan(text: 'điều khoản sử dụng', style: Theme.of(context).textTheme.bodyText2.copyWith(color:AppColor.red)),
-                    TextSpan(text: ' và đang mua vé cho người có độ tuổi phù hợp',style: Theme.of(context).textTheme.bodyText2.copyWith(color:AppColor.white),),
+                    TextSpan(
+                        text: 'điều khoản sử dụng',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText2
+                            .copyWith(color: AppColor.red)),
+                    TextSpan(
+                      text: ' và đang mua vé cho người có độ tuổi phù hợp',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(color: AppColor.white),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
+          Container(height: MediaQuery.of(context).size.height * (17 / 667),),
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+            child: AVButtonFill(
+              onPressed: () {
 
+              },
+              title: 'Tiến hành thanh toán',
+            ),
+          ),
         ],
       ),
     );

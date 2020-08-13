@@ -35,3 +35,36 @@ Widget nameBox(
     ],
   );
 }
+Widget gradientLine(BuildContext context){
+  return  Container(
+    height: 1,
+    decoration: const BoxDecoration(
+        gradient: LinearGradient(
+            begin: Alignment.topRight,
+            end: Alignment.bottomLeft,
+            stops: <double>[
+              0,
+              0.52,
+              1
+            ],
+            colors: <Color>[
+              Color.fromARGB(32, 36, 68, 0),
+              Color(0xff5D65AA),
+              Color.fromARGB(32, 36, 68, 0),
+            ])),
+  );
+}
+void fail(String error,BuildContext context){
+  showDialog<dynamic>(
+    context: context,
+    barrierDismissible: false,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        actions: const <Widget>[
+          CloseButton()
+        ],
+        title: Text(error),
+      );
+    },
+  );
+}

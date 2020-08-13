@@ -351,6 +351,8 @@ class Session {
     this.priceOfPosition,
     this.priceOfPosition2,
     this.priceOfPosition3,
+    this.languageCode,
+    this.versionCode
   });
 
   factory Session.fromJson(final Map<String, dynamic> data) {
@@ -371,6 +373,8 @@ class Session {
       priceOfPosition: getString(Constant.priceOfPosition, data),
       priceOfPosition2: getString(Constant.priceOfPosition2, data),
       priceOfPosition3: getString(Constant.priceOfPosition3, data),
+      versionCode: getString(Constant.versionCode, data),
+      languageCode: getString(Constant.languageCode, data)
     );
   }
 
@@ -387,6 +391,8 @@ class Session {
     String priceOfPosition,
     String priceOfPosition2,
     String priceOfPosition3,
+    String versionCode,
+    String languageCode,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (planCinemaId == null || identical(planCinemaId, this.planCinemaId)) &&
@@ -396,14 +402,20 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3))) {
+        (isOnlineSelling == null ||
+            identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null ||
+            identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null ||
+            identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null ||
+            identical(priceOfPosition3, this.priceOfPosition3)) &&
+        (versionCode == null || identical(versionCode, this.versionCode)) &&
+        (languageCode == null || identical(languageCode, this.languageCode))) {
       return this;
     }
 
-    return Session(
+    return  Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -416,6 +428,8 @@ class Session {
       priceOfPosition: priceOfPosition ?? this.priceOfPosition,
       priceOfPosition2: priceOfPosition2 ?? this.priceOfPosition2,
       priceOfPosition3: priceOfPosition3 ?? this.priceOfPosition3,
+      versionCode: versionCode ?? this.versionCode,
+      languageCode: languageCode ?? this.languageCode,
     );
   }
 
@@ -431,7 +445,8 @@ class Session {
   final String priceOfPosition;
   final String priceOfPosition2;
   final String priceOfPosition3;
-
+  final String versionCode;
+  final String languageCode;
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -446,6 +461,8 @@ class Session {
       Constant.priceOfPosition: priceOfPosition,
       Constant.priceOfPosition2: priceOfPosition2,
       Constant.priceOfPosition3: priceOfPosition3,
+      Constant.versionCode: versionCode,
+      Constant.languageCode: languageCode,
     };
   }
 }
@@ -566,4 +583,11 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+
+}
+class SessionType {
+  SessionType({ this.versionCode, this.languageCode,this.sessionList});
+  final String versionCode;
+  final String languageCode;
+  final List<Session> sessionList;
 }
