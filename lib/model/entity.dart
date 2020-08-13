@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ncckios/base/constant.dart';
 
@@ -583,8 +584,35 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
-
 }
+
+@JsonSerializable(nullable: false)
+class Order{
+  Order({this.orderTotal, this.orderId});
+
+  factory Order.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Order();
+    }
+    return Order(
+      orderId: getInt(Constant.orderId, data),
+      orderTotal: getInt(Constant.orderTotal, data),
+
+    );
+  }
+  final int orderId;
+  final int orderTotal;
+
+
+  Map<String,dynamic> toJson(){
+    return <String,dynamic>{
+      Constant.orderId : orderId,
+      Constant.orderTotal:orderTotal,
+    };
+  }
+}
+
+
 class SessionType {
   SessionType({ this.versionCode, this.languageCode,this.sessionList});
   final String versionCode;

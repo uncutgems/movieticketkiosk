@@ -174,8 +174,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
             element.projectTime.substring(11, element.projectTime.length - 3),
             style: Theme.of(context)
                 .textTheme
-                .bodyText2
-                .copyWith(fontWeight: FontWeight.bold),
+                .button
+                .copyWith(fontWeight: FontWeight.w500,fontSize: 16),
           ),
         ),
       ));
