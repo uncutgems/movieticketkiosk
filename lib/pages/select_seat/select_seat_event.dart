@@ -8,3 +8,5 @@ class GetSeatDataSelectSeatEvent extends SelectSeatEvent {
 
   final int planId;
 }
+
+

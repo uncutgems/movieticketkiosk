@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import '../base/api_handler.dart';
 import '../base/constant.dart';
 import '../base/url.dart';
@@ -23,9 +25,37 @@ class SeatRepository {
         });
       });
 
+      final int maximumColumn = findMaxColumn(seatList) + 1;
+      int rowIndex = 0;
+      int columnIndex = maximumColumn  ;
+
+      for (int i = 0; i < seatList.length; i++) {
+        if (seatList[i].column == maximumColumn - 1) {
+          seatList.insert(i, Seat(type: '-2', rows: rowIndex));
+          rowIndex++;
+          i++;
+        }
+      }
+
+      for (int i = 0; i < maximumColumn + 1; i++) {
+        seatList.insert(i, Seat(type: '-1', column: columnIndex ));
+        columnIndex --;
+      }
+
+      print(maximumColumn.toString());
+
       return seatList;
     } else {
       throw APIException(response);
     }
   }
+}
+
+
+int findMaxColumn(List<Seat> myList) {
+  int maxColumnNumber;
+  if (myList != null && myList.isNotEmpty) {
+    maxColumnNumber = myList.map<int>((Seat e) => e.column??0).reduce(max);
+  }
+  return maxColumnNumber;
 }

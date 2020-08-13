@@ -45,7 +45,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
       ),
       body: ListView(
         padding: const EdgeInsets.all(0),
-        children: [
+        children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 32.0, right: 32),
             child: Row(

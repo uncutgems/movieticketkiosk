@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:math';
 
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
@@ -23,10 +24,13 @@ class SelectSeatBloc extends Bloc<SelectSeatEvent, SelectSeatState> {
       try {
         yield LoadSeatDataSelectSeatState();
         final List<Seat> seatList = await seatRepository.getSeat(event.planId);
+
         yield ReceiveSeatDataSelectSeatState(seatList);
       } on APIException catch (error) {
-        yield FailToReceiveSeatDataSelectSeatState();
+
+        yield FailToReceiveSeatDataSelectSeatState(error.message());
       }
     }
   }
 }
+

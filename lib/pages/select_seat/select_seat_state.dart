@@ -13,4 +13,11 @@ class ReceiveSeatDataSelectSeatState extends SelectSeatState {
   final List<Seat> seatList;
 }
 
-class FailToReceiveSeatDataSelectSeatState extends SelectSeatState {}
+
+
+
+class FailToReceiveSeatDataSelectSeatState extends SelectSeatState {
+  FailToReceiveSeatDataSelectSeatState(this.errorMessage);
+
+  final String errorMessage;
+}

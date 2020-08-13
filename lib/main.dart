@@ -54,7 +54,7 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.selectSeatPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => SelectSeatPage(),
+        builder: (BuildContext context) => const SelectSeatPage(),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
 
