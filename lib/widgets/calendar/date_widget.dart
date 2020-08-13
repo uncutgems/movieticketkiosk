@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:ncckios/base/color.dart';
 
 import 'date_helper.dart';
 
@@ -60,11 +61,14 @@ class DateWidget extends StatelessWidget {
 
     final TextStyle monthStyle =
         isSelected ? selectedMonthTextStyle ?? monthTextStyle ?? subtextStyle : monthTextStyle ?? subtextStyle;
-    final TextStyle dateStyle =
+     TextStyle dateStyle =
         isSelected ? selectedDateTextStyle ?? dateTextStyle ?? textStyle : dateTextStyle ?? textStyle;
-    final TextStyle dayStyle =
+     TextStyle dayStyle =
         isSelected ? selectedWeekDayTextStyle ?? weekDayTextStyle ?? subtextStyle : weekDayTextStyle ?? subtextStyle;
-
+//    if(date.day>DateTime.now().day+2){
+//      dateStyle=dateTextStyle.copyWith(color: AppColor.disableColor);
+//      dayStyle=weekDayTextStyle.copyWith(color: AppColor.disableColor);
+//    }
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
       onLongPress: isDisabled ? null : onLongTap,
@@ -78,21 +82,22 @@ class DateWidget extends StatelessWidget {
               ...labelOrder.map((LabelType type) {
                 Text text;
                 switch (type) {
-                  case LabelType.month:
-                    text = Text(
-                      DateFormat(monthFormat ?? defaultMonthFormat).format(date),
-                      style: monthStyle,
-                    );
-                    break;
                   case LabelType.date:
                     text = Text(
                       DateFormat(dateFormat ?? defaultDateFormat).format(date),
                       style: dateStyle,
                     );
                     break;
+                  case LabelType.month:
+                    text = Text(
+                      DateFormat(monthFormat ?? defaultMonthFormat).format(date),
+                      style: monthStyle,
+                    );
+                    break;
+
                   case LabelType.weekday:
                     text = Text(
-                      DateFormat(weekDayFormat ?? defaultWeekDayFormat).format(date),
+                      DateFormat(weekDayFormat ?? defaultWeekDayFormat,'vi').format(date),
                       style: dayStyle,
                     );
                     break;

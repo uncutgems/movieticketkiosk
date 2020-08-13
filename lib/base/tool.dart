@@ -297,3 +297,24 @@ String convertAccent(String text) {
   }
   return result;
 }
+String convertDateToInput(DateTime date) {
+  final String result = DateFormat('MM%2Fdd%2Fyyyy', 'vi').format(date);
+  return result;
+}
+String convertTimeToDisplay(String date){
+  final DateTime dateTime = DateTime.parse(date);
+  final String result = DateFormat('hh:mm - dd/MM/yyyy').format(dateTime);
+  return result;
+}
+
+String convertLanguageCode (String code) {
+  switch (code) {
+    case 'PDV':
+      return 'Phụ đề Việt';
+    case 'LTV':
+      return 'Lồng tiếng Việt';
+    case 'TMV':
+      return 'Thuyết minh tiếng Việt';
+    default:
+      return code;
+  }}

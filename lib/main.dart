@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/pages/check_out_page/check_out_page.dart';
 import 'package:ncckios/pages/default/default_page.dart';
+import 'package:ncckios/pages/detail/detail_view.dart';
+import 'package:ncckios/pages/film_schedule/film_schedule_page.dart';
+import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
+import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
 
 void main() {
@@ -37,6 +42,34 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => SplashPage(),
         settings: const RouteSettings(name: RoutesName.splashPage),
+      );
+    case RoutesName.filmSchedulePage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => FilmSchedulePage(),
+        settings: const RouteSettings(name: RoutesName.filmSchedulePage),
+      );
+    case RoutesName.checkOutPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => CheckOutPage(),
+        settings: const RouteSettings(name: RoutesName.checkOutPage),
+      );
+    case RoutesName.selectSeatPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => SelectSeatPage(),
+        settings: const RouteSettings(name: RoutesName.selectSeatPage),
+      );
+
+    case RoutesName.homePage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => HomePage(),
+        settings: const RouteSettings(name: RoutesName.homePage),
+      );
+    case RoutesName.detailPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => DetailPage(
+          id: data as int,
+        ),
+        settings: const RouteSettings(name: RoutesName.detailPage),
       );
 
     default:

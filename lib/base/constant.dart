@@ -225,4 +225,13 @@ class Constant {
   static const String priceOfPosition3 = 'PriceOfPosition3';
   static const String seatDataId = 'seatDataId';
   static const String ticketNo = 'ticketNo';
+  static const String lstPlan = 'lstPlan';
+  static const String rows = 'rows';
+  static const String PlanId = 'PlanId';// this is the Session ID
+  static const String pjTime = 'pjTime';
+  static const String nextDay = 'nextday';
+  static const String listFilm = 'lstFilm';
+  static const String location = 'Location';
+  static const String day = 'Day';
+  static const String category = 'Category';
 }

@@ -17,7 +17,7 @@ final ThemeData themeData = ThemeData(
   iconTheme: iconThemeData,
   appBarTheme: appBarTheme,
   buttonTheme: buttonThemeData,
-  buttonColor: AppColor.primaryDarkColor,
+  buttonColor: AppColor.buttonColor,
   disabledColor: AppColor.disableColor,
   scaffoldBackgroundColor: AppColor.primaryColor,
   dialogTheme: dialogTheme,
@@ -31,7 +31,7 @@ final DialogTheme dialogTheme = DialogTheme(
 );
 const ButtonThemeData buttonThemeData = ButtonThemeData(
   disabledColor: AppColor.disableColor,
-  buttonColor: AppColor.primaryDarkColor,
+  buttonColor: AppColor.buttonColor,
   textTheme: ButtonTextTheme.primary,
 );
 
@@ -41,6 +41,7 @@ final AppBarTheme appBarTheme = AppBarTheme(
   brightness: Brightness.dark,
   actionsIconTheme: iconThemeData,
   textTheme: textTheme.copyWith(headline6: textTheme.headline6.copyWith(color: AppColor.white)),
+  elevation: 0.0,
 );
 
 const IconThemeData iconThemeData = IconThemeData(
@@ -124,4 +125,9 @@ final TextTheme textTheme = TextTheme(
     letterSpacing: 1.5,
     color: AppColor.white,
   ),
+);
+
+final BoxDecoration filmBoxDecoration = BoxDecoration(
+  borderRadius: BorderRadius.circular(12),
+
 );

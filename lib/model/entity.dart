@@ -122,6 +122,18 @@ List<String> getListString(String key, Map<String, dynamic> data) {
   return result;
 }
 
+/// List film
+List<Film> parseListFilm(List<dynamic> data) {
+  final List<Film> films = <Film>[];
+  if (data == null) {
+    return films;
+  }
+  for (final dynamic itemJson in data) {
+    films.add(Film.fromJson(itemJson as Map<String, dynamic>));
+  }
+  return films;
+}
+
 @JsonSerializable(nullable: false)
 class AVResponse {
   AVResponse({
@@ -133,7 +145,7 @@ class AVResponse {
 
   final bool isOK; // check Response is OK
   final int code; // status code
-  final Map<String, dynamic> response; // data body response
+  final dynamic response; // data body response
   final String message;
 
   Map<String, dynamic> toJson() {
@@ -167,6 +179,7 @@ class Film {
     this.ageAboveShow,
     this.imageUrl,
     this.bannerUrl,
+    this.category
   });
 
   factory Film.fromJson(final Map<String, dynamic> data) {
@@ -192,6 +205,7 @@ class Film {
       ageAboveShow: getString(Constant.ageAboveShow, data),
       imageUrl: getString(Constant.imageUrl, data),
       bannerUrl: getString(Constant.bannerUrl, data),
+      category: getString(Constant.category, data)
     );
   }
 
@@ -213,6 +227,7 @@ class Film {
   final String ageAboveShow;
   final String imageUrl;
   final String bannerUrl;
+  final String category;
 
   Film copyWith({
     int id,
@@ -233,6 +248,7 @@ class Film {
     String ageAboveShow,
     String imageUrl,
     String bannerUrl,
+    String category,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (filmNameEn == null || identical(filmNameEn, this.filmNameEn)) &&
@@ -251,11 +267,12 @@ class Film {
         (sellOnline == null || identical(sellOnline, this.sellOnline)) &&
         (ageAboveShow == null || identical(ageAboveShow, this.ageAboveShow)) &&
         (imageUrl == null || identical(imageUrl, this.imageUrl)) &&
-        (bannerUrl == null || identical(bannerUrl, this.bannerUrl))) {
+        (bannerUrl == null || identical(bannerUrl, this.bannerUrl)) &&
+        (category == null || identical(category, this.category))) {
       return this;
     }
 
-    return Film(
+    return  Film(
       id: id ?? this.id,
       filmNameEn: filmNameEn ?? this.filmNameEn,
       filmName: filmName ?? this.filmName,
@@ -274,6 +291,7 @@ class Film {
       ageAboveShow: ageAboveShow ?? this.ageAboveShow,
       imageUrl: imageUrl ?? this.imageUrl,
       bannerUrl: bannerUrl ?? this.bannerUrl,
+      category: category ?? this.category,
     );
   }
 
@@ -297,8 +315,25 @@ class Film {
       Constant.ageAboveShow: ageAboveShow,
       Constant.imageUrl: imageUrl,
       Constant.bannerUrl: bannerUrl,
+      Constant.category: category,
     };
   }
+}
+
+class NextDay {
+  NextDay({this.location, this.day, this.listFilm});
+
+  factory NextDay.fromJson(final Map<String, dynamic> json) {
+    return NextDay(
+      location: getString(Constant.location, json),
+      day: getString(Constant.day, json),
+      listFilm: parseListFilm(json[Constant.listFilm] as List<dynamic>),
+    );
+  }
+
+  final String location;
+  final String day;
+  final List<Film> listFilm;
 }
 
 @JsonSerializable(nullable: false)
@@ -316,12 +351,15 @@ class Session {
     this.priceOfPosition,
     this.priceOfPosition2,
     this.priceOfPosition3,
+    this.languageCode,
+    this.versionCode
   });
 
   factory Session.fromJson(final Map<String, dynamic> data) {
     if (data == null) {
       return Session();
     }
+
     return Session(
       id: getInt(Constant.id, data),
       planCinemaId: getInt(Constant.planCinemaId, data),
@@ -335,6 +373,8 @@ class Session {
       priceOfPosition: getString(Constant.priceOfPosition, data),
       priceOfPosition2: getString(Constant.priceOfPosition2, data),
       priceOfPosition3: getString(Constant.priceOfPosition3, data),
+      versionCode: getString(Constant.versionCode, data),
+      languageCode: getString(Constant.languageCode, data)
     );
   }
 
@@ -351,6 +391,8 @@ class Session {
     String priceOfPosition,
     String priceOfPosition2,
     String priceOfPosition3,
+    String versionCode,
+    String languageCode,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (planCinemaId == null || identical(planCinemaId, this.planCinemaId)) &&
@@ -367,11 +409,13 @@ class Session {
         (priceOfPosition2 == null ||
             identical(priceOfPosition2, this.priceOfPosition2)) &&
         (priceOfPosition3 == null ||
-            identical(priceOfPosition3, this.priceOfPosition3))) {
+            identical(priceOfPosition3, this.priceOfPosition3)) &&
+        (versionCode == null || identical(versionCode, this.versionCode)) &&
+        (languageCode == null || identical(languageCode, this.languageCode))) {
       return this;
     }
 
-    return Session(
+    return  Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -384,6 +428,8 @@ class Session {
       priceOfPosition: priceOfPosition ?? this.priceOfPosition,
       priceOfPosition2: priceOfPosition2 ?? this.priceOfPosition2,
       priceOfPosition3: priceOfPosition3 ?? this.priceOfPosition3,
+      versionCode: versionCode ?? this.versionCode,
+      languageCode: languageCode ?? this.languageCode,
     );
   }
 
@@ -399,7 +445,8 @@ class Session {
   final String priceOfPosition;
   final String priceOfPosition2;
   final String priceOfPosition3;
-
+  final String versionCode;
+  final String languageCode;
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -414,6 +461,8 @@ class Session {
       Constant.priceOfPosition: priceOfPosition,
       Constant.priceOfPosition2: priceOfPosition2,
       Constant.priceOfPosition3: priceOfPosition3,
+      Constant.versionCode: versionCode,
+      Constant.languageCode: languageCode,
     };
   }
 }
@@ -421,6 +470,8 @@ class Session {
 @JsonSerializable(nullable: false)
 class Seat {
   Seat({
+    this.rows,
+    this.column,
     this.seatId,
     this.code,
     this.type,
@@ -440,6 +491,8 @@ class Seat {
       status: getInt(Constant.status, data),
       seatDataId: getInt(Constant.seatDataId, data),
       price: getDouble(Constant.price, data),
+      rows: getInt(Constant.rows, data),
+      column: getInt(Constant.column, data),
     );
   }
 
@@ -450,16 +503,19 @@ class Seat {
     int status,
     int seatDataId,
     double price,
+    int column,
+    int rows,
   }) {
     if ((seatId == null || identical(seatId, this.seatId)) &&
         (code == null || identical(code, this.code)) &&
         (type == null || identical(type, this.type)) &&
         (status == null || identical(status, this.status)) &&
         (seatDataId == null || identical(seatDataId, this.seatDataId)) &&
-        (price == null || identical(price, this.price))) {
+        (price == null || identical(price, this.price)) &&
+        (column == null || identical(column, this.column)) &&
+        (rows == null || identical(rows, this.rows))) {
       return this;
     }
-
     return Seat(
       seatId: seatId ?? this.seatId,
       code: code ?? this.code,
@@ -467,6 +523,8 @@ class Seat {
       status: status ?? this.status,
       seatDataId: seatDataId ?? this.seatDataId,
       price: price ?? this.price,
+      column: column ?? this.column,
+      rows: rows ?? this.rows,
     );
   }
 
@@ -476,6 +534,8 @@ class Seat {
   final int status;
   final int seatDataId;
   final double price;
+  final int column;
+  final int rows;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -485,10 +545,11 @@ class Seat {
       Constant.status: status,
       Constant.seatDataId: seatDataId,
       Constant.price: price,
+      Constant.rows: rows,
+      Constant.column: column,
     };
   }
 }
-
 
 @JsonSerializable(nullable: false)
 class Ticket {
@@ -522,4 +583,11 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+
+}
+class SessionType {
+  SessionType({ this.versionCode, this.languageCode,this.sessionList});
+  final String versionCode;
+  final String languageCode;
+  final List<Session> sessionList;
 }
