@@ -9,4 +9,13 @@ class FilmScheduleStateGetTime extends FilmScheduleState{
   final List<Session> sessionList;
 }
 class FilmScheduleStateLoading extends FilmScheduleState{}
-class FilmScheduleStateDismissLoading extends FilmScheduleState{}
+class FilmScheduleStateFail extends FilmScheduleState{
+  FilmScheduleStateFail(this.errorMess);
+  final String errorMess;
+}
+class FilmScheduleStateEmpty extends FilmScheduleState{}
+class FilmScheduleStateToSelectSeatPage extends FilmScheduleState{
+  FilmScheduleStateToSelectSeatPage(this.id);
+  final int id;
+
+}
