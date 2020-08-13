@@ -17,7 +17,7 @@ class Constant {
   static const String firebaseKey = 'firebaseKey';
   static const String token = 'token';
   static const String userInfo = 'userInfo';
-  static const String id = 'id';
+  static const String id = 'Id';
   static const String title = 'title';
   static const String content = 'content';
   static const String time = 'time';
@@ -233,4 +233,5 @@ class Constant {
   static const String listFilm = 'lstFilm';
   static const String location = 'Location';
   static const String day = 'Day';
+  static const String category = 'Category';
 }

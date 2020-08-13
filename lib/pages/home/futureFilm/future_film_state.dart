@@ -14,3 +14,9 @@ class FailGetDataFutureFilmState extends FutureFilmState {
   final String error;
 
 }
+
+class NavigateDetailFutureFilmState extends FutureFilmState {
+  NavigateDetailFutureFilmState(this.id);
+
+  final int id;
+}

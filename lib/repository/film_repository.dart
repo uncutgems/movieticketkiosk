@@ -1,4 +1,3 @@
-import 'dart:convert';
 
 import 'package:ncckios/base/api_handler.dart';
 import 'package:ncckios/base/constant.dart';
@@ -6,25 +5,26 @@ import 'package:ncckios/base/url.dart';
 import 'package:ncckios/model/entity.dart';
 
 class FilmRepository {
-  
-  Future<List<Session>> getSchedule(int filmId,String projectTime) async {
+  Future<List<Session>> getSchedule(int filmId, String projectTime) async {
     final AVResponse response = await callPOST(
-         path: '${URL.filmSchedule}?Filmid=$filmId&ProjectTime=$projectTime',body: <String,dynamic>{},);
+      path: '${URL.filmSchedule}?Filmid=$filmId&ProjectTime=$projectTime',
+      body: <String, dynamic>{},
+    );
     if (response.isOK) {
-      final List<Session> sessionList =<Session>[];
+      final List<Session> sessionList = <Session>[];
       response.response.forEach((final dynamic itemJson) {
-        final Session session = Session.fromJson(itemJson as Map<String,dynamic>);
+        final Session session =
+            Session.fromJson(itemJson as Map<String, dynamic>);
         sessionList.add(session);
         print('Hello Session ${sessionList.first.id}');
       });
 
       return sessionList;
-    }
-    else {
+    } else {
       throw APIException(response);
     }
   }
-  
+
   Future<List<Film>> getFilmList() async {
     final AVResponse result = await callGET(URL.getFilm);
     final List<NextDay> nextDayList = <NextDay>[];
@@ -54,18 +54,28 @@ class FilmRepository {
     final AVResponse result = await callGET(URL.futureFilm);
     final List<Film> listFilm = <Film>[];
     if (result.isOK) {
-
       result.response.forEach((final dynamic item) {
         final Film film = Film.fromJson(item as Map<String, dynamic>);
 
         listFilm.add(film);
       });
 
-
       return listFilm;
     } else {
       throw APIException(result);
     }
   }
-}
 
+  Future<Film> getDetailFilm(int id) async {
+    print(id);
+    final AVResponse result = await callGET(URL.detailFilm + '/'+id.toString());
+    if (result.isOK) {
+      final dynamic jsonItem = result.response;
+      final Film film = Film.fromJson(jsonItem as Map<String, dynamic>);
+
+      return film;
+    } else {
+      throw APIException(result);
+    }
+  }
+}

@@ -2,9 +2,11 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/popularFilm/popular_film_bloc.dart';
+import 'package:ncckios/widgets/button/button_widget.dart';
 
 class PopularFilmWidget extends StatefulWidget {
   @override
@@ -31,13 +33,18 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
     return BlocBuilder<PopularFilmBloc, PopularFilmState>(
       cubit: bloc,
       builder: (BuildContext context, PopularFilmState state) {
-        if (state is InitialPopularFilmState) {
-          return Container();
-        }
         if (state is SuccessGetDataPopularFilmState) {
           return _body(context, state);
         } else {
           return Container();
+        }
+      },
+      buildWhen: (PopularFilmState prev, PopularFilmState current) {
+        if (current is NavigateDetailPopularFilmState) {
+          _navigateToDetail(context, current);
+          return false;
+        } else {
+          return true;
         }
       },
     );
@@ -67,24 +74,32 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
             final Film film = filmList[index];
             return GestureDetector(
               onTap: () {
-                print('navigate to film detail');
+                bloc.add(ClickToDetailPopularFilmEvent(film.id));
               },
               child: Container(
                 decoration: filmBoxDecoration.copyWith(
                   color: AppColor.primaryDarkColor,
-                  image: DecorationImage(
-                    image: NetworkImage(film.imageUrl),
-                    fit: BoxFit.cover,
-                  ),
+                  image: film.imageUrl != null
+                      ? DecorationImage(
+                          image: NetworkImage(film.imageUrl),
+                          fit: BoxFit.cover,
+                        )
+                      : null,
                 ),
+                child: film.id == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : null,
               ),
             );
           },
         ),
         Container(
-          height: screenHeight/ 667*8,
+          height: screenHeight / 667 * 8,
         ),
-        _filmInfo(context, filmList, state.index)
+        if (filmList[0].id != null)
+          _filmInfo(context, filmList, state.index)
+        else
+          Container()
       ],
     );
   }
@@ -94,6 +109,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final Film film = filmList[index];
     final List<String> version = film.versionCode.split('/');
+
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Row(
@@ -109,9 +125,15 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                   child: Text(
                     film.filmName,
                     style: textTheme.bodyText2.copyWith(
-                        color: AppColor.white, fontWeight: FontWeight.w500),
+                      color: AppColor.white,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    maxLines: 2,
                   ),
                   height: screenHeight / 667 * 32,
+                ),
+                Container(
+                  height: screenHeight / 667 * 8,
                 ),
                 Container(
                   height: screenHeight / 667 * 20,
@@ -146,6 +168,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                     },
                   ),
                 ),
+                Container(
+                  height: screenHeight / 667 * 8,
+                ),
                 Text(
                   film.duration.toString() +
                       'p'
@@ -158,22 +183,18 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
               ],
             ),
           ),
-          SizedBox(
-            width: screenWidth/ 360*117,
-            height: screenHeight/ 667*48,
-            child: RaisedButton(
-              child: const Text('ĐẶT VÉ'),
-              color: AppColor.buttonColor,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+          AVButtonFill(
+              title: 'ĐẶT VÉ',
               onPressed: () {
-                print('navigate to đặt vé');
-              },
-            ),
-          )
+                bloc.add(ClickToDetailPopularFilmEvent(film.id));
+              })
         ],
       ),
     );
+  }
+
+  void _navigateToDetail(
+      BuildContext context, NavigateDetailPopularFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
   }
 }

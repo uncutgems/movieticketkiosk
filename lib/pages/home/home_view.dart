@@ -34,7 +34,6 @@ class _HomePageState extends State<HomePage> {
 
   Widget _body(BuildContext context) {
     return Scaffold(
-
       body: ListView(
         children: <Widget>[
           Padding(
@@ -44,7 +43,8 @@ class _HomePageState extends State<HomePage> {
               children: [
                 Text(
                   'Phim nổi bật',
-                  style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: textTheme.bodyText2
+                      .copyWith(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
                 Image.asset('assets/iconfilm.png'),
               ],
@@ -56,7 +56,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Phim sắp chiếu',
-              style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+              style: textTheme.bodyText2.copyWith(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           FutureFilmWidget(),

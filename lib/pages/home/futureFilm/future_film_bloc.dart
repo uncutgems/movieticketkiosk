@@ -10,7 +10,7 @@ part 'future_film_event.dart';
 part 'future_film_state.dart';
 
 class FutureFilmBloc extends Bloc<FutureFilmEvent, FutureFilmState> {
-  FutureFilmBloc() : super(InitialFutureFilmState());
+  FutureFilmBloc() : super(SuccessGetDataFutureFilmState(<Film>[Film(), Film(), Film()]));
 
   final FilmRepository _filmRepository = FilmRepository();
 
@@ -20,12 +20,14 @@ class FutureFilmBloc extends Bloc<FutureFilmEvent, FutureFilmState> {
   ) async* {
     if (event is GetDataFutureFilmEvent) {
       try {
-        yield InitialFutureFilmState();
         final List<Film> filmList = await _filmRepository.getFutureFilm();
         yield SuccessGetDataFutureFilmState(filmList);
       } on APIException catch(e) {
         yield FailGetDataFutureFilmState(e.message());
       }
+    }
+    if (event is ClickToDetailFutureFilmEvent) {
+      yield NavigateDetailFutureFilmState(event.id);
     }
   }
 }
