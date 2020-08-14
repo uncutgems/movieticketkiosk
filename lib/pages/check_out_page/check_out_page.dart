@@ -254,13 +254,13 @@ class _CheckOutPageState extends State<CheckOutPage>
           child: AVButtonFill(
             onPressed: () {
               bloc.add(CheckOutEventClickButton(
-                customerFirstName: 'Minh',
-                customerId: 0,
-                customerLastName: 'Nguyen',
+                customerFirstName: firstNameController.text,
+                customerId: 1,
+                customerLastName: lastNameController.text,
                 listChairValueF1: 'F5, F6',
                 seatsF1: '[5:5],[5:4]',
                 planScreenId: 246842,
-                paymentMethodSystemName: 'VNPay'
+                paymentMethodSystemName: 'VNPAY'
               ));
             },
             title: 'Tiến hành thanh toán',

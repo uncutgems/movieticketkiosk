@@ -11,6 +11,7 @@ class OrderRepository {
       String listChairValueF1,
       String customerFirstName,
       String customerLastName,
+
       String paymentMethodSystemName) async {
     final Map<String, dynamic> body = <String, dynamic>{};
     body[Constant.customerId] = customerId;
@@ -20,14 +21,14 @@ class OrderRepository {
     body[Constant.customerFirstName] = customerFirstName;
     body[Constant.customerLastName] = customerLastName;
     body[Constant.paymentMethodSystemName] = paymentMethodSystemName;
-    body['Content-Type'] = 'application/json';
-
-    final AVResponse response = await callPOST(
-        path: URL.createOrder, body: body, header: <String, String>{Constant.contentType: 'application/json'});
+//    body['Content-Type'] = 'application/json';
+    final AVResponse response =
+        await callPOST(path: URL.createOrder, body: body);
 
     if (response.isOK) {
       print('It works order');
-      final Order order = Order.fromJson(response.response as Map<String, dynamic>);
+      final Order order =
+          Order.fromJson(response.response as Map<String, dynamic>);
 
       return order;
     } else {

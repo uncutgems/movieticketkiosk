@@ -3,7 +3,7 @@ class Constant {
   static const String code = 'code';
   static const String response = 'response';
   static const String message = 'Message';
-  static const String contentType = 'contentType';
+  static const String contentType = 'Content-Type';
   static const String headerDOBODY6969 = 'DOBODY6969';
   static const String results = 'results';
   static const String error = 'error';

@@ -247,10 +247,15 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   Widget _loading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-      ),
+    return Column(
+      children: <Widget>[
+        Container(height: MediaQuery.of(context).size.height/3,),
+        const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+          ),
+        ),
+      ],
     );
   }
 
