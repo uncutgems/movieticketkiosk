@@ -52,7 +52,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return false;
         } else if (state is FilmScheduleStateToSelectSeatPage) {
           Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
-            Constant.sessionId: state.id,
+            'session': state.session,
           });
           return false;
         }
@@ -67,6 +67,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return mainScreen(context, _loading(context));
         } else if (state is FilmScheduleStateEmpty) {
           return mainScreen(
+
             context,
             Container(
               height: MediaQuery
@@ -85,6 +86,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
               ),
             ),
           );
+
         }
         return const Material();
       },
@@ -117,6 +119,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           HorizontalCalendar(
             initialSelectedDates: <DateTime>[DateTime.now()],
             spacingBetweenDates: 8,
+            height: 40*MediaQuery.of(context).size.height/736,
+
             onDateSelected: (DateTime date) {
               currentDate = date;
               bloc.add(FilmScheduleEventGetTime(convertDateToInput(date), 9460));
@@ -194,7 +198,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         child: RaisedButton(
           color: AppColor.white,
           onPressed: () {
-            bloc.add(FilmScheduleEventClickTimeBox(element.id));
+
+            bloc.add(FilmScheduleEventClickTimeBox(element));
           },
           padding: const EdgeInsets.all(10),
           elevation: 0,
@@ -209,6 +214,94 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         ),
       ));
     }
+    final Widget result = Column(children: <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          versionCodeWidget(context, versionCode),
+//          Container(
+//            margin: EdgeInsets.only(
+//                left: MediaQuery.of(context).size.width * (16 / 360),
+//                right: MediaQuery.of(context).size.width * (4 / 360),
+//                top: MediaQuery.of(context).size.height * (29 / 667)),
+//            padding: const EdgeInsets.all(4.0),
+//            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+//            child: Text(
+//              versionCode,
+//              style: Theme.of(context)
+//                  .textTheme
+//                  .bodyText2
+//                  .copyWith(fontSize: 14, color: AppColor.red),
+//            ),
+//          ),
+          Container(
+            margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * (29 / 667)),
+            padding: const EdgeInsets.all(4.0),
+            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+            child: Text(
+              languageCode,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(fontSize: 14, color: AppColor.red),
+            ),
+          ),
+        ],
+      ),
+      GridView.count(
+        crossAxisCount: 4,
+        padding: EdgeInsets.only(
+            left: MediaQuery.of(context).size.width * (16 / 360),
+            right: MediaQuery.of(context).size.width * (36 / 360)),
+        childAspectRatio: 2,
+        children: listWidget,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+      ),
+    ]);
+    return result;
+  }
+
+  Widget versionCodeWidget(BuildContext context,String versionCode){
+    List<String> result = <String>[];
+    if(versionCode.contains(',')){
+      result = versionCode.split(',');
+    }
+    else{
+      result.add(versionCode);
+    }
+    List<Widget> widget = <Widget>[];
+    for(String vCode in result){
+      widget.add(
+        Container(
+          margin: EdgeInsets.only(
+              left: MediaQuery.of(context).size.width * (16 / 360),
+              right: MediaQuery.of(context).size.width * (4 / 360),
+              top: MediaQuery.of(context).size.height * (29 / 667)),
+          padding: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+          child: Text(
+            vCode,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(fontSize: 14, color: AppColor.red),
+          ),
+        ),
+      );
+    }
+    return Row(
+      children: widget
+    );
+  }
+
+
+
+
+  List<Session> sessionType(
+      List<Session> sessionList, String versionCode, String languageCode) {
+
     final Widget result = Column(
       children: <Widget>[
         Row(
@@ -256,6 +349,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   List<Session> sessionType(List<Session> sessionList, String versionCode, String languageCode) {
+
     final List<Session> listSession = <Session>[];
     for (final Session element in sessionList) {
       if (element.versionCode == versionCode && element.languageCode == languageCode) {

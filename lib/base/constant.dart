@@ -243,6 +243,8 @@ class Constant {
   static const String orderId = 'OrderId';
   static const String orderTotal = 'OrderTotal';
   static const String category = 'Category';
+  static const String url='url';
+  static const String idQrCode='idQrCode';
   static const String film = 'film';
   static const String sessionId = 'sessionId';
 }
