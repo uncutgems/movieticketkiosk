@@ -1,5 +1,6 @@
 import 'dart:async';
 
+
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:ncckios/repository/seat_repository.dart';
@@ -23,10 +24,16 @@ class SelectSeatBloc extends Bloc<SelectSeatEvent, SelectSeatState> {
       try {
         yield LoadSeatDataSelectSeatState();
         final List<Seat> seatList = await seatRepository.getSeat(event.planId);
-        yield ReceiveSeatDataSelectSeatState(seatList);
+        yield ReceiveSeatDataSelectSeatState(
+            seatList, event.totalPrice, event.chosenSeatList);
       } on APIException catch (error) {
-        yield FailToReceiveSeatDataSelectSeatState();
+        yield FailToReceiveSeatDataSelectSeatState(error.message());
       }
+    } else if (event is UpdateSeatDataSelectSeatEvent) {
+      yield ReceiveSeatDataSelectSeatState(
+          event.seatList, event.totalPrice, event.chosenSeatList);
+    } else if (event is MoveToNextPageSelectSeatEvent) {
+      yield MoveToNextScreenSelectSeatState(event.chosenList, event.session);
     }
   }
 }

@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: RoutesName.splashPage,
+      initialRoute: RoutesName.selectSeatPage,
       onGenerateRoute: (RouteSettings settings) => routeSettings(settings),
       debugShowCheckedModeBanner: false,
       theme: themeData,
@@ -59,7 +59,7 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.selectSeatPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => SelectSeatPage(),
+        builder: (BuildContext context) => const SelectSeatPage(),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
 
