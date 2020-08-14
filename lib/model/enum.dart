@@ -4,8 +4,4 @@ class SeatType {
   static const String numberTheSeat = '-1';
   static const String alphabetSeat = '-2';
   static const String path = '12';
-
-
-
-
 }

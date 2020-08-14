@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:ncckios/model/enum.dart';
+
 import '../base/api_handler.dart';
 import '../base/constant.dart';
 import '../base/url.dart';
@@ -27,19 +29,31 @@ class SeatRepository {
 
       final int maximumColumn = findMaxColumn(seatList) + 1;
       int rowIndex = 0;
-      int columnIndex = maximumColumn  ;
 
+      final int insertColumn = seatList.first.column;
       for (int i = 0; i < seatList.length; i++) {
-        if (seatList[i].column == maximumColumn - 1) {
-          seatList.insert(i, Seat(type: '-2', rows: rowIndex));
+        if (seatList[i].column == insertColumn) {
+          seatList.insert(
+              i,
+              Seat(
+                  type: SeatType.alphabetSeat,
+                  rows: rowIndex,
+                  column: insertColumn));
           rowIndex++;
           i++;
         }
       }
 
+      final bool check = seatList.first.column > seatList.last.column;
       for (int i = 0; i < maximumColumn + 1; i++) {
-        seatList.insert(i, Seat(type: '-1', column: columnIndex ));
-        columnIndex --;
+        seatList.insert(
+            i,
+            Seat(
+                type: SeatType.numberTheSeat,
+                column: i,
+                rows: 0,
+                code: (check ? maximumColumn - i + 1 : i).toString()));
+        //columnIndex--;
       }
 
       print(maximumColumn.toString());
@@ -51,11 +65,10 @@ class SeatRepository {
   }
 }
 
-
 int findMaxColumn(List<Seat> myList) {
   int maxColumnNumber;
   if (myList != null && myList.isNotEmpty) {
-    maxColumnNumber = myList.map<int>((Seat e) => e.column??0).reduce(max);
+    maxColumnNumber = myList.map<int>((Seat e) => e.column ?? 0).reduce(max);
   }
   return maxColumnNumber;
 }

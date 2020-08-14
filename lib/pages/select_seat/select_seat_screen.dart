@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
@@ -25,7 +26,7 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
-  final int sessionId2 = 204907; //246773 //204907
+  final int sessionId2 = 246813; //246773 //204907 //246844 //246840 //246813
 
   @override
   void initState() {
@@ -54,7 +55,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: const Icon(Icons.arrow_back),
             onPressed: () =>
                 Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
@@ -62,7 +63,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         centerTitle: true,
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           Center(
             child: Container(
               width: (screenWidth * 264) / 360,
@@ -104,7 +105,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
 
   Widget _showError(
       BuildContext context, FailToReceiveSeatDataSelectSeatState state) {
-    return Column(children: [
+    return Column(children: <Widget>[
       Text(
         state.errorMessage,
         style: const TextStyle(color: AppColor.white),
@@ -232,7 +233,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Row(children: [
+          child: Row(children: <Widget>[
             const Text(
               'Kị sĩ bóng đêm trỗi dậy',
               style: TextStyle(color: AppColor.white),
@@ -249,7 +250,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(
-                  children: [
+                  children: <Widget>[
                     Text(
                       state.chosenList.length.toString(),
                       style: const TextStyle(color: AppColor.white),
@@ -259,7 +260,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                       style: TextStyle(color: AppColor.white),
                     ),
                     Text(
-                      state.totalPrice.toString(),
+                      currencyFormat(state.totalPrice.toInt(), 'VND'),
                       style: const TextStyle(color: AppColor.white),
                     ),
                   ],
@@ -281,7 +282,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required List<Seat> seatList,
     @required int maximum,
   }) {
-    for (Seat s in chosenList) {
+    for (final Seat s in chosenList) {
       if (seat.code == s.code) {
         return _selectSeatContainer(
           context: context,
@@ -315,7 +316,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           chosenList: chosenList,
           seatList: seatList);
     } else if (seat.type == SeatType.numberTheSeat &&
-        seat.column == (maximum - 1)) {
+        seat.column == 0) {
       return Container();
     } else if (seat.type == SeatType.numberTheSeat) {
       return _numberSeatContainer(context: context, seat: seat);
@@ -341,8 +342,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   }) {
     return Container(
       child: GestureDetector(
+        //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
         onTap: () {
-          bool check = true;
+          const bool check = true;
           checkValidSeat(chosenList, seat, check);
           bloc.add(UpdateSeatDataSelectSeatEvent(
               seatList, _totalPrice(chosenList), chosenList));
@@ -372,7 +374,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         onTap: () {
-          bool check = true;
+         const bool check = true;
           checkValidSeat(chosenList, seat, check);
           bloc.add(UpdateSeatDataSelectSeatEvent(
               seatList, _totalPrice(chosenList), chosenList));
@@ -392,6 +394,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required Seat seat,
   }) {
     return Container(
+      //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),
@@ -404,11 +407,11 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required BuildContext context,
     @required Seat seat,
   }) {
-    int index = seat.column;
+
     return Container(
       child: Center(
           child: Text(
-        (index + 1).toString(),
+        seat.code ,
         style: const TextStyle(color: AppColor.white),
       )),
     );
@@ -462,7 +465,7 @@ int findMaxRow(List<Seat> myList) {
 void checkValidSeat(List<Seat> chosenList, Seat seat, bool check) {
   bool check = false;
   if (chosenList.isNotEmpty) {
-    for (Seat s in chosenList) {
+    for (final Seat s in chosenList) {
       if (seat.code == s.code) {
         check = true;
       }
