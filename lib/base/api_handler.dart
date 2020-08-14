@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:ncckios/base/url.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,14 +21,13 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final Map<String, String> _headers = <String, String>{};
   _headers[Constant.contentType] = 'application/json';
-  _headers[Constant.headerDOBODY6969] =
-      prefs.getString(Constant.token).toString();
+  _headers[Constant.headerDOBODY6969] = prefs.getString(Constant.token).toString();
   _headers.addAll(headers ?? <String, String>{});
   try {
     print('GET ===================== ');
     print('HEADER: $_headers');
     print('URL : $url');
-    final Response response = await get(url,headers: _headers).timeout(const Duration(seconds: 30));
+    final Response response = await get(url, headers: _headers).timeout(const Duration(seconds: 30));
     if (response != null) {
       print('RESPONSE: ' + response.body);
     }
@@ -41,8 +39,7 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
         response: jsonDecode(response.body),
       );
     } else {
-      final Map<String, dynamic> jsonError =
-          jsonDecode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError = jsonDecode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
@@ -75,19 +72,18 @@ Future<AVResponse> callPOST({
   @required dynamic body,
   Map<String, String> header,
 }) async {
-  final String _url = URL.baseURL + path;
+  final String _url = path;
   final Map<String, String> _headers = <String, String>{};
   _headers.addAll(header ?? <String, String>{});
-  _headers[Constant.contentType] = 'application/json';
+  _headers['Content-Type'] = 'application/json';
 
   print('Calling post data ===============================================');
   print('header: $_headers');
   print('URL: $path');
-  print('body: $body');
+  print('body: ${jsonEncode(body)}');
   try {
     final Response response =
-        await post(_url, headers: _headers, body: jsonEncode(body))
-            .timeout(const Duration(seconds: 30));
+        await post(_url, headers: _headers, body: jsonEncode(body)).timeout(const Duration(seconds: 30));
     if (response != null) {
       print('response: ' + response.body);
     }
@@ -99,8 +95,7 @@ Future<AVResponse> callPOST({
         response: json.decode(response.body),
       );
     } else {
-      final Map<String, dynamic> jsonError =
-          json.decode(response.body) as Map<String, dynamic>;
+      final Map<String, dynamic> jsonError = json.decode(response.body) as Map<String, dynamic>;
       result = AVResponse(
         isOK: false,
         code: response.statusCode,
