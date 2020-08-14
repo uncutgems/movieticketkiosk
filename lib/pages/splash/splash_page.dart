@@ -48,6 +48,6 @@ class _SplashPageState extends State<SplashPage> {
 
   Future<void> _navigateToHome(BuildContext context) async {
     await Future<void>.delayed(const Duration(seconds: 3));
-    Navigator.pushReplacementNamed(context, RoutesName.checkOutPage);
+    Navigator.pushReplacementNamed(context, RoutesName.homePage);
   }
 }

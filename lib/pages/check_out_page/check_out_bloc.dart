@@ -31,6 +31,5 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
     } else if (event is CheckOutEventShowTimeOut) {
       yield CheckOutStateTimeOut();
     }
-    // TODO: implement mapEventToState
   }
 }

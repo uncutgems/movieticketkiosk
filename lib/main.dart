@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_page.dart';
 import 'package:ncckios/pages/default/default_page.dart';
 import 'package:ncckios/pages/detail/detail_view.dart';
@@ -45,7 +47,9 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.filmSchedulePage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => FilmSchedulePage(),
+        builder: (BuildContext context) => FilmSchedulePage(
+          film: data[Constant.film] as Film,
+        ),
         settings: const RouteSettings(name: RoutesName.filmSchedulePage),
       );
     case RoutesName.checkOutPage:
