@@ -11,7 +11,6 @@ class OrderRepository {
       String listChairValueF1,
       String customerFirstName,
       String customerLastName,
-
       String paymentMethodSystemName) async {
     final Map<String, dynamic> body = <String, dynamic>{};
     body[Constant.customerId] = customerId;
@@ -32,6 +31,21 @@ class OrderRepository {
 
       return order;
     } else {
+      throw APIException(response);
+    }
+  }
+
+  Future<QRObject> createQrOrder(int qrId) async{
+    final Map<String, dynamic> body = <String, dynamic>{};
+    final AVResponse response =
+    await callPOST(path: '${URL.createQrOrder}?OrderId=$qrId');
+    if (response.isOK) {
+      print('It works QR');
+      final QRObject qrObject =
+      QRObject.fromJson(response.response as Map<String, dynamic>);
+      return qrObject;
+    }
+    else{
       throw APIException(response);
     }
   }

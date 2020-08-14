@@ -68,3 +68,15 @@ void fail(String error,BuildContext context){
     },
   );
 }
+Widget loading(BuildContext context) {
+  return Column(
+    children: <Widget>[
+      Container(height: MediaQuery.of(context).size.height/3,),
+      const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+        ),
+      ),
+    ],
+  );
+}

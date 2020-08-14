@@ -15,7 +15,6 @@ class FilmScheduleStateFail extends FilmScheduleState{
 }
 class FilmScheduleStateEmpty extends FilmScheduleState{}
 class FilmScheduleStateToSelectSeatPage extends FilmScheduleState{
-  FilmScheduleStateToSelectSeatPage(this.id);
-  final int id;
-
+  FilmScheduleStateToSelectSeatPage(this.session);
+  final Session session;
 }

@@ -5,6 +5,7 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/qr/qr.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -69,7 +70,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
           _animationController.forward();
-          return mainScreen(context, bottomQR(context));
+          return mainScreen(context, bottomQR(context,QR(orderId: state.order.orderId,)));
         }
         return const Material();
       },
@@ -270,7 +271,7 @@ class _CheckOutPageState extends State<CheckOutPage>
     );
   }
 
-  Widget bottomQR(BuildContext context) {
+  Widget bottomQR(BuildContext context,Widget qrCode) {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -294,6 +295,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             ).animate(_animationController),
           ),
         ),
+        qrCode,
       ],
     );
   }

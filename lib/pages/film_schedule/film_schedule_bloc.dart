@@ -35,7 +35,7 @@ class FilmScheduleBloc extends Bloc<FilmScheduleEvent, FilmScheduleState> {
       }
     }
     else if(event is FilmScheduleEventClickTimeBox){
-      yield FilmScheduleStateToSelectSeatPage(event.id);
+      yield FilmScheduleStateToSelectSeatPage(event.session);
     }
   }
 }
