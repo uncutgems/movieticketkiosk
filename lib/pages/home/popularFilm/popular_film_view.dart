@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/popularFilm/popular_film_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
@@ -175,10 +176,8 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                   film.duration.toString() +
                       'p'
                           '-' +
-                      film.premieredDay
-                          .substring(0, film.premieredDay.indexOf('T')),
-                  style:
-                      textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
+                      convertTime('dd/MM/yyyy', DateTime.parse(film.premieredDay).millisecondsSinceEpoch, false),
+                  style: textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
                 ),
               ],
             ),
