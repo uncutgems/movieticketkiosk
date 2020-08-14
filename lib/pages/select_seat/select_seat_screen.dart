@@ -23,7 +23,7 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
-  final int sessionId2 = 204907; //246773 //204907
+  final int sessionId2 = 246773; //246773 //204907
 
   @override
   void initState() {
