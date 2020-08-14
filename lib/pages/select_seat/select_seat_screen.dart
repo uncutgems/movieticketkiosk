@@ -4,8 +4,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
+import 'package:ncckios/widgets/button/button_widget.dart';
 
 import '../../model/entity.dart';
 
@@ -23,7 +25,7 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
-  final int sessionId2 = 246773; //246773 //204907
+  final int sessionId2 = 204907; //246773 //204907
 
   @override
   void initState() {
@@ -51,8 +53,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
-        leading:
-            const IconButton(icon: Icon(Icons.arrow_back), onPressed: null),
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () =>
+                Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
         title: const Text('Chọn ghế'),
         centerTitle: true,
@@ -78,6 +82,17 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 return _showSeat(context, state);
               } else if (state is FailToReceiveSeatDataSelectSeatState) {
                 _showError(context, state);
+              }else if ( state is MoveToNextScreenSelectSeatState){
+
+//                Navigator.pushNamed(
+//                  context,
+//                  RoutesName.checkOutPage,
+//                  arguments: <String, dynamic>{
+//                    'chosenList': state.chosenList,
+//                    'session':state.session,
+//                  },
+//                ).then((value) {});
+
               }
               return Container();
             },
@@ -215,36 +230,45 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         Container(
           height: 8,
         ),
-        Row(children: [
-          const Padding(
-            padding: EdgeInsets.only(left: 16),
-            child: Text(
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(children: [
+            const Text(
               'Kị sĩ bóng đêm trỗi dậy',
               style: TextStyle(color: AppColor.white),
             ),
-          ),
-          Container(),
-        ]),
-        Container(
-          height: 30,
-        ),
-        Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: Row(children: <Widget>[
-            Text(
-              state.chosenList.length.toString(),
-              style: const TextStyle(color: AppColor.white),
-            ),
-            const Text(
-              ' ghế - ',
-              style: TextStyle(color: AppColor.white),
-            ),
-            Text(
-              state.totalPrice.toString(),
-              style: const TextStyle(color: AppColor.white),
-            ),
             Container(),
           ]),
+        ),
+        Container(
+          height: 10,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
+          child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: [
+                    Text(
+                      state.chosenList.length.toString(),
+                      style: const TextStyle(color: AppColor.white),
+                    ),
+                    const Text(
+                      ' ghế - ',
+                      style: TextStyle(color: AppColor.white),
+                    ),
+                    Text(
+                      state.totalPrice.toString(),
+                      style: const TextStyle(color: AppColor.white),
+                    ),
+                  ],
+                ),
+                AVButtonFill(
+                  title: 'ĐẶT VÉ',
+                  onPressed: () {},
+                ),
+              ]),
         ),
       ],
     );
@@ -317,11 +341,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   }) {
     return Container(
       child: GestureDetector(
-        child: Text(
-          seat.code,
-          style: const TextStyle(color: AppColor.blue),
-        ),
-
         onTap: () {
           bool check = true;
           checkValidSeat(chosenList, seat, check);
@@ -373,12 +392,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required Seat seat,
   }) {
     return Container(
-      child: GestureDetector(
-        child: Text(
-          seat.code,
-          style: const TextStyle(color: AppColor.blue),
-        ),
-      ),
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),

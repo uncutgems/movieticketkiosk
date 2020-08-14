@@ -32,6 +32,8 @@ class SelectSeatBloc extends Bloc<SelectSeatEvent, SelectSeatState> {
     } else if (event is UpdateSeatDataSelectSeatEvent) {
       yield ReceiveSeatDataSelectSeatState(
           event.seatList, event.totalPrice, event.chosenSeatList);
+    } else if (event is MoveToNextPageSelectSeatEvent) {
+      yield MoveToNextScreenSelectSeatState(event.chosenList, event.session);
     }
   }
 }

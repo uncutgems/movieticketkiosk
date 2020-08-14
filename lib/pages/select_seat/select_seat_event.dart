@@ -18,3 +18,13 @@ class UpdateSeatDataSelectSeatEvent extends SelectSeatEvent {
   final double totalPrice;
   final List<Seat> chosenSeatList;
 }
+
+
+class MoveToNextPageSelectSeatEvent extends SelectSeatEvent{
+  MoveToNextPageSelectSeatEvent(this.chosenList, this.session);
+
+  final List<Seat> chosenList;
+  final Session session;
+
+
+}
