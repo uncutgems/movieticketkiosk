@@ -29,7 +29,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   final Comparator<Session> comparator = (Session a, Session b) => DateTime.parse(a.projectTime)
       .millisecondsSinceEpoch
       .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
-
+  bool pressCalendar =false;
   @override
   void dispose() {
     bloc.close();
@@ -52,6 +52,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return false;
         } else if (state is FilmScheduleStateToSelectSeatPage) {
           Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
+
             Constant.session: state.session,
             Constant.film: widget.film,
           });
@@ -63,10 +64,13 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         if (state is FilmScheduleInitial) {
           return mainScreen(context, Container());
         } else if (state is FilmScheduleStateGetTime) {
+          pressCalendar=true;
           return mainScreen(context, _columnSessionShowing(context, state.sessionList));
         } else if (state is FilmScheduleStateLoading) {
+          pressCalendar=false;
           return mainScreen(context, _loading(context));
         } else if (state is FilmScheduleStateEmpty) {
+          pressCalendar=true;
           return mainScreen(
             context,
             Container(
@@ -109,11 +113,12 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
       body: ListView(
         children: <Widget>[
           HorizontalCalendar(
+            pressCalender: pressCalendar,
             initialSelectedDates: <DateTime>[DateTime.now()],
             spacingBetweenDates: 8,
             onDateSelected: (DateTime date) {
               currentDate = date;
-              bloc.add(FilmScheduleEventGetTime(convertDateToInput(date), 9460));
+              bloc.add(FilmScheduleEventGetTime(convertDateToInput(date),this.widget.film.id));
             },
             height: 40 * _screenHeight / 736,
             padding: const EdgeInsets.all(0),
@@ -295,73 +300,6 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return Row(children: widget);
   }
 
-//  List<Session> sessionType(
-//      List<Session> sessionList, String versionCode, String languageCode) {
-//
-//    final Widget result = Column(
-//      children: <Widget>[
-//        Row(
-//          mainAxisAlignment: MainAxisAlignment.start,
-//          children: <Widget>[
-//            versionCodeWidget(context, versionCode),
-//            Container(
-//              margin: EdgeInsets.only(top: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .height * (29 / 667)),
-//              padding: const EdgeInsets.all(3.0),
-//              decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-//              child: Text(
-//                languageCode,
-//                style: Theme
-//                    .of(context)
-//                    .textTheme
-//                    .bodyText2
-//                    .copyWith(fontSize: 14, color: AppColor.red),
-//              ),
-//            ),
-//          ],
-//        ),
-//        GridView.count(
-//          crossAxisCount: 4,
-//          padding: EdgeInsets.only(
-//              left: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .width * (16 / 360),
-//              right: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .width * (36 / 360)),
-//          childAspectRatio: 2,
-//          children: listWidget,
-//          shrinkWrap: true,
-//          physics: const NeverScrollableScrollPhysics(),
-//        ),
-//      ],
-//    );
-//
-//    return result;
-//  }
-
-//  List<Session> sessionType(List<Session> sessionList, String versionCode, String languageCode) {
-//
-//    final List<Session> listSession = <Session>[];
-//    for (final Session element in sessionList) {
-//      if (element.versionCode == versionCode && element.languageCode == languageCode) {
-//        listSession.add(element);
-//      }
-//    }
-//    final Comparator<Session> comparator = (Session a, Session b) =>
-//        DateTime
-//            .parse(a.projectTime)
-//            .millisecondsSinceEpoch
-//            .compareTo(DateTime
-//            .parse(b.projectTime)
-//            .millisecondsSinceEpoch);
-//    listSession.sort(comparator);
-//    return listSession;
-//  }
 
   Widget _loading(BuildContext context) {
     return Column(
@@ -415,43 +353,4 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return result;
   }
 
-//  Widget versionCodeWidget(BuildContext context, String versionCode) {
-//    List<String> result = <String>[];
-//    if (versionCode.contains(',')) {
-//      result = versionCode.split(',');
-//    } else {
-//      result.add(versionCode);
-//    }
-//    final List<Widget> widget = <Widget>[];
-//    for (final String vCode in result) {
-//      widget.add(
-//        Container(
-//          margin: EdgeInsets.only(
-//              left: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .width * (16 / 360),
-//              right: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .width * (4 / 360),
-//              top: MediaQuery
-//                  .of(context)
-//                  .size
-//                  .height * (29 / 667)),
-//          padding: const EdgeInsets.all(4.0),
-//          decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-//          child: Text(
-//            vCode,
-//            style: Theme
-//                .of(context)
-//                .textTheme
-//                .bodyText2
-//                .copyWith(fontSize: 14, color: AppColor.red),
-//          ),
-//        ),
-//      );
-//    }
-//    return Row(children: widget);
-//  }
 }

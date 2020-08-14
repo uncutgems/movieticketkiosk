@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
@@ -328,7 +329,7 @@ class _CheckOutPageState extends State<CheckOutPage>
                     Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.blue, fontWeight: FontWeight.normal),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).popUntil(ModalRoute.withName(RoutesName.defaultPage));
               },
             ),
           ],
