@@ -240,7 +240,9 @@ class Constant {
   static const String customerFirstName = 'CustomerFirstName';
   static const String customerLastName = 'CustomerLastName';
   static const String paymentMethodSystemName = 'PaymentMethodSystemName';
-  static const String orderId='OrderId';
-  static const String orderTotal='OrderTotal';
+  static const String orderId = 'OrderId';
+  static const String orderTotal = 'OrderTotal';
   static const String category = 'Category';
+  static const String film = 'film';
+  static const String sessionId = 'sessionId';
 }

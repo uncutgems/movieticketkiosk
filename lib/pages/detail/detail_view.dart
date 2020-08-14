@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
@@ -44,12 +46,12 @@ class _DetailPageState extends State<DetailPage> {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final Film film = state.film;
+    const EdgeInsets _padding = EdgeInsets.only(right: 16, top: 8, bottom: 8);
     return Scaffold(
       appBar: AppBar(
         title: Text(
           'Thông tin phim',
-          style: textTheme.bodyText1
-              .copyWith(color: AppColor.dark20, fontWeight: FontWeight.w500),
+          style: textTheme.bodyText1.copyWith(color: AppColor.dark20, fontWeight: FontWeight.w500),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -66,192 +68,209 @@ class _DetailPageState extends State<DetailPage> {
             color: AppColor.white,
             child: Stack(
               children: <Widget>[
-                if (film.id != null) Container(
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                    image: NetworkImage(film.bannerUrl),
-                  )),
-                  width: screenWidth,
-                  height: screenHeight / 667 * 240,
-                  child: Center(
-                    child: FloatingActionButton(
-                      child: const Icon(Icons.play_arrow),
-                      elevation: 0.6,
-                      onPressed: () {
-                        _launchURL(film.videoUrl);
-                      },
+                if (film.id != null)
+                  Container(
+                    decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: NetworkImage(film.bannerUrl),
+                        )),
+                    width: screenWidth,
+                    height: screenHeight / 667 * 240,
+                    child: Center(
+                      child: FloatingActionButton(
+                        child: const Icon(Icons.play_arrow),
+                        elevation: 0.6,
+                        onPressed: () {
+                          _launchURL(film.videoUrl);
+                        },
+                      ),
+                    ),
+                  )
+                else
+                  Container(
+                    child: const Center(
+                      child: CircularProgressIndicator(),
                     ),
                   ),
-                ) else Container(child: const Center(child: CircularProgressIndicator(),),),
                 Positioned(
                   bottom: 0,
                   child: Container(
                     decoration: const BoxDecoration(
                         color: AppColor.primaryColor,
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.circular(24),
-                            bottom: Radius.circular(0))),
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(24), bottom: Radius.circular(0))),
                     height: screenHeight / 667 * 125,
                     width: screenWidth,
                     child: film.id != null
                         ? _filmInfo(context, film)
                         : const Center(
-                            child: CircularProgressIndicator(),
-                          ),
+                      child: CircularProgressIndicator(),
+                    ),
                   ),
                 )
               ],
             ),
           ),
           Image.asset('assets/divider.png'),
-          if (film.id != null) Expanded(
-            child: ListView(
-              padding: const EdgeInsets.only(top: 0),
-              shrinkWrap: true,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(
+          if (film.id != null)
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.only(top: 0),
+                shrinkWrap: true,
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.symmetric(
                       horizontal: screenWidth / 340 * 16,
-                      vertical: screenHeight / 667 * 8),
-                  child: Table(
-                    columnWidths: const <int, TableColumnWidth>{
-                      0: FractionColumnWidth(0.4)
-                    },
-                    children: <TableRow>[
-                      TableRow(
-                        children: <Widget>[
+                      vertical: screenHeight / 667 * 8,
+                    ),
+                    child: Table(
+                      columnWidths: const <int, TableColumnWidth>{0: FractionColumnWidth(0.4)},
+                      children: <TableRow>[
+                        TableRow(
+                          children: <Widget>[
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                'Kiểm duỵệt',
+                                textAlign: TextAlign.end,
+                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              ),
+                            ),
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                film.description,
+                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(
+                          children: <Widget>[
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                'Khởi chiếu',
+                                textAlign: TextAlign.end,
+                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              ),
+                            ),
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                convertTime(
+                                    'dd/MM/yyyy', DateTime
+                                    .parse(film.premieredDay)
+                                    .millisecondsSinceEpoch, false),
+                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              ),
+                            ),
+                          ],
+                        ),
+                        TableRow(children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 16),
+                            padding: _padding,
                             child: Text(
-                              'Kiểm duỵệt',
+                              'Thể loại',
                               textAlign: TextAlign.end,
-                              style: textTheme.subtitle2
-                                  .copyWith(color: AppColor.borderTrip),
+                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
                             ),
                           ),
-                          Text(
-                            film.description,
-                            style: textTheme.bodyText2
-                                .copyWith(color: AppColor.border),
-                          ),
-                        ],
-                      ),
-                      TableRow(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text(
-                            'Khởi chiếu',
-                            textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.borderTrip),
-                          ),
-                        ),
-                        Text(
-                          film.premieredDay.substring(0, film.premieredDay.indexOf('T')),
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.border),
-                        ),
-                      ]),
-                      TableRow(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text(
-                            'Thể loại',
-                            textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.borderTrip),
-                          ),
-                        ),
-                        Text(
-                          film.category,
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.border),
-                        ),
-                      ]),
-                      TableRow(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text(
-                            'Đạo diễn',
-                            textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.borderTrip),
-                          ),
-                        ),
-                        Text(
-                          film.director,
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.border),
-                        ),
-                      ]),
-                      TableRow(
-                        children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.only(right: 16.0),
+                            padding: _padding,
                             child: Text(
-                              'Diễn viên',
-                              textAlign: TextAlign.end,
-                              style: textTheme.subtitle2
-                                  .copyWith(color: AppColor.borderTrip),
+                              film.category,
+                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
                             ),
                           ),
-                          Text(
-                            film.actors,
-                            style: textTheme.bodyText2
-                                .copyWith(color: AppColor.border),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              'Đạo diễn',
+                              textAlign: TextAlign.end,
+                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                            ),
                           ),
-                        ],
-                      ),
-                      TableRow(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text(
-                            'Thời lượng',
-                            textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.borderTrip),
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              film.director,
+                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                            ),
                           ),
+                        ]),
+                        TableRow(
+                          children: <Widget>[
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                'Diễn viên',
+                                textAlign: TextAlign.end,
+                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              ),
+                            ),
+                            Padding(
+                              padding: _padding,
+                              child: Text(
+                                film.actors,
+                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          film.duration.toString() + ' phút',
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.border),
-                        ),
-                      ]),
-                      TableRow(children: <Widget>[
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16.0),
-                          child: Text(
-                            'Ngôn ngữ',
-                            textAlign: TextAlign.end,
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.borderTrip),
+                        TableRow(children: <Widget>[
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              'Thời lượng',
+                              textAlign: TextAlign.end,
+                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                            ),
                           ),
-                        ),
-                        Text(
-                          convertLanguageCode(film.languageCode),
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.border),
-                        ),
-                      ]),
-                    ],
-                  ),
-                ),
-                Image.asset('assets/divider.png'),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth / 360 * 16,
-                      vertical: screenHeight / 667 * 8),
-                  child: Text(
-                    film.introduction,
-                    style: textTheme.bodyText2.copyWith(
-                      color: AppColor.border,
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              film.duration.toString() + ' phút',
+                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                            ),
+                          ),
+                        ]),
+                        TableRow(children: <Widget>[
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              'Ngôn ngữ',
+                              textAlign: TextAlign.end,
+                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                            ),
+                          ),
+                          Padding(
+                            padding: _padding,
+                            child: Text(
+                              convertLanguageCode(film.languageCode),
+                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                            ),
+                          ),
+                        ]),
+                      ],
                     ),
                   ),
-                )
-              ],
-            ),
-          ) else Container(),
+                  Image.asset('assets/divider.png'),
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth / 360 * 16, vertical: screenHeight / 667 * 8),
+                    child: Text(
+                      film.introduction,
+                      style: textTheme.bodyText2.copyWith(
+                        color: AppColor.border,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            )
+          else
+            Container(),
         ],
       ),
     );
@@ -300,29 +319,14 @@ class _DetailPageState extends State<DetailPage> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     itemCount: version.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       final String versionCode = version[index];
-                      return Container(
-                        child: Text(
-                          versionCode,
-                          style:
-                              textTheme.bodyText2.copyWith(color: AppColor.red),
-                        ),
-                        height: screenHeight / 667 * 16,
-                        decoration: BoxDecoration(
-                          color: AppColor.backGround,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                              width: 1,
-                              color: AppColor.red,
-                              style: BorderStyle.solid),
-                        ),
-                      );
+                      return _itemVersionWidget(context, versionCode);
                     },
                   ),
                 ),
@@ -330,13 +334,10 @@ class _DetailPageState extends State<DetailPage> {
                   height: screenHeight / 667 * 8,
                 ),
                 Text(
-                  film.duration.toString() +
-                      'p'
-                          ' - ' +
-                      film.premieredDay
-                          .substring(0, film.premieredDay.indexOf('T')),
-                  style:
-                      textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
+                  '${film.duration.toString()} p  - ${convertTime('dd/MM/yyyy', DateTime
+                      .parse(film.premieredDay)
+                      .millisecondsSinceEpoch, false)}',
+                  style: textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
                 ),
               ],
             ),
@@ -344,9 +345,29 @@ class _DetailPageState extends State<DetailPage> {
           AVButtonFill(
               title: 'ĐẶT VÉ',
               onPressed: () {
-                print('abc');
+                Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: <String, dynamic>{
+                  Constant.film: film,
+                });
               })
         ],
+      ),
+    );
+  }
+
+  Widget _itemVersionWidget(BuildContext context, String versionCode) {
+    return Container(
+      padding: const EdgeInsets.symmetric(
+        vertical: 3,
+        horizontal: 4,
+      ),
+      child: Text(
+        versionCode,
+        style: textTheme.bodyText2.copyWith(color: AppColor.red),
+      ),
+      decoration: BoxDecoration(
+        color: AppColor.backGround,
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
       ),
     );
   }

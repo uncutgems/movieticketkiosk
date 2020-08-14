@@ -3,7 +3,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart';
 import 'package:meta/meta.dart';
-import 'package:ncckios/base/url.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
