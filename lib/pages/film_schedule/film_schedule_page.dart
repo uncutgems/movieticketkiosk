@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
@@ -51,7 +52,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return false;
         } else if (state is FilmScheduleStateToSelectSeatPage) {
           Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
-            'session': state.session,
+            Constant.session: state.session,
+            Constant.film: widget.film,
           });
           return false;
         }
@@ -66,26 +68,17 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           return mainScreen(context, _loading(context));
         } else if (state is FilmScheduleStateEmpty) {
           return mainScreen(
-
             context,
             Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: Center(
                 child: Text(
                   'Xin lỗi bạn ngày này chưa có lịch chiếu',
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .headline6
-                      .copyWith(color: AppColor.white),
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
                 ),
               ),
             ),
           );
-
         }
         return const Material();
       },
@@ -195,7 +188,6 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         child: RaisedButton(
           color: AppColor.white,
           onPressed: () {
-
             bloc.add(FilmScheduleEventClickTimeBox(element));
           },
           padding: const EdgeInsets.all(10),
@@ -232,13 +224,16 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 //            ),
 //          ),
           Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * (29 / 667)),
+            margin: EdgeInsets.only(top: MediaQuery
+                .of(context)
+                .size
+                .height * (29 / 667)),
             padding: const EdgeInsets.all(4.0),
             decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
             child: Text(
               languageCode,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(fontSize: 14, color: AppColor.red),
@@ -260,12 +255,11 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return result;
   }
 
-  Widget versionCodeWidget(BuildContext context,String versionCode){
+  Widget versionCodeWidget(BuildContext context, String versionCode) {
     List<String> result = <String>[];
     if (versionCode.contains(',')) {
       result = versionCode.split(',');
-    }
-    else {
+    } else {
       result.add(versionCode);
     }
     final List<Widget> widget = <Widget>[];
@@ -289,7 +283,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
           child: Text(
             vCode,
-            style: Theme.of(context)
+            style: Theme
+                .of(context)
                 .textTheme
                 .bodyText2
                 .copyWith(fontSize: 14, color: AppColor.red),
@@ -297,11 +292,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         ),
       );
     }
-    return Row(
-        children: widget
-    );
+    return Row(children: widget);
   }
-
 
 //  List<Session> sessionType(
 //      List<Session> sessionList, String versionCode, String languageCode) {
