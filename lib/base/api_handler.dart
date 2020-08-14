@@ -29,7 +29,8 @@ Future<AVResponse> callGET(String url, {Map<String, String> headers}) async {
     print('GET ===================== ');
     print('HEADER: $_headers');
     print('URL : $url');
-    final Response response = await get(url,headers: _headers).timeout(const Duration(seconds: 30));
+    final Response response =
+        await get(url, headers: _headers).timeout(const Duration(seconds: 30));
     if (response != null) {
       print('RESPONSE: ' + response.body);
     }
@@ -75,7 +76,7 @@ Future<AVResponse> callPOST({
   @required dynamic body,
   Map<String, String> header,
 }) async {
-  final String _url = URL.baseURL + path;
+  final String _url = path;
   final Map<String, String> _headers = <String, String>{};
   _headers.addAll(header ?? <String, String>{});
   _headers[Constant.contentType] = 'application/json';
@@ -83,7 +84,7 @@ Future<AVResponse> callPOST({
   print('Calling post data ===============================================');
   print('header: $_headers');
   print('URL: $path');
-  print('body: $body');
+  print('body: ${jsonEncode(body)}');
   try {
     final Response response =
         await post(_url, headers: _headers, body: jsonEncode(body))
