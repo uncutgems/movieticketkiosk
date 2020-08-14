@@ -4,6 +4,7 @@ import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/check_out_page/check_out_page.dart';
 import 'package:ncckios/pages/default/default_page.dart';
+import 'package:ncckios/pages/detail/detail_view.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_page.dart';
 import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/home/home_view.dart';
@@ -35,7 +36,7 @@ class MyApp extends StatelessWidget {
 }
 
 MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
-  //final dynamic data = settings.arguments;
+  final dynamic data = settings.arguments;
   switch (settings.name) {
     case RoutesName.splashPage:
       return MaterialPageRoute<dynamic>(
@@ -62,6 +63,13 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => HomePage(),
         settings: const RouteSettings(name: RoutesName.homePage),
+      );
+    case RoutesName.detailPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => DetailPage(
+          id: data as int,
+        ),
+        settings: const RouteSettings(name: RoutesName.detailPage),
       );
 
     default:

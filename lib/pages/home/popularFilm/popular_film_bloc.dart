@@ -12,7 +12,7 @@ part 'popular_film_state.dart';
 final FilmRepository _filmRepository = FilmRepository();
 
 class PopularFilmBloc extends Bloc<PopularFilmEvent, PopularFilmState> {
-  PopularFilmBloc() : super(InitialPopularFilmState());
+  PopularFilmBloc() : super(SuccessGetDataPopularFilmState(<Film>[Film()], 0));
 
   @override
   Stream<PopularFilmState> mapEventToState(
@@ -20,7 +20,6 @@ class PopularFilmBloc extends Bloc<PopularFilmEvent, PopularFilmState> {
   ) async* {
     if (event is GetDataPopularFilmEvent) {
       try {
-        yield InitialPopularFilmState();
         final List<Film> filmList = await _filmRepository.getFilmList();
         yield SuccessGetDataPopularFilmState(filmList, 0);
       } on APIException catch(e) {
@@ -29,6 +28,9 @@ class PopularFilmBloc extends Bloc<PopularFilmEvent, PopularFilmState> {
     }
     if (event is ChangedPagePopularFilmEvent) {
       yield SuccessGetDataPopularFilmState(event.listFilm, event.index);
+    }
+    if (event is ClickToDetailPopularFilmEvent) {
+      yield NavigateDetailPopularFilmState(event.id);
     }
   }
 }

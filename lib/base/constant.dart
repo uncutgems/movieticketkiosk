@@ -3,7 +3,7 @@ class Constant {
   static const String code = 'code';
   static const String response = 'response';
   static const String message = 'Message';
-  static const String contentType = 'contentType';
+  static const String contentType = 'Content-Type';
   static const String headerDOBODY6969 = 'DOBODY6969';
   static const String results = 'results';
   static const String error = 'error';
@@ -17,7 +17,7 @@ class Constant {
   static const String firebaseKey = 'firebaseKey';
   static const String token = 'token';
   static const String userInfo = 'userInfo';
-  static const String id = 'id';
+  static const String id = 'Id';
   static const String title = 'title';
   static const String content = 'content';
   static const String time = 'time';
@@ -233,4 +233,14 @@ class Constant {
   static const String listFilm = 'lstFilm';
   static const String location = 'Location';
   static const String day = 'Day';
+  static const String customerId = 'customerId';
+  static const String planScreenId = 'planScreenId';
+  static const String seatsF1 = 'seatsF1';
+  static const String listChairValueF1 = 'ListChairValueF1';
+  static const String customerFirstName = 'CustomerFirstName';
+  static const String customerLastName = 'CustomerLastName';
+  static const String paymentMethodSystemName = 'PaymentMethodSystemName';
+  static const String orderId='OrderId';
+  static const String orderTotal='OrderTotal';
+  static const String category = 'Category';
 }

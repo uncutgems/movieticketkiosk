@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ncckios/base/constant.dart';
 
@@ -179,6 +180,7 @@ class Film {
     this.ageAboveShow,
     this.imageUrl,
     this.bannerUrl,
+    this.category
   });
 
   factory Film.fromJson(final Map<String, dynamic> data) {
@@ -204,6 +206,7 @@ class Film {
       ageAboveShow: getString(Constant.ageAboveShow, data),
       imageUrl: getString(Constant.imageUrl, data),
       bannerUrl: getString(Constant.bannerUrl, data),
+      category: getString(Constant.category, data)
     );
   }
 
@@ -225,6 +228,7 @@ class Film {
   final String ageAboveShow;
   final String imageUrl;
   final String bannerUrl;
+  final String category;
 
   Film copyWith({
     int id,
@@ -245,6 +249,7 @@ class Film {
     String ageAboveShow,
     String imageUrl,
     String bannerUrl,
+    String category,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (filmNameEn == null || identical(filmNameEn, this.filmNameEn)) &&
@@ -263,11 +268,12 @@ class Film {
         (sellOnline == null || identical(sellOnline, this.sellOnline)) &&
         (ageAboveShow == null || identical(ageAboveShow, this.ageAboveShow)) &&
         (imageUrl == null || identical(imageUrl, this.imageUrl)) &&
-        (bannerUrl == null || identical(bannerUrl, this.bannerUrl))) {
+        (bannerUrl == null || identical(bannerUrl, this.bannerUrl)) &&
+        (category == null || identical(category, this.category))) {
       return this;
     }
 
-    return Film(
+    return  Film(
       id: id ?? this.id,
       filmNameEn: filmNameEn ?? this.filmNameEn,
       filmName: filmName ?? this.filmName,
@@ -286,6 +292,7 @@ class Film {
       ageAboveShow: ageAboveShow ?? this.ageAboveShow,
       imageUrl: imageUrl ?? this.imageUrl,
       bannerUrl: bannerUrl ?? this.bannerUrl,
+      category: category ?? this.category,
     );
   }
 
@@ -309,6 +316,7 @@ class Film {
       Constant.ageAboveShow: ageAboveShow,
       Constant.imageUrl: imageUrl,
       Constant.bannerUrl: bannerUrl,
+      Constant.category: category,
     };
   }
 }
@@ -344,6 +352,8 @@ class Session {
     this.priceOfPosition,
     this.priceOfPosition2,
     this.priceOfPosition3,
+    this.languageCode,
+    this.versionCode
   });
 
   factory Session.fromJson(final Map<String, dynamic> data) {
@@ -364,6 +374,8 @@ class Session {
       priceOfPosition: getString(Constant.priceOfPosition, data),
       priceOfPosition2: getString(Constant.priceOfPosition2, data),
       priceOfPosition3: getString(Constant.priceOfPosition3, data),
+      versionCode: getString(Constant.versionCode, data),
+      languageCode: getString(Constant.languageCode, data)
     );
   }
 
@@ -380,6 +392,8 @@ class Session {
     String priceOfPosition,
     String priceOfPosition2,
     String priceOfPosition3,
+    String versionCode,
+    String languageCode,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (planCinemaId == null || identical(planCinemaId, this.planCinemaId)) &&
@@ -389,14 +403,20 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3))) {
+        (isOnlineSelling == null ||
+            identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null ||
+            identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null ||
+            identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null ||
+            identical(priceOfPosition3, this.priceOfPosition3)) &&
+        (versionCode == null || identical(versionCode, this.versionCode)) &&
+        (languageCode == null || identical(languageCode, this.languageCode))) {
       return this;
     }
 
-    return Session(
+    return  Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -409,6 +429,8 @@ class Session {
       priceOfPosition: priceOfPosition ?? this.priceOfPosition,
       priceOfPosition2: priceOfPosition2 ?? this.priceOfPosition2,
       priceOfPosition3: priceOfPosition3 ?? this.priceOfPosition3,
+      versionCode: versionCode ?? this.versionCode,
+      languageCode: languageCode ?? this.languageCode,
     );
   }
 
@@ -424,7 +446,8 @@ class Session {
   final String priceOfPosition;
   final String priceOfPosition2;
   final String priceOfPosition3;
-
+  final String versionCode;
+  final String languageCode;
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -439,6 +462,8 @@ class Session {
       Constant.priceOfPosition: priceOfPosition,
       Constant.priceOfPosition2: priceOfPosition2,
       Constant.priceOfPosition3: priceOfPosition3,
+      Constant.versionCode: versionCode,
+      Constant.languageCode: languageCode,
     };
   }
 }
@@ -559,4 +584,38 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+}
+
+@JsonSerializable(nullable: false)
+class Order{
+  Order({this.orderTotal, this.orderId});
+
+  factory Order.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Order();
+    }
+    return Order(
+      orderId: getInt(Constant.orderId, data),
+      orderTotal: getDouble(Constant.orderTotal, data),
+
+    );
+  }
+  final int orderId;
+  final double orderTotal;
+
+
+  Map<String,dynamic> toJson(){
+    return <String,dynamic>{
+      Constant.orderId : orderId,
+      Constant.orderTotal:orderTotal,
+    };
+  }
+}
+
+
+class SessionType {
+  SessionType({ this.versionCode, this.languageCode,this.sessionList});
+  final String versionCode;
+  final String languageCode;
+  final List<Session> sessionList;
 }
