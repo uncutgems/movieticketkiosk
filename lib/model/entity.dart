@@ -596,12 +596,12 @@ class Order{
     }
     return Order(
       orderId: getInt(Constant.orderId, data),
-      orderTotal: getInt(Constant.orderTotal, data),
+      orderTotal: getDouble(Constant.orderTotal, data),
 
     );
   }
   final int orderId;
-  final int orderTotal;
+  final double orderTotal;
 
 
   Map<String,dynamic> toJson(){
