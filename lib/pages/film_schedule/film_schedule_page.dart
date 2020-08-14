@@ -72,7 +72,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
               Container(
                   height: MediaQuery.of(context).size.height * 0.5,
                   child:  Center(
-                    child: Text('Xin lỗi bạn ngày này chưa có lịch chiếu',style: Theme.of(context).textTheme.headline6,),
+                    child: Text('Xin lỗi bạn ngày này chưa có lịch chiếu',style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),),
 
                   )));
         }

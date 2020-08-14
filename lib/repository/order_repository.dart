@@ -38,7 +38,7 @@ class OrderRepository {
   Future<QRObject> createQrOrder(int qrId) async{
     final Map<String, dynamic> body = <String, dynamic>{};
     final AVResponse response =
-    await callPOST(path: '${URL.createQrOrder}?OrderId=$qrId');
+    await callPOST(path: '${URL.createQrOrder}?OrderId=$qrId',body: body);
     if (response.isOK) {
       print('It works QR');
       final QRObject qrObject =
