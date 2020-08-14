@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/enum.dart';
@@ -13,8 +14,11 @@ import 'package:ncckios/widgets/button/button_widget.dart';
 import '../../model/entity.dart';
 
 class SelectSeatPage extends StatefulWidget {
-  const SelectSeatPage({Key key, @required this.film, @required this.session})
-      : super(key: key);
+  const SelectSeatPage({
+    Key key,
+    @required this.film,
+    @required this.session,
+  }) : super(key: key);
 
   final Film film;
   final Session session;
@@ -26,12 +30,13 @@ class SelectSeatPage extends StatefulWidget {
 class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
-  final int sessionId2 = 246813; //246773 //204907 //246844 //246840 //246813
+
+//  final int sessionId2 = 246813; //246773 //204907 //246844 //246840 //246813
 
   @override
   void initState() {
-    bloc.add(GetSeatDataSelectSeatEvent(sessionId2, _totalPrice(chosenSeatList),
-        chosenSeatList)); //204907  , 246773
+    bloc.add(
+        GetSeatDataSelectSeatEvent(widget.session.id, _totalPrice(chosenSeatList), chosenSeatList)); //204907  , 246773
     super.initState();
   }
 
@@ -55,9 +60,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () =>
-                Navigator.pop(context, RoutesName.filmSchedulePage)),
+            icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
         title: const Text('Chọn ghế'),
         centerTitle: true,
@@ -83,17 +86,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 return _showSeat(context, state);
               } else if (state is FailToReceiveSeatDataSelectSeatState) {
                 _showError(context, state);
-              }else if ( state is MoveToNextScreenSelectSeatState){
-
-//                Navigator.pushNamed(
-//                  context,
-//                  RoutesName.checkOutPage,
-//                  arguments: <String, dynamic>{
-//                    'chosenList': state.chosenList,
-//                    'session':state.session,
-//                  },
-//                ).then((value) {});
-
               }
               return Container();
             },
@@ -103,8 +95,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     );
   }
 
-  Widget _showError(
-      BuildContext context, FailToReceiveSeatDataSelectSeatState state) {
+  Widget _showError(BuildContext context, FailToReceiveSeatDataSelectSeatState state) {
     return Column(children: <Widget>[
       Text(
         state.errorMessage,
@@ -113,8 +104,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       RaisedButton(
         color: AppColor.red100,
         onPressed: () {
-          bloc.add(GetSeatDataSelectSeatEvent(
-              sessionId2, _totalPrice(chosenSeatList), chosenSeatList));
+          bloc.add(GetSeatDataSelectSeatEvent(widget.session.id, _totalPrice(chosenSeatList), chosenSeatList));
         },
       ),
     ]);
@@ -151,37 +141,22 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           padding: const EdgeInsets.only(right: 16, left: 16),
           child: Row(
             children: <Widget>[
-              _demoSeat(context: context, color: AppColor.dark60),
-              Container(
-                width: 8,
+              Expanded(
+                child: _demoSeat(
+                  context: context,
+                  color: AppColor.dark60,
+                  text: 'Đã đặt',
+                ),
               ),
-              const Text(
-                'Đã đặt',
-                style: TextStyle(color: AppColor.white),
-              ),
-              Container(
-                width: 47,
-              ),
-              Container(
-                width: 26,
-                height: 26,
-                decoration: BoxDecoration(
-                  border: Border.all(),
-                  borderRadius: BorderRadius.circular(4),
+              Expanded(
+                child: _demoSeat(
+                  context: context,
                   color: AppColor.white,
-                ),
-                child: const Icon(
-                  Icons.check,
-                  color: AppColor.red,
+                  text: 'Đang chọn',
+                  check: true,
                 ),
               ),
-              Container(
-                width: 8,
-              ),
-              const Text(
-                'Đang chọn',
-                style: TextStyle(color: AppColor.white),
-              ),
+              Expanded(child: Container()),
             ],
           ),
         ),
@@ -192,35 +167,26 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           padding: const EdgeInsets.only(right: 16, left: 16, bottom: 32),
           child: Row(
             children: <Widget>[
-              _demoSeat(context: context, color: AppColor.white),
-              Container(
-                width: 8,
+              Expanded(
+                child: _demoSeat(
+                  context: context,
+                  color: AppColor.white,
+                  text: 'Ghế thường',
+                ),
               ),
-              const Text(
-                'Ghế thường',
-                style: TextStyle(color: AppColor.white),
+              Expanded(
+                child: _demoSeat(
+                  context: context,
+                  color: AppColor.orange80,
+                  text: 'Ghế Vip',
+                ),
               ),
-              Container(
-                width: 16,
-              ),
-              _demoSeat(context: context, color: AppColor.orange80),
-              Container(
-                width: 8,
-              ),
-              const Text(
-                'Ghế Vip',
-                style: TextStyle(color: AppColor.white),
-              ),
-              Container(
-                width: 33,
-              ),
-              _demoSeat(context: context, color: AppColor.red100),
-              Container(
-                width: 8,
-              ),
-              const Text(
-                'Ghế Đôi',
-                style: TextStyle(color: AppColor.white),
+              Expanded(
+                child: _demoSeat(
+                  context: context,
+                  color: AppColor.red100,
+                  text: 'Ghế Đôi',
+                ),
               ),
             ],
           ),
@@ -234,9 +200,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(children: <Widget>[
-            const Text(
-              'Kị sĩ bóng đêm trỗi dậy',
-              style: TextStyle(color: AppColor.white),
+            Text(
+              widget.film.filmName,
+              style: Theme.of(context).textTheme.subtitle2.copyWith(color: AppColor.white),
             ),
             Container(),
           ]),
@@ -246,30 +212,38 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      state.chosenList.length.toString(),
-                      style: const TextStyle(color: AppColor.white),
-                    ),
-                    const Text(
-                      ' ghế - ',
-                      style: TextStyle(color: AppColor.white),
-                    ),
-                    Text(
-                      currencyFormat(state.totalPrice.toInt(), 'VND'),
-                      style: const TextStyle(color: AppColor.white),
-                    ),
-                  ],
+                Text(
+                  state.chosenList.length.toString(),
+                  style: const TextStyle(color: AppColor.white),
                 ),
-                AVButtonFill(
-                  title: 'ĐẶT VÉ',
-                  onPressed: () {},
+                const Text(
+                  ' ghế - ',
+                  style: TextStyle(color: AppColor.white),
                 ),
-              ]),
+                Text(
+                  currencyFormat(state.totalPrice.toInt(), 'VND'),
+                  style: const TextStyle(color: AppColor.white),
+                ),
+              ],
+            ),
+            AVButtonFill(
+              title: 'ĐẶT VÉ',
+              onPressed: () {
+                Navigator.pushNamed(
+                  context,
+                  RoutesName.checkOutPage,
+                  arguments: <String, dynamic>{
+                    Constant.chosenList: state.chosenList,
+                    Constant.session: widget.session,
+                    Constant.film: widget.film,
+                  },
+                );
+              },
+            ),
+          ]),
         ),
       ],
     );
@@ -298,8 +272,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       return Container();
     }
     if (seat.status == 1 || seat.status == 2) {
-      return _soldSeatContainer(
-          context: context, color: AppColor.dark60, seat: seat);
+      return _soldSeatContainer(context: context, color: AppColor.dark60, seat: seat);
     } else if (seat.type == SeatType.vipSeat) {
       return _seatContainer(
         context: context,
@@ -315,8 +288,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           seat: seat,
           chosenList: chosenList,
           seatList: seatList);
-    } else if (seat.type == SeatType.numberTheSeat &&
-        seat.column == 0) {
+    } else if (seat.type == SeatType.numberTheSeat && seat.column == 0) {
       return Container();
     } else if (seat.type == SeatType.numberTheSeat) {
       return _numberSeatContainer(context: context, seat: seat);
@@ -346,8 +318,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         onTap: () {
           const bool check = true;
           checkValidSeat(chosenList, seat, check);
-          bloc.add(UpdateSeatDataSelectSeatEvent(
-              seatList, _totalPrice(chosenList), chosenList));
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
         },
       ),
       decoration: BoxDecoration(
@@ -374,10 +345,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         onTap: () {
-         const bool check = true;
+          const bool check = true;
           checkValidSeat(chosenList, seat, check);
-          bloc.add(UpdateSeatDataSelectSeatEvent(
-              seatList, _totalPrice(chosenList), chosenList));
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
         },
       ),
       decoration: BoxDecoration(
@@ -407,12 +377,11 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required BuildContext context,
     @required Seat seat,
   }) {
-
     return Container(
       child: Center(
           child: Text(
-        seat.code ,
-        style: const TextStyle(color: AppColor.white),
+            seat.code,
+            style: const TextStyle(color: AppColor.white),
       )),
     );
   }
@@ -433,15 +402,37 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   Widget _demoSeat({
     @required BuildContext context,
     @required Color color,
+    @required String text,
+    bool check,
   }) {
-    return Container(
-      width: 26,
-      height: 26,
-      decoration: BoxDecoration(
-        border: Border.all(),
-        borderRadius: BorderRadius.circular(4),
-        color: color,
-      ),
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        Container(
+          width: 26,
+          height: 26,
+          margin: const EdgeInsets.only(right: 8),
+          decoration: BoxDecoration(
+            border: Border.all(),
+            borderRadius: BorderRadius.circular(4),
+            color: color,
+          ),
+          child: check ?? false
+              ? const Icon(
+            Icons.check,
+            color: AppColor.red,
+          )
+              : null,
+        ),
+        Text(
+          text,
+          style: Theme
+              .of(context)
+              .textTheme
+              .subtitle2
+              .copyWith(color: AppColor.white),
+        ),
+      ],
     );
   }
 }

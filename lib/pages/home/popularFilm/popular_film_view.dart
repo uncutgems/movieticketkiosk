@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
@@ -87,9 +88,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                         )
                       : null,
                 ),
-                child: film.id == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : null,
+                child: film.id == null ? const Center(child: CircularProgressIndicator()) : null,
               ),
             );
           },
@@ -97,9 +96,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
         Container(
           height: screenHeight / 667 * 8,
         ),
-        if (filmList[0].id != null)
-          _filmInfo(context, filmList, state.index)
-        else
+        if (filmList[0].id != null) _filmInfo(context, filmList, state.index) else
           Container()
       ],
     );
@@ -143,7 +140,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     itemCount: version.length,
@@ -153,17 +150,13 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                       return Container(
                         child: Text(
                           versionCode,
-                          style:
-                              textTheme.bodyText2.copyWith(color: AppColor.red),
+                          style: textTheme.bodyText2.copyWith(color: AppColor.red),
                         ),
                         height: screenHeight / 667 * 16,
                         decoration: BoxDecoration(
                           color: AppColor.backGround,
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                              width: 1,
-                              color: AppColor.red,
-                              style: BorderStyle.solid),
+                          border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
                         ),
                       );
                     },
@@ -192,8 +185,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
     );
   }
 
-  void _navigateToDetail(
-      BuildContext context, NavigateDetailPopularFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
+  void _navigateToDetail(BuildContext context, NavigateDetailPopularFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
+      Constant.filmId: state.id,
+    });
   }
 }

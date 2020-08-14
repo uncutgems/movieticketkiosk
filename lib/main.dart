@@ -11,6 +11,7 @@ import 'package:ncckios/pages/film_schedule/film_schedule_page.dart';
 import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
+import 'package:ncckios/pages/successful_checkout/successful_checkout_page.dart';
 
 void main() {
   runApp(MyApp());
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: RoutesName.selectSeatPage,
+      initialRoute: RoutesName.splashPage,
       onGenerateRoute: (RouteSettings settings) => routeSettings(settings),
       debugShowCheckedModeBanner: false,
       theme: themeData,
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
-  final dynamic data = settings.arguments;
+  final Map<String, dynamic> data = settings.arguments as Map<String, dynamic>;
   switch (settings.name) {
     case RoutesName.splashPage:
       return MaterialPageRoute<dynamic>(
@@ -54,12 +55,21 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.checkOutPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => CheckOutPage(),
+        builder: (BuildContext context) =>
+            CheckOutPage(
+              film: data[Constant.film] as Film,
+              session: data[Constant.session] as Session,
+              seats: data[Constant.chosenList] as List<Seat>,
+            ),
         settings: const RouteSettings(name: RoutesName.checkOutPage),
       );
     case RoutesName.selectSeatPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => const SelectSeatPage(),
+        builder: (BuildContext context) =>
+            SelectSeatPage(
+              film: data[Constant.film] as Film,
+              session: data[Constant.session] as Session,
+            ),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
 
@@ -70,10 +80,21 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.detailPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => DetailPage(
-          id: data as int,
-        ),
+        builder: (BuildContext context) =>
+            DetailPage(
+              id: data[Constant.filmId] as int,
+            ),
         settings: const RouteSettings(name: RoutesName.detailPage),
+      );
+    case RoutesName.successfulCheckout:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) =>
+            SuccessfulCheckoutPage(
+              session: data[Constant.session] as Session,
+              film: data[Constant.film] as Film,
+              seats: data[Constant.chosenList] as List<Seat>,
+            ),
+        settings: const RouteSettings(name: RoutesName.successfulCheckout),
       );
 
     default:
