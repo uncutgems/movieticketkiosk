@@ -17,6 +17,5 @@ class SplashBloc extends Bloc<SplashEvent, SplashState> {
       await Future<void>.delayed(const Duration(seconds: 1));
       yield SplashStateNextPage();
     }
-    // TODO: implement mapEventToState
   }
 }

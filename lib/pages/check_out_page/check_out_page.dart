@@ -321,9 +321,9 @@ class _CheckOutPageState extends State<CheckOutPage>
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Đồng ý",
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: AppColor.blue, fontWeight: FontWeight.normal),
+                'Đồng ý',
+                style:
+                    Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.blue, fontWeight: FontWeight.normal),
               ),
               onPressed: () {
                 Navigator.of(context).pop();
