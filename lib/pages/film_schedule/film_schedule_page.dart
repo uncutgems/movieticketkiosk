@@ -94,6 +94,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         .of(context)
         .size
         .height;
+    final double _screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
@@ -115,12 +116,13 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           HorizontalCalendar(
             pressCalender: pressCalendar,
             initialSelectedDates: <DateTime>[DateTime.now()],
-            spacingBetweenDates: 8,
+            spacingBetweenDates: 8*_screenWidth/411.43,
             onDateSelected: (DateTime date) {
               currentDate = date;
               bloc.add(FilmScheduleEventGetTime(convertDateToInput(date),this.widget.film.id));
             },
             height: 40 * _screenHeight / 736,
+
             padding: const EdgeInsets.all(0),
             labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
             weekDayFormat: 'EEEE',

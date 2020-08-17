@@ -43,7 +43,7 @@ class _SuccessfulCheckoutPageState extends State<SuccessfulCheckoutPage> {
           TicketWidget(
             ticket: null,
             name: '',
-            seat: '',
+            seat: convertSeatToString(widget.seats),
             version: widget.film.versionCode,
             languageCode: widget.film.languageCode,
             projectDate: '',
@@ -63,5 +63,15 @@ class _SuccessfulCheckoutPageState extends State<SuccessfulCheckoutPage> {
         ),
       ),
     );
+  }
+  String convertSeatToString(List<Seat> seatList){
+    String result = '';
+    for (final Seat seat in seatList){
+      result+=seat.code+',';
+    }
+    result = result.substring(0,result.length-1);
+    print(result);
+
+    return result;
   }
 }
