@@ -645,6 +645,22 @@ class QRObject {
   }
 }
 
+class OrderStatus{
+  OrderStatus({this.barCode, this.code});
+  factory OrderStatus.fromJson(final Map<String,dynamic> response){
+    if(response==null){
+      return OrderStatus();
+    }
+    return OrderStatus(
+      barCode: getString(Constant.barCode,response),
+      code: getString(Constant.code, response)
+    );
+  }
+  final String barCode;
+  final String code;
+}
+
+
 class SessionType {
   SessionType({this.versionCode, this.languageCode, this.sessionList});
 

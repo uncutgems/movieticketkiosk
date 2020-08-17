@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
@@ -5,6 +7,7 @@ import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
+import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
 import 'package:ncckios/widgets/qr/qr.dart';
@@ -70,6 +73,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
           _animationController.forward();
+          
           return mainScreen(
             context,
             bottomQR(
@@ -325,6 +329,7 @@ class _CheckOutPageState extends State<CheckOutPage>
                   paymentMethodSystemName: 'VNPAY'));
             },
             title: 'Tiến hành thanh toán',
+
           ),
         ),
       ],
@@ -332,6 +337,10 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget bottomQR(BuildContext context, Widget qrCode) {
+
+    Timer.periodic(const Duration(seconds: 10), (Timer timer) {
+
+    });
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),

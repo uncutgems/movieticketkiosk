@@ -5,3 +5,7 @@ class SeatType {
   static const String alphabetSeat = '-2';
   static const String path = '12';
 }
+class PaymentStatus{
+  static const String success='00';
+  static const String pending='10';
+}

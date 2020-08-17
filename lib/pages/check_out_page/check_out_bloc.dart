@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:ncckios/model/entity.dart';
+import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/repository/order_repository.dart';
 
 part 'check_out_event.dart';
@@ -12,7 +13,7 @@ part 'check_out_state.dart';
 class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
   CheckOutBloc() : super(CheckOutInitial());
   OrderRepository orderRepository = OrderRepository();
-
+  Timer statusTimer;
   @override
   Stream<CheckOutState> mapEventToState(
     CheckOutEvent event,
@@ -30,6 +31,19 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
       yield CheckOutStateQR(order);
     } else if (event is CheckOutEventShowTimeOut) {
       yield CheckOutStateTimeOut();
+    }
+    else if (event is CheckOutEventCheckPaymentStatus){
+      OrderStatus status=OrderStatus();
+
+      statusTimer=Timer.periodic(const Duration(seconds: 10), (Timer timer) async{
+        final OrderStatus orderStatus = await orderRepository.checkOrder(event.orderId);
+       status = orderStatus;
+      });
+      if (status.code == PaymentStatus.success){
+//        yield CheckOutStateQR()
+      statusTimer.cancel();
+
+      }
     }
   }
 }

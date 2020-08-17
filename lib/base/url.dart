@@ -7,4 +7,5 @@ class URL {
   static const String futureFilm = baseURL + 'FilmShowings';
   static const String detailFilm = baseURL + 'Films';
   static const String createQrOrder = baseURL+'CreateQrOrder';
+  static const String checkOrder = baseURL+'CheckOrder';
 }
