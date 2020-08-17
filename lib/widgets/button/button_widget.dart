@@ -10,6 +10,8 @@ class AVButtonFill extends StatelessWidget {
     this.backgroundColor,
     this.radius,
     this.height,
+    this.width,
+
   }) : super(key: key);
   final String title;
   final Color textColor;
@@ -17,11 +19,13 @@ class AVButtonFill extends StatelessWidget {
   final VoidCallback onPressed;
   final double radius;
   final double height;
+  final double width;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: height ?? 48,
+      width: width,
       child: RaisedButton(
         color: backgroundColor ?? Theme.of(context).buttonColor,
         disabledColor: Theme.of(context).disabledColor,
