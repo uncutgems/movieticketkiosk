@@ -78,7 +78,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             child: Container(
               width: AppSize.getWidth(context, 264),
               child: Image.asset(
-                'assets/screen.png',
+                'assets/screen2.png',
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -205,7 +205,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         const Image(
-          image: AssetImage('assets/line1.png'),
+          image: AssetImage('assets/line2.png'),
         ),
         Container(
           height: 8,
@@ -298,7 +298,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                     width: AppSize.getWidth(context, 117),
                     height: AppSize.getHeight(context, 48),
                     title: 'ĐẶT VÉ',
-                    fontsize: 20,
+                    fontsize: 30,
                     onPressed: () {
                       if (state.chosenList.isEmpty) {
                         _showMaterialDialog1();
@@ -406,7 +406,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required List<Seat> seatList,
     bool checker,
   }) {
-    return Container(
+    return AnimatedContainer(
       child: GestureDetector(
         child: checker ?? false
             ? const Icon(
@@ -425,8 +425,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),
-        color: color,
-      ),
+        color:  color,
+      ), duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -502,7 +502,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           style: Theme.of(context)
               .textTheme
               .subtitle2
-              .copyWith(color: AppColor.white),
+              .copyWith(color: AppColor.white,fontSize: 18),
         ),
       ],
     );
@@ -512,11 +512,20 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     showDialog<dynamic>(
         context: context,
         builder: (_) => AlertDialog(
-              title: const Text('Chú ý'),
-              content: const Text('Vui Lòng không để ghế trống ở giữa'),
+              title:  Text('Chú ý',style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: AppColor.white,fontSize: 30),),
+              content:  Text('Vui Lòng không để ghế trống ở giữa',style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: AppColor.white,fontSize: 17)),
               actions: <Widget>[
                 FlatButton(
-                  child: const Text('Chọn lại!'),
+                  child:  Text('Chọn lại!',style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      .copyWith(color: AppColor.white,fontSize: 30)),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
@@ -529,11 +538,20 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     showDialog<dynamic>(
         context: context,
         builder: (_) => AlertDialog(
-              title: const Text('Bạn chưa chọn ghế nào!'),
-              content: const Text('Vui Lòng chọn ghế để tiếp tục'),
+              title:  Text('Bạn chưa chọn ghế nào!',style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: AppColor.white,fontSize: 30)),
+              content:  Text('Vui Lòng chọn ghế để tiếp tục',style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: AppColor.white,fontSize: 17)),
               actions: <Widget>[
                 FlatButton(
-                  child: const Text('Chọn ghế!'),
+                  child:  Text('Chọn ghế!',style: Theme.of(context)
+                      .textTheme
+                      .subtitle2
+                      .copyWith(color: AppColor.white,fontSize: 17)),
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
