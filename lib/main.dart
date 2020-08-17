@@ -94,6 +94,8 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
           session: data[Constant.session] as Session,
           film: data[Constant.film] as Film,
           seats: data[Constant.chosenList] as List<Seat>,
+          customerLastName: data[Constant.customerLastName] as String,
+          customerFirstName: data[Constant.customerFirstName] as String,
         ),
         settings: const RouteSettings(name: RoutesName.successfulCheckout),
       );

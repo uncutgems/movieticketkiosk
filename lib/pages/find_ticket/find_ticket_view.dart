@@ -97,7 +97,6 @@ class _FindTicketPageState extends State<FindTicketPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: AVButtonFill(
-                          fontSize: screenHeight/667*16,
                           title: 'TRA CỨU THÔNG TIN VÉ',
                           onPressed: () {
                             bloc.add(CLickFindTicketEvent(_codeController.text));

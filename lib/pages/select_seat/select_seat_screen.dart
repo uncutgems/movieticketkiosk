@@ -298,7 +298,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                     width: AppSize.getWidth(context, 117),
                     height: AppSize.getHeight(context, 48),
                     title: 'ĐẶT VÉ',
-                    fontsize: 30,
                     onPressed: () {
                       if (state.chosenList.isEmpty) {
                         showMaterialDialog(
