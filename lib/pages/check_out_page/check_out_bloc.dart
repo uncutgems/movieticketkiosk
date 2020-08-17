@@ -42,7 +42,7 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
       if (status.code == PaymentStatus.success){
 //        yield CheckOutStateQR()
       statusTimer.cancel();
-
+      yield CheckOutStateSuccess();
       }
     }
   }

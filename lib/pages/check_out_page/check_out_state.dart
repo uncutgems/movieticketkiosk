@@ -7,6 +7,7 @@ class CheckOutStateQR extends CheckOutState{
   CheckOutStateQR(this.order);
   final Order order;
 }
+class CheckOutStateSuccess extends CheckOutState{}
 class CheckOutStateTimeOut extends CheckOutState{}
 //class CheckOutDismissLoadingState extends CheckOutState{}
 //class CheckOutStateShowQR extends CheckOutState{}
