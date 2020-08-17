@@ -39,7 +39,7 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
         print('Coders $orderStatus.code');
        status = orderStatus;
       });
-      Future<dynamic>.delayed(Duration(seconds: 15),(){
+      Future<dynamic>.delayed(const Duration(seconds: 15),(){
         statusTimer.cancel();
       });
       if (status.code == PaymentStatus.success) {

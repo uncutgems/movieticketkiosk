@@ -365,7 +365,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           style: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.white),
+              .copyWith(color: AppColor.white,fontSize: AppSize.getFontSize(context, 14)),
         )),
         Container(height: AppSize.getHeight(context, 8)),
         Center(
@@ -378,6 +378,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             ).animate(_animationController),
           ),
         ),
+        Container(height: AppSize.getHeight(context, 8),),
         qrCode,
       ],
     );
@@ -390,11 +391,14 @@ class _CheckOutPageState extends State<CheckOutPage>
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12)
+          ),
           backgroundColor: AppColor.white,
           contentTextStyle: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.black),
+              .copyWith(color: AppColor.black,fontSize: AppSize.getFontSize(context, 14)),
 //          titlePadding: EdgeInsets.all(24),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -408,7 +412,7 @@ class _CheckOutPageState extends State<CheckOutPage>
               child: Text(
                 'Đồng ý',
                 style: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: AppColor.blue, fontWeight: FontWeight.normal),
+                    color: AppColor.blueLight, fontWeight: FontWeight.normal,fontSize: AppSize.getFontSize(context, 14)),
               ),
               onPressed: () {
                 Navigator.of(context)
@@ -457,7 +461,7 @@ class Countdown extends AnimatedWidget {
           style: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.red));
+              .copyWith(color: AppColor.red,fontSize: AppSize.getFontSize(context, 14)));
     } else {
       bloc.add(CheckOutEventShowTimeOut());
       controller.reset();
