@@ -10,7 +10,7 @@ class AVButtonFill extends StatelessWidget {
     this.backgroundColor,
     this.radius,
     this.height,
-    this.width,
+    this.width, this.fontsize,
 
   }) : super(key: key);
   final String title;
@@ -20,6 +20,7 @@ class AVButtonFill extends StatelessWidget {
   final double radius;
   final double height;
   final double width;
+  final double fontsize;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +34,7 @@ class AVButtonFill extends StatelessWidget {
           title.toUpperCase() ?? '',
           style: Theme.of(context).textTheme.bodyText1.copyWith(
                 color: textColor ?? AppColor.white,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold, fontSize: fontsize
               ),
         ),
         onPressed: onPressed,

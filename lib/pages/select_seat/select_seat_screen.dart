@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
@@ -75,7 +76,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         children: <Widget>[
           Center(
             child: Container(
-              width: (screenWidth * 264) / 360,
+              width: AppSize.getWidth(context, 264),
               child: Image.asset(
                 'assets/screen.png',
                 fit: BoxFit.fitWidth,
@@ -222,7 +223,47 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             Container(),
           ]),
         ),
-
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: AppSize.getWidth(context, 26),
+                height: AppSize.getHeight(context, 22),
+                decoration:
+                    BoxDecoration(border: Border.all(color: AppColor.red)),
+                child: Center(
+                  child: Text(
+                    widget.session.versionCode,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(fontSize: 18, color: AppColor.red),
+                  ),
+                ),
+              ),
+              Container(
+                width: AppSize.getWidth(context, 4),
+              ),
+              Container(
+                width: AppSize.getWidth(context, 26),
+                height: AppSize.getHeight(context, 22),
+                decoration:
+                    BoxDecoration(border: Border.all(color: AppColor.red)),
+                child: Center(
+                  child: Text(
+                    widget.session.languageCode,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(fontSize: 18, color: AppColor.red),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
         Padding(
           padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
           child: Row(
@@ -232,23 +273,32 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                   children: <Widget>[
                     Text(
                       state.chosenList.length.toString(),
-                      style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(color: AppColor.white),
                     ),
-                     Text(
+                    Text(
                       ' ghế - ',
-                      style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(color: AppColor.white),
                     ),
                     Text(
                       currencyFormat(state.totalPrice.toInt(), 'VND'),
-                      style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline6
+                          .copyWith(color: AppColor.white),
                     ),
                   ],
                 ),
                 AVButtonFill(
-                    width: (screenWidth / 360) * 117,
-                    height: (screenWidth / 360) * 48,
+                    width: AppSize.getWidth(context, 117),
+                    height: AppSize.getHeight(context, 48),
                     title: 'ĐẶT VÉ',
-
+                    fontsize: 20,
                     onPressed: () {
                       if (state.chosenList.isEmpty) {
                         _showMaterialDialog1();
@@ -432,8 +482,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          width: (screenWidth / 360) * 26,
-          height: (screenWidth / 360) * 26,
+          width: AppSize.getWidth(context, 26),
+          height: AppSize.getWidth(context, 26),
           margin: const EdgeInsets.only(right: 8),
           decoration: BoxDecoration(
             border: Border.all(),
@@ -479,19 +529,18 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     showDialog<dynamic>(
         context: context,
         builder: (_) => AlertDialog(
-          title: const Text('Bạn chưa chọn ghế nào!'),
-          content: const Text('Vui Lòng chọn ghế để tiếp tục'),
-          actions: <Widget>[
-            FlatButton(
-              child: const Text('Chọn ghế!'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            )
-          ],
-        ));
+              title: const Text('Bạn chưa chọn ghế nào!'),
+              content: const Text('Vui Lòng chọn ghế để tiếp tục'),
+              actions: <Widget>[
+                FlatButton(
+                  child: const Text('Chọn ghế!'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            ));
   }
-
 }
 
 int findMaxColumn(List<Seat> myList) {
