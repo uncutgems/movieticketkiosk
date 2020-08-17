@@ -23,6 +23,7 @@ class PopularFilmBloc extends Bloc<PopularFilmEvent, PopularFilmState> {
         final List<Film> filmList = await _filmRepository.getFilmList();
         yield SuccessGetDataPopularFilmState(filmList, 0);
       } on APIException catch(e) {
+        print('hhaaaaaaaa' + e.message());
         yield FailGetDataPopularFilmState(e.message());
       }
     }

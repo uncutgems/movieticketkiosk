@@ -37,7 +37,10 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
       builder: (BuildContext context, PopularFilmState state) {
         if (state is SuccessGetDataPopularFilmState) {
           return _body(context, state);
-        } else {
+        } else if (state is FailGetDataPopularFilmState) {
+          return _failToLoad(context, state);
+        }
+        else {
           return Container();
         }
       },
@@ -53,7 +56,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
   }
 
   Widget _body(BuildContext context, SuccessGetDataPopularFilmState state) {
-//    final double screenWidth = MediaQuery.of(context).size.width;
+//final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final List<Film> filmList = state.filmList;
     return Column(
@@ -190,4 +193,30 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
       Constant.filmId: state.id,
     });
   }
+  Widget _failToLoad (BuildContext context, FailGetDataPopularFilmState state) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: screenHeight/ 667*330,
+      width: screenWidth,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(state.error, style: textTheme.headline6,),
+            Container(
+              height: 8,
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 36,),
+              onPressed: () {
+                bloc.add(GetDataPopularFilmEvent());
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }

@@ -29,13 +29,22 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailBloc, DetailState>(
       cubit: bloc,
       builder: (BuildContext context, DetailState state) {
         if (state is SuccessGetDataDetailState) {
           return _body(context, state);
-        } else {
+        } else if (state is FailGetDataDetailState) {
+          return _failToLoad(context, state);
+        }
+        else {
           return Container();
         }
       },
@@ -303,7 +312,7 @@ class _DetailPageState extends State<DetailPage> {
               children: <Widget>[
                 Text(
                   film.filmName.substring(0, film.filmName.indexOf('-')),
-                  style: textTheme.bodyText2.copyWith(
+                  style: textTheme.bodyText1.copyWith(
                     color: AppColor.white,
                     fontWeight: FontWeight.w500,
                   ),
@@ -313,7 +322,7 @@ class _DetailPageState extends State<DetailPage> {
                   height: screenHeight / 667 * 8,
                 ),
                 Container(
-                  height: screenHeight / 667 * 20,
+                  height: screenHeight / 667 * 22,
                   width: screenWidth / 10 * 1,
                   child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
@@ -326,7 +335,25 @@ class _DetailPageState extends State<DetailPage> {
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       final String versionCode = version[index];
-                      return _itemVersionWidget(context, versionCode);
+
+                      return Container(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 4),
+                          child: Text(
+                            versionCode,
+                            style:
+                                textTheme.bodyText2.copyWith(color: AppColor.red),
+                          ),
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColor.backGround,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                              width: 1,
+                              color: AppColor.red,
+                              style: BorderStyle.solid),
+                        ),
+                      );
                     },
                   ),
                 ),
@@ -345,30 +372,46 @@ class _DetailPageState extends State<DetailPage> {
           AVButtonFill(
               title: 'ĐẶT VÉ',
               onPressed: () {
-                Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: <String, dynamic>{
-                  Constant.film: film,
-                });
+                _navigateToFilmSchedule(context, film);
+
               })
         ],
       ),
     );
   }
 
-  Widget _itemVersionWidget(BuildContext context, String versionCode) {
+  void _navigateToFilmSchedule (BuildContext context, Film film) {
+    Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: film);
+  }
+
+  Widget _failToLoad (BuildContext context, FailGetDataDetailState state) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      padding: const EdgeInsets.symmetric(
-        vertical: 3,
-        horizontal: 4,
-      ),
-      child: Text(
-        versionCode,
-        style: textTheme.bodyText2.copyWith(color: AppColor.red),
-      ),
-      decoration: BoxDecoration(
-        color: AppColor.backGround,
-        borderRadius: BorderRadius.circular(4),
-        border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
+      height: screenHeight/ 667*330,
+      width: screenWidth,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(state.error, style: textTheme.headline6,),
+            Container(
+              height: 8,
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 36,),
+              onPressed: () {
+                bloc.add(GetDataDetailEvent(widget.id));
+              },
+            )
+          ],
+        ),
       ),
     );
   }
+
+
+
+ 
+
 }
