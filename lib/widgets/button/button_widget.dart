@@ -9,7 +9,7 @@ class AVButtonFill extends StatelessWidget {
     this.textColor,
     this.backgroundColor,
     this.radius,
-    this.height,
+    this.height, this.fontSize,
   }) : super(key: key);
   final String title;
   final Color textColor;
@@ -17,6 +17,7 @@ class AVButtonFill extends StatelessWidget {
   final VoidCallback onPressed;
   final double radius;
   final double height;
+  final double fontSize;
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +31,7 @@ class AVButtonFill extends StatelessWidget {
           style: Theme.of(context).textTheme.bodyText1.copyWith(
                 color: textColor ?? AppColor.white,
                 fontWeight: FontWeight.bold,
+            fontSize: fontSize,
               ),
         ),
         onPressed: onPressed,

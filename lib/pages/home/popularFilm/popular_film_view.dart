@@ -39,8 +39,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
           return _body(context, state);
         } else if (state is FailGetDataPopularFilmState) {
           return _failToLoad(context, state);
-        }
-        else {
+        } else {
           return Container();
         }
       },
@@ -67,7 +66,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
               scrollDirection: Axis.horizontal,
               enableInfiniteScroll: true,
               enlargeCenterPage: true,
-              viewportFraction: 0.7,
+              viewportFraction: 0.6,
               aspectRatio: 16 / 9,
               autoPlay: true,
               height: screenHeight / 667 * 330,
@@ -91,7 +90,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                         )
                       : null,
                 ),
-                child: film.id == null ? const Center(child: CircularProgressIndicator()) : null,
+                child: film.id == null
+                    ? const Center(child: CircularProgressIndicator())
+                    : null,
               ),
             );
           },
@@ -99,7 +100,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
         Container(
           height: screenHeight / 667 * 8,
         ),
-        if (filmList[0].id != null) _filmInfo(context, filmList, state.index) else
+        if (filmList[0].id != null)
+          _filmInfo(context, filmList, state.index)
+        else
           Container()
       ],
     );
@@ -128,6 +131,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                     style: textTheme.bodyText2.copyWith(
                       color: AppColor.white,
                       fontWeight: FontWeight.w500,
+                        fontSize: screenHeight/667*14
                     ),
                     maxLines: 2,
                   ),
@@ -143,23 +147,28 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                      width: 4,
-                    ),
+                        Container(width: 4),
                     itemCount: version.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       final String versionCode = version[index];
                       return Container(
-                        child: Text(
-                          versionCode,
-                          style: textTheme.bodyText2.copyWith(color: AppColor.red),
+                        padding: EdgeInsets.symmetric(vertical: screenHeight/667*3, horizontal: screenWidth/360*4),
+                        child: Center(
+                          child: Text(
+                            versionCode,
+//                          textAlign: TextAlign.center,
+                            style: textTheme.bodyText2
+                                .copyWith(color: AppColor.red),
+                          ),
                         ),
-                        height: screenHeight / 667 * 16,
                         decoration: BoxDecoration(
                           color: AppColor.backGround,
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
+                          border: Border.all(
+                              width: 1,
+                              color: AppColor.red,
+                              style: BorderStyle.solid),
                         ),
                       );
                     },
@@ -169,11 +178,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                   height: screenHeight / 667 * 8,
                 ),
                 Text(
-                  film.duration.toString() +
-                      'p'
-                          '-' +
-                      convertTime('dd/MM/yyyy', DateTime.parse(film.premieredDay).millisecondsSinceEpoch, false),
-                  style: textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
+                  '${film.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime.parse(film.premieredDay).millisecondsSinceEpoch, false)}',
+                  style:
+                      textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
                 ),
               ],
             ),
@@ -188,27 +195,36 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
     );
   }
 
-  void _navigateToDetail(BuildContext context, NavigateDetailPopularFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
-      Constant.filmId: state.id,
-    });
+  void _navigateToDetail(
+      BuildContext context, NavigateDetailPopularFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage,
+        arguments: <String, dynamic>{
+          Constant.filmId: state.id,
+        });
   }
-  Widget _failToLoad (BuildContext context, FailGetDataPopularFilmState state) {
+
+  Widget _failToLoad(BuildContext context, FailGetDataPopularFilmState state) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     return Container(
-      height: screenHeight/ 667*330,
+      height: screenHeight / 667 * 330,
       width: screenWidth,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(state.error, style: textTheme.headline6,),
+            Text(
+              state.error,
+              style: textTheme.headline6,
+            ),
             Container(
               height: 8,
             ),
             IconButton(
-              icon: const Icon(Icons.refresh, size: 36,),
+              icon: const Icon(
+                Icons.refresh,
+                size: 36,
+              ),
               onPressed: () {
                 bloc.add(GetDataPopularFilmEvent());
               },
@@ -218,5 +234,4 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
       ),
     );
   }
-
 }

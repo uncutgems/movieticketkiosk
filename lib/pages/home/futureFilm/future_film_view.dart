@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_bloc.dart';
 
@@ -120,10 +121,13 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                               final List<String> version = futureFilm.versionCode.split('/');
                               final String versionCode = version[index];
                               return Container(
-                                child: Text(
-                                  versionCode,
-                                  style: textTheme.bodyText2
-                                      .copyWith(color: AppColor.red),
+                                padding: EdgeInsets.symmetric(vertical: screenHeight/667*3, horizontal: screenWidth/360*4),
+                                child: Center(
+                                  child: Text(
+                                    versionCode,
+                                    style: textTheme.bodyText2
+                                        .copyWith(color: AppColor.red),
+                                  ),
                                 ),
                                 height: screenHeight / 667 * 16,
                                 decoration: BoxDecoration(
@@ -142,11 +146,9 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                           height: screenHeight / 667 * 8,
                         ),
                         if (futureFilm.id != null) Text(
-                          futureFilm.duration.toString() +
-                              'p'
-                                  '-' +
-                              futureFilm.premieredDay.substring(
-                                  0, futureFilm.premieredDay.indexOf('T')),
+                          '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime
+                              .parse(futureFilm.premieredDay)
+                              .millisecondsSinceEpoch, false)}',
                           style: textTheme.bodyText2
                               .copyWith(color: AppColor.borderTrip),
                         ) else Container(),
