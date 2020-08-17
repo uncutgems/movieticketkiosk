@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/size.dart';
 
 class AVButtonFill extends StatelessWidget {
   const AVButtonFill({
@@ -10,7 +11,8 @@ class AVButtonFill extends StatelessWidget {
     this.backgroundColor,
     this.radius,
     this.height,
-    this.width, this.fontsize,
+    this.width, 
+
 
   }) : super(key: key);
   final String title;
@@ -20,13 +22,13 @@ class AVButtonFill extends StatelessWidget {
   final double radius;
   final double height;
   final double width;
-  final double fontsize;
+
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: height ?? 48,
-      width: width,
+      height: AppSize.getHeight(context, 48),
+      width: AppSize.getWidth(context, 117),
       child: RaisedButton(
         color: backgroundColor ?? Theme.of(context).buttonColor,
         disabledColor: Theme.of(context).disabledColor,
@@ -34,8 +36,9 @@ class AVButtonFill extends StatelessWidget {
           title.toUpperCase() ?? '',
           style: Theme.of(context).textTheme.bodyText1.copyWith(
                 color: textColor ?? AppColor.white,
-                fontWeight: FontWeight.bold, fontSize: fontsize
-              ),
+                fontWeight: FontWeight.bold,
+            fontSize: AppSize.getFontSize(context, 16),
+             ),
         ),
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
