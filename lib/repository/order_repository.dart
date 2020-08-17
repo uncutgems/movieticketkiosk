@@ -40,10 +40,24 @@ class OrderRepository {
     final AVResponse response =
     await callPOST(path: '${URL.createQrOrder}?OrderId=$qrId',body: body);
     if (response.isOK) {
-      print('It works QR');
+//      print('It works QR');
       final QRObject qrObject =
       QRObject.fromJson(response.response as Map<String, dynamic>);
       return qrObject;
+    }
+    else{
+      throw APIException(response);
+    }
+  }
+  Future<OrderStatus> checkOrder(int orderId) async{
+    final Map<String, dynamic> body = <String, dynamic>{};
+    final AVResponse response =
+    await callPOST(path: '${URL.checkOrder}?orderId=$orderId',body: body);
+    if (response.isOK) {
+      print('It works Status');
+      final OrderStatus orderStatus =
+      OrderStatus.fromJson(response.response as Map<String, dynamic>);
+      return orderStatus;
     }
     else{
       throw APIException(response);

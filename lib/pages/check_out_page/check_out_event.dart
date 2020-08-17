@@ -13,3 +13,7 @@ class CheckOutEventClickButton extends CheckOutEvent{
   final String paymentMethodSystemName;
 }
 class CheckOutEventShowTimeOut extends CheckOutEvent{}
+class CheckOutEventCheckPaymentStatus extends CheckOutEvent{
+  CheckOutEventCheckPaymentStatus(this.orderId);
+  final int orderId;
+}

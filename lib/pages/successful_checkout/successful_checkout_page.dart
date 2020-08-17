@@ -32,8 +32,9 @@ class _SuccessfulCheckoutPageState extends State<SuccessfulCheckoutPage> {
     final double _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
-        title: const Text('Thanh toán'),
+        title:  Text('Thanh toán',style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white,fontSize: 16*_screenHeight/720),),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),

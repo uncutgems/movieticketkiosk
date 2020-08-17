@@ -1,8 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
@@ -36,6 +38,7 @@ class _CheckOutPageState extends State<CheckOutPage>
   AnimationController _animationController;
   int levelClock = 10;
 
+  int orderId;
   @override
   void dispose() {
     _animationController.dispose();
@@ -70,6 +73,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
           _animationController.forward();
+          orderId = state.order.orderId;
           return mainScreen(
             context,
             bottomQR(
@@ -91,6 +95,20 @@ class _CheckOutPageState extends State<CheckOutPage>
             ),
           );
         }
+        else if(state is CheckOutStateSuccess){
+          Navigator.pushNamed(
+            context,
+            RoutesName.successfulCheckout,
+            arguments: <String, dynamic>{
+              Constant.film: widget.film,
+              Constant.session: widget.session,
+              Constant.chosenList: widget.seats,
+              Constant.customerFirstName: firstNameController.text,
+              Constant.customerLastName: lastNameController.text,
+            },
+          );
+        }
+
         return const Material();
       },
     );
@@ -306,7 +324,9 @@ class _CheckOutPageState extends State<CheckOutPage>
         Padding(
           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
           child: AVButtonFill(
-
+            height:AppSize.getHeight(context, 48) ,
+            width: AppSize.getWidth(context, 312),
+            fontsize: AppSize.getFontSize(context, 16),
             onPressed: () {
               String listChairValueF1 = '';
               String seatsF1 = '';
@@ -321,10 +341,11 @@ class _CheckOutPageState extends State<CheckOutPage>
                   listChairValueF1: listChairValueF1.substring(
                       0, listChairValueF1.length - 1),
                   seatsF1: seatsF1.substring(0, seatsF1.length - 1),
-                  planScreenId: 246842,
+                  planScreenId: widget.session.id,
                   paymentMethodSystemName: 'VNPAY'));
             },
             title: 'Tiến hành thanh toán',
+
           ),
         ),
       ],
@@ -332,6 +353,8 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget bottomQR(BuildContext context, Widget qrCode) {
+    bloc.add(CheckOutEventCheckPaymentStatus(orderId));
+
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -342,9 +365,9 @@ class _CheckOutPageState extends State<CheckOutPage>
           style: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.white),
+              .copyWith(color: AppColor.white,fontSize: AppSize.getFontSize(context, 14)),
         )),
-        Container(height: MediaQuery.of(context).size.height * 8 / 667),
+        Container(height: AppSize.getHeight(context, 8)),
         Center(
           child: Countdown(
             controller: _animationController,
@@ -355,6 +378,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             ).animate(_animationController),
           ),
         ),
+        Container(height: AppSize.getHeight(context, 8),),
         qrCode,
       ],
     );
@@ -367,11 +391,14 @@ class _CheckOutPageState extends State<CheckOutPage>
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12)
+          ),
           backgroundColor: AppColor.white,
           contentTextStyle: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.black),
+              .copyWith(color: AppColor.black,fontSize: AppSize.getFontSize(context, 14)),
 //          titlePadding: EdgeInsets.all(24),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -385,7 +412,7 @@ class _CheckOutPageState extends State<CheckOutPage>
               child: Text(
                 'Đồng ý',
                 style: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: AppColor.blue, fontWeight: FontWeight.normal),
+                    color: AppColor.blueLight, fontWeight: FontWeight.normal,fontSize: AppSize.getFontSize(context, 14)),
               ),
               onPressed: () {
                 Navigator.of(context)
@@ -434,7 +461,7 @@ class Countdown extends AnimatedWidget {
           style: Theme.of(context)
               .textTheme
               .bodyText2
-              .copyWith(color: AppColor.red));
+              .copyWith(color: AppColor.red,fontSize: AppSize.getFontSize(context, 14)));
     } else {
       bloc.add(CheckOutEventShowTimeOut());
       controller.reset();

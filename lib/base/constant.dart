@@ -250,4 +250,6 @@ class Constant {
   static const String session = 'session';
   static const String chosenList = 'chosenList';
   static const String roomName='RoomName';
+
+  static const String barCode='barCode';
 }

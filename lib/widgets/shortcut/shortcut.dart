@@ -25,13 +25,13 @@ Widget nameBox(
             }
             return null;
           },
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyText2.copyWith(fontSize: 16*_screenHeight/720),
           decoration: const InputDecoration(
+            contentPadding: EdgeInsets.all( 16),
             border: InputBorder.none,
           ),
           obscureText: false,
           controller: controller,
-
         ),
       ),
     ],
