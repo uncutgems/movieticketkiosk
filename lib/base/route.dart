@@ -6,5 +6,6 @@ class RoutesName {
   static const String homePage = 'homePage';
   static const String defaultPage = 'defaultPage';
   static const String detailPage = 'detailPage';
+  static const String findTicketPage = 'findTicketPage';
   static const String successfulCheckout = 'successfulCheckout';
 }

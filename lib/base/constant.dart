@@ -249,4 +249,5 @@ class Constant {
   static const String sessionId = 'sessionId';
   static const String session = 'session';
   static const String chosenList = 'chosenList';
+  static const String roomName='RoomName';
 }
