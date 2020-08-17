@@ -69,6 +69,7 @@ class _CheckOutPageState extends State<CheckOutPage>
         }
       },
       builder: (BuildContext context, CheckOutState state) {
+        print('======================== build');
         if (state is CheckOutInitial) {
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {

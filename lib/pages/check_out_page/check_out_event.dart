@@ -17,3 +17,10 @@ class CheckOutEventCheckPaymentStatus extends CheckOutEvent{
   CheckOutEventCheckPaymentStatus(this.orderId);
   final int orderId;
 }
+
+class PaymentStatusChangeCheckOutEvent extends CheckOutEvent {
+  PaymentStatusChangeCheckOutEvent(this.status);
+
+  final OrderStatus status;
+
+}
