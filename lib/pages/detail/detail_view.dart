@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
@@ -27,13 +28,22 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<DetailBloc, DetailState>(
       cubit: bloc,
       builder: (BuildContext context, DetailState state) {
         if (state is SuccessGetDataDetailState) {
           return _body(context, state);
-        } else {
+        } else if (state is FailGetDataDetailState) {
+          return _failToLoad(context, state);
+        }
+        else {
           return Container();
         }
       },
@@ -284,7 +294,7 @@ class _DetailPageState extends State<DetailPage> {
               children: <Widget>[
                 Text(
                   film.filmName.substring(0, film.filmName.indexOf('-')),
-                  style: textTheme.bodyText2.copyWith(
+                  style: textTheme.bodyText1.copyWith(
                     color: AppColor.white,
                     fontWeight: FontWeight.w500,
                   ),
@@ -294,7 +304,7 @@ class _DetailPageState extends State<DetailPage> {
                   height: screenHeight / 667 * 8,
                 ),
                 Container(
-                  height: screenHeight / 667 * 20,
+                  height: screenHeight / 667 * 22,
                   width: screenWidth / 10 * 1,
                   child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
@@ -308,12 +318,14 @@ class _DetailPageState extends State<DetailPage> {
                     itemBuilder: (BuildContext context, int index) {
                       final String versionCode = version[index];
                       return Container(
-                        child: Text(
-                          versionCode,
-                          style:
-                              textTheme.bodyText2.copyWith(color: AppColor.red),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 4),
+                          child: Text(
+                            versionCode,
+                            style:
+                                textTheme.bodyText2.copyWith(color: AppColor.red),
+                          ),
                         ),
-                        height: screenHeight / 667 * 16,
                         decoration: BoxDecoration(
                           color: AppColor.backGround,
                           borderRadius: BorderRadius.circular(4),
@@ -344,10 +356,40 @@ class _DetailPageState extends State<DetailPage> {
           AVButtonFill(
               title: 'ĐẶT VÉ',
               onPressed: () {
-                print('abc');
+                _navigateToFilmSchedule(context, film);
               })
         ],
       ),
     );
   }
+  void _navigateToFilmSchedule (BuildContext context, Film film) {
+    Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: film);
+  }
+
+  Widget _failToLoad (BuildContext context, FailGetDataDetailState state) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: screenHeight/ 667*330,
+      width: screenWidth,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(state.error, style: textTheme.headline6,),
+            Container(
+              height: 8,
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 36,),
+              onPressed: () {
+                bloc.add(GetDataDetailEvent(widget.id));
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 }

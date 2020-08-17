@@ -6,6 +6,7 @@ import 'package:ncckios/pages/check_out_page/check_out_page.dart';
 import 'package:ncckios/pages/default/default_page.dart';
 import 'package:ncckios/pages/detail/detail_view.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_page.dart';
+import 'package:ncckios/pages/find_ticket/find_ticket_view.dart';
 import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
@@ -70,6 +71,11 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
           id: data as int,
         ),
         settings: const RouteSettings(name: RoutesName.detailPage),
+      );
+      case RoutesName.findTicketPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => FindTicketPage(),
+        settings: const RouteSettings(name: RoutesName.findTicketPage),
       );
 
     default:

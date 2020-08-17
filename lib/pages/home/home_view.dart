@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_view.dart';
 import 'package:ncckios/pages/home/home_bloc.dart';
@@ -46,7 +47,11 @@ class _HomePageState extends State<HomePage> {
                   style: textTheme.bodyText2
                       .copyWith(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
-                Image.asset('assets/iconfilm.png'),
+
+                GestureDetector(child: Image.asset('assets/iconfilm.png'),
+                onTap: () {
+                  Navigator.pushNamed(context, RoutesName.findTicketPage);
+                },),
               ],
             ),
           ),

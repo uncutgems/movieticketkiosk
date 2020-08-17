@@ -160,53 +160,51 @@ class AVResponse {
 
 @JsonSerializable(nullable: false)
 class Film {
-  Film({
-    this.id,
-    this.filmNameEn,
-    this.filmName,
-    this.duration,
-    this.director,
-    this.actors,
-    this.introduction,
-    this.versionCode,
-    this.countryName,
-    this.languageCode,
-    this.premieredDay,
-    this.description,
-    this.statusCode,
-    this.videoUrl,
-    this.sellOnline,
-    this.ageAboveShow,
-    this.imageUrl,
-    this.bannerUrl,
-    this.category
-  });
+  Film(
+      {this.id,
+      this.filmNameEn,
+      this.filmName,
+      this.duration,
+      this.director,
+      this.actors,
+      this.introduction,
+      this.versionCode,
+      this.countryName,
+      this.languageCode,
+      this.premieredDay,
+      this.description,
+      this.statusCode,
+      this.videoUrl,
+      this.sellOnline,
+      this.ageAboveShow,
+      this.imageUrl,
+      this.bannerUrl,
+      this.category});
 
   factory Film.fromJson(final Map<String, dynamic> data) {
     if (data == null) {
       return Film();
     }
     return Film(
-      id: getInt(Constant.id, data),
-      filmNameEn: getString(Constant.filmNameEn, data),
-      filmName: getString(Constant.filmName, data),
-      duration: getInt(Constant.duration, data),
-      director: getString(Constant.director, data),
-      actors: getString(Constant.actors, data),
-      introduction: getString(Constant.introduction, data),
-      versionCode: getString(Constant.versionCode, data),
-      countryName: getString(Constant.countryName, data),
-      languageCode: getString(Constant.languageCode, data),
-      premieredDay: getString(Constant.premieredDay, data),
-      description: getString(Constant.description, data),
-      statusCode: getString(Constant.statusCode, data),
-      videoUrl: getString(Constant.videoUrl, data),
-      sellOnline: getBool(Constant.sellOnline, data),
-      ageAboveShow: getString(Constant.ageAboveShow, data),
-      imageUrl: getString(Constant.imageUrl, data),
-      bannerUrl: getString(Constant.bannerUrl, data),
-      category: getString(Constant.category, data)
-    );
+        id: getInt(Constant.id, data),
+        filmNameEn: getString(Constant.filmNameEn, data),
+        filmName: getString(Constant.filmName, data),
+        duration: getInt(Constant.duration, data),
+        director: getString(Constant.director, data),
+        actors: getString(Constant.actors, data),
+        introduction: getString(Constant.introduction, data),
+        versionCode: getString(Constant.versionCode, data),
+        countryName: getString(Constant.countryName, data),
+        languageCode: getString(Constant.languageCode, data),
+        premieredDay: getString(Constant.premieredDay, data),
+        description: getString(Constant.description, data),
+        statusCode: getString(Constant.statusCode, data),
+        videoUrl: getString(Constant.videoUrl, data),
+        sellOnline: getBool(Constant.sellOnline, data),
+        ageAboveShow: getString(Constant.ageAboveShow, data),
+        imageUrl: getString(Constant.imageUrl, data),
+        bannerUrl: getString(Constant.bannerUrl, data),
+        category: getString(Constant.category, data));
   }
 
   final int id;
@@ -272,7 +270,7 @@ class Film {
       return this;
     }
 
-    return  Film(
+    return Film(
       id: id ?? this.id,
       filmNameEn: filmNameEn ?? this.filmNameEn,
       filmName: filmName ?? this.filmName,
@@ -338,22 +336,21 @@ class NextDay {
 
 @JsonSerializable(nullable: false)
 class Session {
-  Session({
-    this.id,
-    this.planCinemaId,
-    this.projectDate,
-    this.projectTime,
-    this.filmId,
-    this.roomId,
-    this.dayPartId,
-    this.publishDate,
-    this.isOnlineSelling,
-    this.priceOfPosition,
-    this.priceOfPosition2,
-    this.priceOfPosition3,
-    this.languageCode,
-    this.versionCode
-  });
+  Session(
+      {this.id,
+      this.planCinemaId,
+      this.projectDate,
+      this.projectTime,
+      this.filmId,
+      this.roomId,
+      this.dayPartId,
+      this.publishDate,
+      this.isOnlineSelling,
+      this.priceOfPosition,
+      this.priceOfPosition2,
+      this.priceOfPosition3,
+      this.languageCode,
+      this.versionCode});
 
   factory Session.fromJson(final Map<String, dynamic> data) {
     if (data == null) {
@@ -361,21 +358,20 @@ class Session {
     }
 
     return Session(
-      id: getInt(Constant.id, data),
-      planCinemaId: getInt(Constant.planCinemaId, data),
-      projectDate: getString(Constant.projectDate, data),
-      projectTime: getString(Constant.projectTime, data),
-      filmId: getInt(Constant.filmId, data),
-      roomId: getInt(Constant.roomId, data),
-      dayPartId: getInt(Constant.dayPartId, data),
-      publishDate: getString(Constant.publishDate, data),
-      isOnlineSelling: getInt(Constant.isOnlineSelling, data),
-      priceOfPosition: getString(Constant.priceOfPosition, data),
-      priceOfPosition2: getString(Constant.priceOfPosition2, data),
-      priceOfPosition3: getString(Constant.priceOfPosition3, data),
-      versionCode: getString(Constant.versionCode, data),
-      languageCode: getString(Constant.languageCode, data)
-    );
+        id: getInt(Constant.id, data),
+        planCinemaId: getInt(Constant.planCinemaId, data),
+        projectDate: getString(Constant.projectDate, data),
+        projectTime: getString(Constant.projectTime, data),
+        filmId: getInt(Constant.filmId, data),
+        roomId: getInt(Constant.roomId, data),
+        dayPartId: getInt(Constant.dayPartId, data),
+        publishDate: getString(Constant.publishDate, data),
+        isOnlineSelling: getInt(Constant.isOnlineSelling, data),
+        priceOfPosition: getString(Constant.priceOfPosition, data),
+        priceOfPosition2: getString(Constant.priceOfPosition2, data),
+        priceOfPosition3: getString(Constant.priceOfPosition3, data),
+        versionCode: getString(Constant.versionCode, data),
+        languageCode: getString(Constant.languageCode, data));
   }
 
   Session copyWith({
@@ -415,7 +411,7 @@ class Session {
       return this;
     }
 
-    return  Session(
+    return Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -447,6 +443,7 @@ class Session {
   final String priceOfPosition3;
   final String versionCode;
   final String languageCode;
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -583,11 +580,49 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
-
 }
+
 class SessionType {
-  SessionType({ this.versionCode, this.languageCode,this.sessionList});
+  SessionType({this.versionCode, this.languageCode, this.sessionList});
+
   final String versionCode;
   final String languageCode;
   final List<Session> sessionList;
 }
+
+/*
+class Order {
+  Order(
+      {this.id,
+      this.customerId,
+      this.orderStatusId,
+      this.barCode,
+      this.customerFirstName,
+      this.customerLastName,
+      this.customerPhone,
+      this.customerEmail,
+      this.planScreenId,
+      this.seatsF1,
+      this.listChairValue,
+      this.paymentMethodSystemName});
+  
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
+       id: getString(key, data)
+    );
+  }
+
+  final int id;
+  final int customerId;
+  final int orderStatusId;
+  final String barCode;
+  final String customerFirstName;
+  final String customerLastName;
+  final String customerPhone;
+  final String customerEmail;
+  final int planScreenId;
+  final String seatsF1;
+  final String listChairValue;
+  final String paymentMethodSystemName;
+}
+*/
