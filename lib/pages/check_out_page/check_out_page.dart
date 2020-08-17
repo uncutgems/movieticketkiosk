@@ -69,6 +69,7 @@ class _CheckOutPageState extends State<CheckOutPage>
         }
       },
       builder: (BuildContext context, CheckOutState state) {
+        print('======================== build');
         if (state is CheckOutInitial) {
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
@@ -326,7 +327,6 @@ class _CheckOutPageState extends State<CheckOutPage>
           child: AVButtonFill(
             height:AppSize.getHeight(context, 48) ,
             width: AppSize.getWidth(context, 312),
-            fontsize: AppSize.getFontSize(context, 16),
             onPressed: () {
               String listChairValueF1 = '';
               String seatsF1 = '';
