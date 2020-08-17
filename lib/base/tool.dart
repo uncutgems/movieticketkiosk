@@ -328,7 +328,7 @@ String convertLanguageCode(String code) {
   }
 }
 
-void _showMaterialDialog({
+void showMaterialDialog({
   @required BuildContext context,
   String title,
   @required String content,

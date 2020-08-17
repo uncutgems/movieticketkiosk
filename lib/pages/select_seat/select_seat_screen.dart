@@ -301,7 +301,24 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                     fontsize: 30,
                     onPressed: () {
                       if (state.chosenList.isEmpty) {
-                        _showMaterialDialog1();
+                        showMaterialDialog(
+                          context: context,
+                          title: 'Bạn chưa chọn ghế nào!',
+                          content: 'Vui Lòng chọn ghế để tiếp tục',
+                          action: <Widget>[
+                            FlatButton(
+                              child: Text('Chọn ghế!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      .copyWith(
+                                          color: AppColor.white, fontSize: 17)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
                       } else if (checkChosenList(state.chosenList)) {
                         Navigator.pushNamed(
                           context,
@@ -313,7 +330,23 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                           },
                         );
                       } else {
-                        _showMaterialDialog();
+                        showMaterialDialog(
+                          context: context,
+                          content: 'Vui Lòng không để ghế trống ở giữa',
+                          action: <Widget>[
+                            FlatButton(
+                              child: Text('Chọn lại!',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .subtitle2
+                                      .copyWith(
+                                          color: AppColor.white, fontSize: 17)),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            )
+                          ],
+                        );
                       }
                     }),
               ]),
@@ -425,8 +458,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),
-        color:  color,
-      ), duration: const Duration(milliseconds: 100),
+        color: color,
+      ),
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -502,63 +536,13 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           style: Theme.of(context)
               .textTheme
               .subtitle2
-              .copyWith(color: AppColor.white,fontSize: 18),
+              .copyWith(color: AppColor.white, fontSize: 18),
         ),
       ],
     );
   }
 
-  void _showMaterialDialog() {
-    showDialog<dynamic>(
-        context: context,
-        builder: (_) => AlertDialog(
-              title:  Text('Chú ý',style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: AppColor.white,fontSize: 30),),
-              content:  Text('Vui Lòng không để ghế trống ở giữa',style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: AppColor.white,fontSize: 17)),
-              actions: <Widget>[
-                FlatButton(
-                  child:  Text('Chọn lại!',style: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      .copyWith(color: AppColor.white,fontSize: 30)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
-  }
 
-  void _showMaterialDialog1() {
-    showDialog<dynamic>(
-        context: context,
-        builder: (_) => AlertDialog(
-              title:  Text('Bạn chưa chọn ghế nào!',style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: AppColor.white,fontSize: 30)),
-              content:  Text('Vui Lòng chọn ghế để tiếp tục',style: Theme.of(context)
-                  .textTheme
-                  .subtitle2
-                  .copyWith(color: AppColor.white,fontSize: 17)),
-              actions: <Widget>[
-                FlatButton(
-                  child:  Text('Chọn ghế!',style: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      .copyWith(color: AppColor.white,fontSize: 17)),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
-  }
 }
 
 int findMaxColumn(List<Seat> myList) {
