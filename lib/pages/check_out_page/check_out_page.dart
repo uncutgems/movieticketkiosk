@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
+import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/qr/qr.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CheckOutPage extends StatefulWidget {
+  const CheckOutPage({
+    Key key,
+    @required this.film,
+    @required this.session,
+    @required this.seats,
+  }) : super(key: key);
+  final Film film;
+  final Session session;
+  final List<Seat> seats;
+
   @override
   _CheckOutPageState createState() => _CheckOutPageState();
 }
@@ -17,16 +30,8 @@ class _CheckOutPageState extends State<CheckOutPage>
     with TickerProviderStateMixin {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
-  Session session = Session(
-    projectTime: '2020-08-11T23:00:00',
-  );
+
   Seat seat = Seat();
-  Film film = Film(
-      filmName: 'Mãi bên em (2D) - C16',
-      imageUrl: 'https://chieuphimquocgia.com.vn/Content/Images/0014807_0.jpeg',
-      ageAboveShow: '0',
-      versionCode: '2D',
-      languageCode: 'PDV');
   CheckOutBloc bloc = CheckOutBloc();
   AnimationController _animationController;
   int levelClock = 10;
@@ -43,11 +48,7 @@ class _CheckOutPageState extends State<CheckOutPage>
   @override
   void initState() {
     _animationController = AnimationController(
-        vsync: this,
-        duration: Duration(
-            seconds:
-                levelClock) // gameData.levelClock is a user entered number elsewhere in the applciation
-        );
+        vsync: this, duration: Duration(seconds: levelClock));
 
     super.initState();
   }
@@ -69,7 +70,26 @@ class _CheckOutPageState extends State<CheckOutPage>
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
           _animationController.forward();
-          return mainScreen(context, bottomQR(context));
+          return mainScreen(
+            context,
+            bottomQR(
+              context,
+              GestureDetector(
+                child: QR(orderId: state.order.orderId),
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  RoutesName.successfulCheckout,
+                  arguments: <String, dynamic>{
+                    Constant.film: widget.film,
+                    Constant.session: widget.session,
+                    Constant.chosenList: widget.seats,
+                    Constant.customerFirstName: firstNameController.text,
+                    Constant.customerLastName: lastNameController.text,
+                  },
+                ),
+              ),
+            ),
+          );
         }
         return const Material();
       },
@@ -77,16 +97,26 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget mainScreen(BuildContext context, Widget widget) {
+    print(' hello ${this.widget.film.toJson()}');
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
         elevation: 0.0,
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              size: 16 * _screenHeight / 720,
+            ),
+            onPressed: () => Navigator.pop(context)),
         backgroundColor: Colors.transparent,
         centerTitle: true,
         title: Text(
           'Thanh Toán',
           style: Theme.of(context).textTheme.headline6.copyWith(
-              color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
+              color: AppColor.white,
+              fontSize: 16 * _screenHeight / 720,
+              fontWeight: FontWeight.w500),
         ),
       ),
       body: ListView(
@@ -100,7 +130,7 @@ class _CheckOutPageState extends State<CheckOutPage>
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Image.network(
-                  film.imageUrl,
+                  this.widget.film.imageUrl,
                   width: 0.33 * MediaQuery.of(context).size.width,
                   height: 0.27 * MediaQuery.of(context).size.height,
                 ),
@@ -124,17 +154,16 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget filmInfo(BuildContext context) {
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return Padding(
       padding: const EdgeInsets.only(left: 16.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            film.filmName,
-            style: Theme.of(context)
-                .textTheme
-                .headline6
-                .copyWith(color: AppColor.white, fontSize: 16),
+            widget.film.filmName,
+            style: Theme.of(context).textTheme.headline6.copyWith(
+                color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
           Row(
 //          mainAxisSize: MainAxisSize.min,
@@ -146,11 +175,11 @@ class _CheckOutPageState extends State<CheckOutPage>
                 decoration:
                     BoxDecoration(border: Border.all(color: AppColor.red)),
                 child: Text(
-                  film.versionCode,
+                  widget.film.versionCode,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      .copyWith(fontSize: 14, color: AppColor.red),
+                      .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
                 ),
               ),
               Container(
@@ -159,28 +188,53 @@ class _CheckOutPageState extends State<CheckOutPage>
                 decoration:
                     BoxDecoration(border: Border.all(color: AppColor.red)),
                 child: Text(
-                  film.languageCode,
+                  widget.film.languageCode,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2
-                      .copyWith(fontSize: 14, color: AppColor.red),
+                      .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
                 ),
               ),
             ],
           ),
           Text(
-            '•  ${convertTimeToDisplay(session.projectTime)}',
+            '•  ${convertTimeToDisplay(widget.session.projectTime)}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
-                  fontSize: 16,
+                  fontSize: 16*_screenHeight/720,
                   color: AppColor.white,
                 ),
-          )
+          ),
+          Container(height: 8*_screenHeight/720,),
+          Text(
+            '•  Phòng chiếu số ${widget.session.roomName}',
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+              fontSize: 16*_screenHeight/720,
+              color: AppColor.white,
+            ),
+          ),
+          Container(height: 8*_screenHeight/720,),
+          Text(
+            '•  Ghế: ${convertSeatToString(widget.seats)}',
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                  fontSize: 16*_screenHeight/720,
+                  color: AppColor.white,
+                ),
+          ),
+          Container(height: 8*_screenHeight/720,),
+          Text(
+            '•  Tổng cộng: ${currencyFormat(sumOfPrice(widget.seats),'đ')}',
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+              fontSize: 16*_screenHeight/720,
+              color: AppColor.white,
+            ),
+          ),
         ],
       ),
     );
   }
 
   Widget bottomHalf(BuildContext context) {
+    final double _screenHeight = MediaQuery.of(context).size.height;
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -191,7 +245,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             style: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.white),
+                .copyWith(color: AppColor.white,fontSize: 16*_screenHeight/720),
           ),
         ),
         Container(
@@ -226,20 +280,20 @@ class _CheckOutPageState extends State<CheckOutPage>
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2
-                    .copyWith(color: AppColor.white),
+                    .copyWith(color: AppColor.white,fontSize: 14*_screenHeight/720),
                 children: <TextSpan>[
                   TextSpan(
                       text: 'điều khoản sử dụng',
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2
-                          .copyWith(color: AppColor.red)),
+                          .copyWith(color: AppColor.red,fontSize: 14*_screenHeight/720)),
                   TextSpan(
                     text: ' và đang mua vé cho người có độ tuổi phù hợp',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2
-                        .copyWith(color: AppColor.white),
+                        .copyWith(color: AppColor.white,fontSize: 14*_screenHeight/720),
                   ),
                 ],
               ),
@@ -252,16 +306,23 @@ class _CheckOutPageState extends State<CheckOutPage>
         Padding(
           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
           child: AVButtonFill(
+
             onPressed: () {
+              String listChairValueF1 = '';
+              String seatsF1 = '';
+              for (final Seat seat in widget.seats) {
+                listChairValueF1 += seat.code + ',';
+                seatsF1 += seat.seat + ',';
+              }
               bloc.add(CheckOutEventClickButton(
-                customerFirstName: firstNameController.text,
-                customerId: 1,
-                customerLastName: lastNameController.text,
-                listChairValueF1: 'F5, F6',
-                seatsF1: '[5:5],[5:4]',
-                planScreenId: 246842,
-                paymentMethodSystemName: 'VNPAY'
-              ));
+                  customerFirstName: firstNameController.text,
+                  customerId: 1,
+                  customerLastName: lastNameController.text,
+                  listChairValueF1: listChairValueF1.substring(
+                      0, listChairValueF1.length - 1),
+                  seatsF1: seatsF1.substring(0, seatsF1.length - 1),
+                  planScreenId: 246842,
+                  paymentMethodSystemName: 'VNPAY'));
             },
             title: 'Tiến hành thanh toán',
           ),
@@ -270,7 +331,7 @@ class _CheckOutPageState extends State<CheckOutPage>
     );
   }
 
-  Widget bottomQR(BuildContext context) {
+  Widget bottomQR(BuildContext context, Widget qrCode) {
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -294,6 +355,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             ).animate(_animationController),
           ),
         ),
+        qrCode,
       ],
     );
   }
@@ -321,12 +383,13 @@ class _CheckOutPageState extends State<CheckOutPage>
           actions: <Widget>[
             FlatButton(
               child: Text(
-                "Đồng ý",
+                'Đồng ý',
                 style: Theme.of(context).textTheme.bodyText2.copyWith(
                     color: AppColor.blue, fontWeight: FontWeight.normal),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context)
+                    .popUntil(ModalRoute.withName(RoutesName.detailPage));
               },
             ),
           ],
@@ -334,6 +397,24 @@ class _CheckOutPageState extends State<CheckOutPage>
       },
     );
   }
+}
+String convertSeatToString(List<Seat> seatList){
+  String result = '';
+  for (final Seat seat in seatList){
+    result+=seat.code+',';
+  }
+  result = result.substring(0,result.length-1);
+  print(result);
+
+  return result;
+}
+
+int sumOfPrice(List<Seat> seatList){
+  int sum = 0;
+  for (final Seat seat in seatList){
+    sum=sum + seat.price.toInt();
+  }
+  return sum;
 }
 
 class Countdown extends AnimatedWidget {

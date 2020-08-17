@@ -3,10 +3,11 @@ import 'package:ncckios/base/color.dart';
 
 Widget nameBox(
     BuildContext context, TextEditingController controller, String text) {
+  final double _screenHeight=MediaQuery.of(context).size.height;
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: <Widget>[
-      Text(text,style: Theme.of(context).textTheme.bodyText2.copyWith(color:AppColor.white),),
+      Text(text,style: Theme.of(context).textTheme.bodyText2.copyWith(color:AppColor.white,fontSize: 16*_screenHeight/720),),
       Container(
         height: MediaQuery.of(context).size.height*(8/667),
       ),
@@ -15,6 +16,7 @@ Widget nameBox(
             color: AppColor.white,
             borderRadius: BorderRadius.all(Radius.circular(10.0))),
 //          color: AppColor.white,
+      height:  40*_screenHeight/720,
         child: TextFormField(
           cursorColor: Colors.white,
           validator: (String value) {
@@ -66,5 +68,17 @@ void fail(String error,BuildContext context){
         title: Text(error),
       );
     },
+  );
+}
+Widget loading(BuildContext context) {
+  return Column(
+    children: <Widget>[
+      Container(height: MediaQuery.of(context).size.height/3,),
+      const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+        ),
+      ),
+    ],
   );
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:ncckios/base/color.dart';
 
 import 'date_helper.dart';
 
@@ -61,17 +60,17 @@ class DateWidget extends StatelessWidget {
 
     final TextStyle monthStyle =
         isSelected ? selectedMonthTextStyle ?? monthTextStyle ?? subtextStyle : monthTextStyle ?? subtextStyle;
-     TextStyle dateStyle =
+    final TextStyle dateStyle =
         isSelected ? selectedDateTextStyle ?? dateTextStyle ?? textStyle : dateTextStyle ?? textStyle;
-     TextStyle dayStyle =
+    final TextStyle dayStyle =
         isSelected ? selectedWeekDayTextStyle ?? weekDayTextStyle ?? subtextStyle : weekDayTextStyle ?? subtextStyle;
 //    if(date.day>DateTime.now().day+2){
 //      dateStyle=dateTextStyle.copyWith(color: AppColor.disableColor);
 //      dayStyle=weekDayTextStyle.copyWith(color: AppColor.disableColor);
 //    }
-    bool today=false;
-    if(date.day==DateTime.now().day){
-     today=true;
+    bool today = false;
+    if (date.day == DateTime.now().day) {
+      today = true;
     }
     return GestureDetector(
       onTap: isDisabled ? null : onTap,
@@ -100,8 +99,8 @@ class DateWidget extends StatelessWidget {
                     break;
 
                   case LabelType.weekday:
-                    text = Text(today?'Hôm nay':
-                      DateFormat(weekDayFormat ?? defaultWeekDayFormat,'vi').format(date),
+                    text = Text(
+                      today ? 'Hôm nay' : DateFormat(weekDayFormat ?? defaultWeekDayFormat, 'vi').format(date),
                       style: dayStyle,
                     );
                     break;

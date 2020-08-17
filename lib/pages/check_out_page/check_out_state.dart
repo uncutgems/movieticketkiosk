@@ -9,3 +9,4 @@ class CheckOutStateQR extends CheckOutState{
 }
 class CheckOutStateTimeOut extends CheckOutState{}
 //class CheckOutDismissLoadingState extends CheckOutState{}
+//class CheckOutStateShowQR extends CheckOutState{}

@@ -31,7 +31,10 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
       builder: (BuildContext context, FutureFilmState state) {
         if (state is SuccessGetDataFutureFilmState) {
           return _body(context, state);
-        } else {
+        } else if (state is FailGetDataFutureFilmState) {
+          return _failToLoad(context, state);
+        }
+        else {
           return Container();
         }
       },
@@ -165,5 +168,32 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
       BuildContext context, NavigateDetailFutureFilmState state) {
     Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
   }
+
+  Widget _failToLoad (BuildContext context, FailGetDataFutureFilmState state) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return Container(
+      height: screenHeight/ 667*310,
+      width: screenWidth,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(state.error, style: textTheme.headline6,),
+            Container(
+              height: 8,
+            ),
+            IconButton(
+              icon: const Icon(Icons.refresh, size: 36,),
+              onPressed: () {
+                bloc.add(GetDataFutureFilmEvent());
+              },
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
 
 }

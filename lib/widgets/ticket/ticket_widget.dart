@@ -50,16 +50,13 @@ class TicketWidget extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
                         filmName,
-                        style: textTheme.subtitle1.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: AppColor.backGround),
+                        style: textTheme.subtitle1.copyWith(fontWeight: FontWeight.bold, color: AppColor.backGround),
                       ),
                       Container(
                         height: screenHeight / 667 * 11,
@@ -72,17 +69,13 @@ class TicketWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(2.0),
                               child: Text(
                                 version,
-                                style: textTheme.bodyText2
-                                    .copyWith(color: AppColor.red),
+                                style: textTheme.bodyText2.copyWith(color: AppColor.red),
                               ),
                             ),
                             height: screenHeight / 667 * 22,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                  width: 1,
-                                  color: AppColor.red,
-                                  style: BorderStyle.solid),
+                              border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
                             ),
                           ),
                           Container(
@@ -93,17 +86,13 @@ class TicketWidget extends StatelessWidget {
                               padding: const EdgeInsets.all(2.0),
                               child: Text(
                                 convertLanguageCode(languageCode),
-                                style: textTheme.bodyText2
-                                    .copyWith(color: AppColor.red),
+                                style: textTheme.bodyText2.copyWith(color: AppColor.red),
                               ),
                             ),
                             height: screenHeight / 667 * 22,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                  width: 1,
-                                  color: AppColor.red,
-                                  style: BorderStyle.solid),
+                              border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
                             ),
                           ),
                         ],
@@ -117,8 +106,7 @@ class TicketWidget extends StatelessWidget {
                   height: screenHeight / 667 * 1,
                 ),
                 Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 24.0, vertical: 16),
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 16),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
@@ -127,42 +115,36 @@ class TicketWidget extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'Người đặt',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
                             name,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            style:
+                                textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
                           ),
                           Text(
                             'Ca chiếu',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
                             projectTime,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            style:
+                            textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
                           ),
                           Text(
                             'Phòng chiếu',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
                             cinemaId,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            style:
+                            textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
@@ -174,42 +156,36 @@ class TicketWidget extends StatelessWidget {
                         children: <Widget>[
                           Text(
                             'Mã vé',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
-                            ticket.ticketNo,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            ticket != null ? ticket.ticketNo : '',
+                            style:
+                            textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
                           ),
                           Text(
                             'Ngày chiếu',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
                             projectDate,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            style:
+                            textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
                           ),
                           Text(
                             'Ghế',
-                            style: textTheme.subtitle2
-                                .copyWith(color: AppColor.title),
+                            style: textTheme.subtitle2.copyWith(color: AppColor.title),
                           ),
                           Text(
                             seat,
-                            style: textTheme.subtitle1.copyWith(
-                                color: AppColor.backGround,
-                                fontWeight: FontWeight.bold),
+                            style:
+                            textTheme.subtitle1.copyWith(color: AppColor.backGround, fontWeight: FontWeight.bold),
                           ),
                           Container(
                             height: screenHeight / 667 * 16,
@@ -232,19 +208,15 @@ class TicketWidget extends StatelessWidget {
             child: Container(
               height: screenHeight / 667 * 16,
               width: screenWidth / 360 * 16,
-              decoration: const BoxDecoration(
-                  shape: BoxShape.circle, color: AppColor.primaryColor),
+              decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColor.primaryColor),
             )),
         Positioned(
           bottom: screenHeight / 667 * 41,
           right: 0,
           child: Container(
-            height: screenHeight/ 667* 16,
-            width: screenWidth/ 360 * 16,
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.primaryColor
-            ),
+            height: screenHeight / 667 * 16,
+            width: screenWidth / 360 * 16,
+            decoration: const BoxDecoration(shape: BoxShape.circle, color: AppColor.primaryColor),
           ),
         )
       ],
@@ -281,4 +253,3 @@ class MySeparator extends StatelessWidget {
     );
   }
 }
-

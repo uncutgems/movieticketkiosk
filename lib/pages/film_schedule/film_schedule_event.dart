@@ -8,8 +8,8 @@ class FilmScheduleEventGetTime extends FilmScheduleEvent{
   final int filmId;
 }
 class FilmScheduleEventClickTimeBox extends FilmScheduleEvent{
-  FilmScheduleEventClickTimeBox(this.id);
-  final int id;
+  FilmScheduleEventClickTimeBox(this.session);
+  final Session session;
 
 
 }

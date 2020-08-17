@@ -227,7 +227,7 @@ class Constant {
   static const String ticketNo = 'ticketNo';
   static const String lstPlan = 'lstPlan';
   static const String rows = 'rows';
-  static const String PlanId = 'PlanId';// this is the Session ID
+  static const String PlanId = 'PlanId'; // this is the Session ID
   static const String pjTime = 'pjTime';
   static const String nextDay = 'nextday';
   static const String listFilm = 'lstFilm';
@@ -240,7 +240,14 @@ class Constant {
   static const String customerFirstName = 'CustomerFirstName';
   static const String customerLastName = 'CustomerLastName';
   static const String paymentMethodSystemName = 'PaymentMethodSystemName';
-  static const String orderId='OrderId';
-  static const String orderTotal='OrderTotal';
+  static const String orderId = 'OrderId';
+  static const String orderTotal = 'OrderTotal';
   static const String category = 'Category';
+  static const String url = 'url';
+  static const String idQrCode = 'idQrCode';
+  static const String film = 'film';
+  static const String sessionId = 'sessionId';
+  static const String session = 'session';
+  static const String chosenList = 'chosenList';
+  static const String roomName='RoomName';
 }

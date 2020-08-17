@@ -16,7 +16,7 @@ class FilmRepository {
         final Session session =
             Session.fromJson(itemJson as Map<String, dynamic>);
         sessionList.add(session);
-        print('Hello Session ${sessionList.first.languageCode}');
+        print('Hello Session ${sessionList.first.roomName}');
       });
       return sessionList;
     } else {
@@ -44,6 +44,7 @@ class FilmRepository {
 
       return listFilm;
     } else {
+      print('aaaaaaaa'+ result.message);
       throw APIException(result);
     }
   }
