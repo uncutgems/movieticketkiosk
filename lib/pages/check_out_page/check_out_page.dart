@@ -1,13 +1,12 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
-import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
 import 'package:ncckios/widgets/qr/qr.dart';
@@ -39,6 +38,7 @@ class _CheckOutPageState extends State<CheckOutPage>
   AnimationController _animationController;
   int levelClock = 10;
 
+  int orderId;
   @override
   void dispose() {
     _animationController.dispose();
@@ -73,7 +73,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           return mainScreen(context, bottomHalf(context));
         } else if (state is CheckOutStateQR) {
           _animationController.forward();
-          
+          orderId = state.order.orderId;
           return mainScreen(
             context,
             bottomQR(
@@ -95,6 +95,20 @@ class _CheckOutPageState extends State<CheckOutPage>
             ),
           );
         }
+        else if(state is CheckOutStateSuccess){
+          Navigator.pushNamed(
+            context,
+            RoutesName.successfulCheckout,
+            arguments: <String, dynamic>{
+              Constant.film: widget.film,
+              Constant.session: widget.session,
+              Constant.chosenList: widget.seats,
+              Constant.customerFirstName: firstNameController.text,
+              Constant.customerLastName: lastNameController.text,
+            },
+          );
+        }
+
         return const Material();
       },
     );
@@ -310,7 +324,9 @@ class _CheckOutPageState extends State<CheckOutPage>
         Padding(
           padding: const EdgeInsets.only(left: 24.0, right: 24.0),
           child: AVButtonFill(
-
+            height:AppSize.getHeight(context, 48) ,
+            width: AppSize.getWidth(context, 312),
+            fontsize: AppSize.getFontSize(context, 16),
             onPressed: () {
               String listChairValueF1 = '';
               String seatsF1 = '';
@@ -325,7 +341,7 @@ class _CheckOutPageState extends State<CheckOutPage>
                   listChairValueF1: listChairValueF1.substring(
                       0, listChairValueF1.length - 1),
                   seatsF1: seatsF1.substring(0, seatsF1.length - 1),
-                  planScreenId: 246842,
+                  planScreenId: widget.session.id,
                   paymentMethodSystemName: 'VNPAY'));
             },
             title: 'Tiến hành thanh toán',
@@ -337,10 +353,8 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget bottomQR(BuildContext context, Widget qrCode) {
+    bloc.add(CheckOutEventCheckPaymentStatus(orderId));
 
-    Timer.periodic(const Duration(seconds: 10), (Timer timer) {
-
-    });
     return ListView(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -353,7 +367,7 @@ class _CheckOutPageState extends State<CheckOutPage>
               .bodyText2
               .copyWith(color: AppColor.white),
         )),
-        Container(height: MediaQuery.of(context).size.height * 8 / 667),
+        Container(height: AppSize.getHeight(context, 8)),
         Center(
           child: Countdown(
             controller: _animationController,

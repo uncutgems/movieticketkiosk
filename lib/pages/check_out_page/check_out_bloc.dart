@@ -34,16 +34,20 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
     }
     else if (event is CheckOutEventCheckPaymentStatus){
       OrderStatus status=OrderStatus();
-
-      statusTimer=Timer.periodic(const Duration(seconds: 10), (Timer timer) async{
+      statusTimer=Timer.periodic(const Duration(seconds: 5), (Timer timer) async{
         final OrderStatus orderStatus = await orderRepository.checkOrder(event.orderId);
+        print('Coders $orderStatus.code');
        status = orderStatus;
       });
-      if (status.code == PaymentStatus.success){
+      Future<dynamic>.delayed(Duration(seconds: 15),(){
+        statusTimer.cancel();
+      });
+      if (status.code == PaymentStatus.success) {
 //        yield CheckOutStateQR()
-      statusTimer.cancel();
-      yield CheckOutStateSuccess();
+        statusTimer.cancel();
+        yield CheckOutStateSuccess();
       }
+
     }
   }
 }

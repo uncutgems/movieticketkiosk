@@ -54,7 +54,7 @@ class OrderRepository {
     final AVResponse response =
     await callPOST(path: '${URL.checkOrder}?orderId=$orderId',body: body);
     if (response.isOK) {
-      print('It works QR');
+      print('It works Status');
       final OrderStatus orderStatus =
       OrderStatus.fromJson(response.response as Map<String, dynamic>);
       return orderStatus;
