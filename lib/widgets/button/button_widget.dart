@@ -10,7 +10,10 @@ class AVButtonFill extends StatelessWidget {
     this.textColor,
     this.backgroundColor,
     this.radius,
-    this.height, this.fontSize,
+    this.height,
+    this.width, 
+
+
   }) : super(key: key);
   final String title;
   final Color textColor;
@@ -18,7 +21,8 @@ class AVButtonFill extends StatelessWidget {
   final VoidCallback onPressed;
   final double radius;
   final double height;
-  final double fontSize;
+  final double width;
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class AVButtonFill extends StatelessWidget {
                 color: textColor ?? AppColor.white,
                 fontWeight: FontWeight.bold,
             fontSize: AppSize.getFontSize(context, 16),
-              ),
+             ),
         ),
         onPressed: onPressed,
         shape: RoundedRectangleBorder(
