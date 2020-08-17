@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/popularFilm/popular_film_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
@@ -89,9 +91,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                         )
                       : null,
                 ),
-                child: film.id == null
-                    ? const Center(child: CircularProgressIndicator())
-                    : null,
+                child: film.id == null ? const Center(child: CircularProgressIndicator()) : null,
               ),
             );
           },
@@ -99,9 +99,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
         Container(
           height: screenHeight / 667 * 8,
         ),
-        if (filmList[0].id != null)
-          _filmInfo(context, filmList, state.index)
-        else
+        if (filmList[0].id != null) _filmInfo(context, filmList, state.index) else
           Container()
       ],
     );
@@ -145,7 +143,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (BuildContext context, int index) =>
-                        const SizedBox(
+                    const SizedBox(
                       width: 4,
                     ),
                     itemCount: version.length,
@@ -155,17 +153,13 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                       return Container(
                         child: Text(
                           versionCode,
-                          style:
-                              textTheme.bodyText2.copyWith(color: AppColor.red),
+                          style: textTheme.bodyText2.copyWith(color: AppColor.red),
                         ),
                         height: screenHeight / 667 * 16,
                         decoration: BoxDecoration(
                           color: AppColor.backGround,
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                              width: 1,
-                              color: AppColor.red,
-                              style: BorderStyle.solid),
+                          border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
                         ),
                       );
                     },
@@ -178,10 +172,8 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                   film.duration.toString() +
                       'p'
                           '-' +
-                      film.premieredDay
-                          .substring(0, film.premieredDay.indexOf('T')),
-                  style:
-                      textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
+                      convertTime('dd/MM/yyyy', DateTime.parse(film.premieredDay).millisecondsSinceEpoch, false),
+                  style: textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
                 ),
               ],
             ),
@@ -196,9 +188,10 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
     );
   }
 
-  void _navigateToDetail(
-      BuildContext context, NavigateDetailPopularFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
+  void _navigateToDetail(BuildContext context, NavigateDetailPopularFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
+      Constant.filmId: state.id,
+    });
   }
   Widget _failToLoad (BuildContext context, FailGetDataPopularFilmState state) {
     final double screenHeight = MediaQuery.of(context).size.height;

@@ -398,14 +398,10 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null ||
-            identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null ||
-            identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null ||
-            identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null ||
-            identical(priceOfPosition3, this.priceOfPosition3)) &&
+        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3)) &&
         (versionCode == null || identical(versionCode, this.versionCode)) &&
         (languageCode == null || identical(languageCode, this.languageCode))) {
       return this;
@@ -475,6 +471,7 @@ class Seat {
     this.status,
     this.seatDataId,
     this.price,
+    this.seat,
   });
 
   factory Seat.fromJson(final Map<String, dynamic> data) {
@@ -490,6 +487,7 @@ class Seat {
       price: getDouble(Constant.price, data),
       rows: getInt(Constant.rows, data),
       column: getInt(Constant.column, data),
+      seat: getString(Constant.seat, data),
     );
   }
 
@@ -502,6 +500,7 @@ class Seat {
     double price,
     int column,
     int rows,
+    String seat,
   }) {
     if ((seatId == null || identical(seatId, this.seatId)) &&
         (code == null || identical(code, this.code)) &&
@@ -510,9 +509,11 @@ class Seat {
         (seatDataId == null || identical(seatDataId, this.seatDataId)) &&
         (price == null || identical(price, this.price)) &&
         (column == null || identical(column, this.column)) &&
-        (rows == null || identical(rows, this.rows))) {
+        (rows == null || identical(rows, this.rows)) &&
+        (seat == null || identical(seat, this.seat))) {
       return this;
     }
+
     return Seat(
       seatId: seatId ?? this.seatId,
       code: code ?? this.code,
@@ -522,6 +523,7 @@ class Seat {
       price: price ?? this.price,
       column: column ?? this.column,
       rows: rows ?? this.rows,
+      seat: seat ?? this.seat,
     );
   }
 
@@ -533,6 +535,7 @@ class Seat {
   final double price;
   final int column;
   final int rows;
+  final String seat;
 
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
@@ -544,6 +547,7 @@ class Seat {
       Constant.price: price,
       Constant.rows: rows,
       Constant.column: column,
+      Constant.seat: seat,
     };
   }
 }
@@ -580,6 +584,55 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+
+}
+
+@JsonSerializable(nullable: false)
+class Order {
+  Order({this.orderTotal, this.orderId});
+
+  factory Order.fromJson(final Map<String, dynamic> data) {
+    if (data == null) {
+      return Order();
+    }
+    return Order(
+      orderId: getInt(Constant.orderId, data),
+      orderTotal: getDouble(Constant.orderTotal, data),
+    );
+  }
+
+  final int orderId;
+  final double orderTotal;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{
+      Constant.orderId: orderId,
+      Constant.orderTotal: orderTotal,
+    };
+  }
+}
+
+class QRObject {
+  QRObject({this.data, this.url, this.idQrCode});
+
+  factory QRObject.fromJson(final Map<String, dynamic> response) {
+    if (response == null) {
+      return QRObject();
+    }
+    return QRObject(
+        data: getString(Constant.data, response),
+        url: getString(Constant.url, response),
+        idQrCode: getString(Constant.idQrCode, response));
+  }
+
+  final String data;
+  final String url;
+  final String idQrCode;
+
+  Map<String, dynamic> toJson() {
+    return <String, dynamic>{Constant.data: data, Constant.url: url, Constant.idQrCode: idQrCode};
+  }
+
 }
 
 class SessionType {

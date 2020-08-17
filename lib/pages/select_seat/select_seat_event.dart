@@ -4,7 +4,27 @@ part of 'select_seat_bloc.dart';
 abstract class SelectSeatEvent {}
 
 class GetSeatDataSelectSeatEvent extends SelectSeatEvent {
-  GetSeatDataSelectSeatEvent(this.planId);
+  GetSeatDataSelectSeatEvent(this.planId, this.totalPrice, this.chosenSeatList);
 
   final int planId;
+  final double totalPrice;
+  final List<Seat> chosenSeatList;
+}
+
+
+class UpdateSeatDataSelectSeatEvent extends SelectSeatEvent {
+  UpdateSeatDataSelectSeatEvent(this.seatList,this.totalPrice, this.chosenSeatList);
+  final List<Seat> seatList;
+  final double totalPrice;
+  final List<Seat> chosenSeatList;
+}
+
+
+class MoveToNextPageSelectSeatEvent extends SelectSeatEvent{
+  MoveToNextPageSelectSeatEvent(this.chosenList, this.session);
+
+  final List<Seat> chosenList;
+  final Session session;
+
+
 }

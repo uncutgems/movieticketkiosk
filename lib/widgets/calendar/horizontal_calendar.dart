@@ -34,6 +34,7 @@ class HorizontalCalendar extends StatefulWidget {
     this.isDateDisabled,
     this.initialSelectedDates,
     this.spacingBetweenDates = 8.0,
+    this.pressCalender=false,
     this.padding = const EdgeInsets.all(8.0),
     this.labelOrder = const <LabelType>[
       LabelType.month,
@@ -74,6 +75,7 @@ class HorizontalCalendar extends StatefulWidget {
   final EdgeInsetsGeometry padding;
   final List<LabelType> labelOrder;
   final int maxSelectedDateCount;
+  final bool pressCalender;
 
   @override
   _HorizontalCalendarState createState() => _HorizontalCalendarState();
@@ -126,27 +128,31 @@ class _HorizontalCalendarState extends State<HorizontalCalendar> {
                   disabledDecoration: widget.disabledDecoration,
                   labelOrder: widget.labelOrder,
                   onTap: () {
-                    if (!selectedDates.contains(date)) {
-                      if (widget.maxSelectedDateCount == 1 && selectedDates.length == 1) {
-                        selectedDates.clear();
-                      } else if (widget.maxSelectedDateCount == selectedDates.length) {
-                        if (widget.onMaxDateSelectionReached != null) {
-                          widget.onMaxDateSelectionReached();
+                    if(widget.pressCalender) {
+                      if (!selectedDates.contains(date)) {
+                        if (widget.maxSelectedDateCount == 1 &&
+                            selectedDates.length == 1) {
+                          selectedDates.clear();
+                        } else if (widget.maxSelectedDateCount ==
+                            selectedDates.length) {
+                          if (widget.onMaxDateSelectionReached != null) {
+                            widget.onMaxDateSelectionReached();
+                          }
+                          return;
                         }
-                        return;
-                      }
 
-                      selectedDates.add(date);
-                      if (widget.onDateSelected != null) {
-                        widget.onDateSelected(date);
+                        selectedDates.add(date);
+                        if (widget.onDateSelected != null) {
+                          widget.onDateSelected(date);
+                        }
+                      } else {
+                        final bool isRemoved = selectedDates.remove(date);
+                        if (isRemoved && widget.onDateUnSelected != null) {
+                          widget.onDateUnSelected(date);
+                        }
                       }
-                    } else {
-                      final bool isRemoved = selectedDates.remove(date);
-                      if (isRemoved && widget.onDateUnSelected != null) {
-                        widget.onDateUnSelected(date);
-                      }
+                      setState(() {});
                     }
-                    setState(() {});
                   },
                   onLongTap: () => widget.onDateLongTap != null ? widget.onDateLongTap(date) : null,
                 ),

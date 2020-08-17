@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
@@ -13,6 +14,10 @@ import 'package:ncckios/widgets/calendar/horizontal_calendar.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 
 class FilmSchedulePage extends StatefulWidget {
+  const FilmSchedulePage({Key key, @required this.film}) : super(key: key);
+
+  final Film film;
+
   @override
   _FilmSchedulePageState createState() => _FilmSchedulePageState();
 }
@@ -20,11 +25,11 @@ class FilmSchedulePage extends StatefulWidget {
 class _FilmSchedulePageState extends State<FilmSchedulePage> {
   DateTime currentDate = DateTime.now();
   FilmScheduleBloc bloc = FilmScheduleBloc();
-  final Comparator<Session> comparator = (Session a, Session b) =>
-      DateTime.parse(a.projectTime)
-          .millisecondsSinceEpoch
-          .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
 
+  final Comparator<Session> comparator = (Session a, Session b) => DateTime.parse(a.projectTime)
+      .millisecondsSinceEpoch
+      .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
+  bool pressCalendar =false;
   @override
   void dispose() {
     bloc.close();
@@ -33,8 +38,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 
   @override
   void initState() {
-    bloc.add(
-        FilmScheduleEventGetTime(convertDateToInput(DateTime.now()), 9460));
+    bloc.add(FilmScheduleEventGetTime(convertDateToInput(DateTime.now()), widget.film.id));
     super.initState();
   }
 
@@ -46,10 +50,11 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         if (state is FilmScheduleStateFail) {
           fail(state.errorMess, context);
           return false;
-        }
-        else if(state is FilmScheduleStateToSelectSeatPage){
+        } else if (state is FilmScheduleStateToSelectSeatPage) {
           Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
-            'sessionId': state.id,
+
+            Constant.session: state.session,
+            Constant.film: widget.film,
           });
           return false;
         }
@@ -59,19 +64,25 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         if (state is FilmScheduleInitial) {
           return mainScreen(context, Container());
         } else if (state is FilmScheduleStateGetTime) {
-          return mainScreen(
-              context, columnSessionShowing(context, state.sessionList));
+          pressCalendar=true;
+          return mainScreen(context, _columnSessionShowing(context, state.sessionList));
         } else if (state is FilmScheduleStateLoading) {
+          pressCalendar=false;
           return mainScreen(context, _loading(context));
         } else if (state is FilmScheduleStateEmpty) {
+          pressCalendar=true;
           return mainScreen(
-              context,
-              Container(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  child:  Center(
-                    child: Text('Xin lỗi bạn ngày này chưa có lịch chiếu',style: Theme.of(context).textTheme.headline6,),
-
-                  )));
+            context,
+            Container(
+              height: MediaQuery.of(context).size.height * 0.5,
+              child: Center(
+                child: Text(
+                  'Xin lỗi bạn ngày này chưa có lịch chiếu',
+                  style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
+                ),
+              ),
+            ),
+          );
         }
         return const Material();
       },
@@ -79,47 +90,63 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   Widget mainScreen(BuildContext context, Widget widget) {
+    final double _screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
+        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
         title: Text(
           'Chọn suất chiếu',
-          style: Theme.of(context).textTheme.headline6.copyWith(
-              color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
+          style: Theme
+              .of(context)
+              .textTheme
+              .headline6
+              .copyWith(color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
       body: ListView(
         children: <Widget>[
           HorizontalCalendar(
-            initialSelectedDates: [DateTime.now()],
-
+            pressCalender: pressCalendar,
+            initialSelectedDates: <DateTime>[DateTime.now()],
             spacingBetweenDates: 8,
-            height: 32,
             onDateSelected: (DateTime date) {
               currentDate = date;
-              bloc.add(
-                  FilmScheduleEventGetTime(convertDateToInput(date), 9460));
+              bloc.add(FilmScheduleEventGetTime(convertDateToInput(date),this.widget.film.id));
             },
+            height: 40 * _screenHeight / 736,
             padding: const EdgeInsets.all(0),
             labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
             weekDayFormat: 'EEEE',
             dateFormat: 'dd/MM',
-            dateTextStyle: Theme.of(context)
+            dateTextStyle: Theme
+                .of(context)
                 .textTheme
                 .bodyText2
                 .copyWith(color: AppColor.white),
-            weekDayTextStyle: Theme.of(context)
+            weekDayTextStyle: Theme
+                .of(context)
                 .textTheme
                 .bodyText2
                 .copyWith(color: AppColor.white),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 6)),
-//            selectedDecoration: const BoxDecoration(color: AppColor.red),
-            selectedDateTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.red),
-            selectedWeekDayTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.red),
+            selectedDateTextStyle: Theme
+                .of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.red),
+            selectedWeekDayTextStyle: Theme
+                .of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.red),
           ),
           Container(
             height: MediaQuery.of(context).size.height * (11 / 667),
@@ -131,24 +158,25 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     );
   }
 
-  Widget columnSessionShowing(BuildContext context, List<Session> session) {
+  Widget _columnSessionShowing(BuildContext context, List<Session> session) {
     return Column(
-      children: sessionShowing(context, session),
+      children: _sessionShowing(context, session),
     );
   }
 
-  List<Widget> sessionShowing(BuildContext context, List<Session> session) {
-//    final List<Session> session = state.sessionList;
+  List<Widget> _sessionShowing(BuildContext context, List<Session> session) {
     final List<SessionType> sessionTypeList = categorizeSession(session);
     final List<List<Session>> sessionLists = <List<Session>>[];
-    for (final SessionType sessionType in sessionTypeList) {
-      sessionLists.add(sessionType.sessionList);
-    }
-    final List<Widget> result = <Widget>[];
-    for (final List<Session> element in sessionLists) {
-      result.add(timeButton(context, element));
-    }
-    return result;
+    sessionLists.addAll(sessionTypeList.map((SessionType sessionType) => sessionType.sessionList).toList());
+    return sessionLists.map((List<Session> sessions) => timeButton(context, sessions)).toList();
+//    for (final SessionType sessionType in sessionTypeList) {
+//      sessionLists.add(sessionType.sessionList);
+//    }
+
+//    final List<Widget> result = <Widget>[];
+//    for (final List<Session> element in sessionLists) {
+//      result.add(timeButton(context, element));
+//    }
   }
 
   Widget timeButton(BuildContext context, List<Session> sessionList) {
@@ -165,17 +193,17 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         child: RaisedButton(
           color: AppColor.white,
           onPressed: () {
-
-            bloc.add(FilmScheduleEventClickTimeBox(element.id));
+            bloc.add(FilmScheduleEventClickTimeBox(element));
           },
           padding: const EdgeInsets.all(10),
           elevation: 0,
           child: Text(
             element.projectTime.substring(11, element.projectTime.length - 3),
-            style: Theme.of(context)
+            style: Theme
+                .of(context)
                 .textTheme
-                .bodyText2
-                .copyWith(fontWeight: FontWeight.bold),
+                .button
+                .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
           ),
         ),
       ));
@@ -184,29 +212,33 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
       Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
+          versionCodeWidget(context, versionCode),
+//          Container(
+//            margin: EdgeInsets.only(
+//                left: MediaQuery.of(context).size.width * (16 / 360),
+//                right: MediaQuery.of(context).size.width * (4 / 360),
+//                top: MediaQuery.of(context).size.height * (29 / 667)),
+//            padding: const EdgeInsets.all(4.0),
+//            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+//            child: Text(
+//              versionCode,
+//              style: Theme.of(context)
+//                  .textTheme
+//                  .bodyText2
+//                  .copyWith(fontSize: 14, color: AppColor.red),
+//            ),
+//          ),
           Container(
-            margin: EdgeInsets.only(
-                left: MediaQuery.of(context).size.width * (16 / 360),
-                right: MediaQuery.of(context).size.width * (4 / 360),
-                top: MediaQuery.of(context).size.height * (29 / 667)),
-            padding: const EdgeInsets.all(3.0),
-            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-            child: Text(
-              versionCode,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(fontSize: 14, color: AppColor.red),
-            ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * (29 / 667)),
-            padding: const EdgeInsets.all(3.0),
+            margin: EdgeInsets.only(top: MediaQuery
+                .of(context)
+                .size
+                .height * (29 / 667)),
+            padding: const EdgeInsets.all(4.0),
             decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
             child: Text(
               languageCode,
-              style: Theme.of(context)
+              style: Theme
+                  .of(context)
                   .textTheme
                   .bodyText2
                   .copyWith(fontSize: 14, color: AppColor.red),
@@ -225,32 +257,65 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         physics: const NeverScrollableScrollPhysics(),
       ),
     ]);
-
     return result;
   }
 
-  List<Session> sessionType(
-      List<Session> sessionList, String versionCode, String languageCode) {
-    final List<Session> listSession = <Session>[];
-    for (final Session element in sessionList) {
-      if (element.versionCode == versionCode &&
-          element.languageCode == languageCode) {
-        listSession.add(element);
-      }
+  Widget versionCodeWidget(BuildContext context, String versionCode) {
+    List<String> result = <String>[];
+    if (versionCode.contains(',')) {
+      result = versionCode.split(',');
+    } else {
+      result.add(versionCode);
     }
-    final Comparator<Session> comparator = (Session a, Session b) =>
-        DateTime.parse(a.projectTime)
-            .millisecondsSinceEpoch
-            .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
-    listSession.sort(comparator);
-    return listSession;
+    final List<Widget> widget = <Widget>[];
+    for (final String vCode in result) {
+      widget.add(
+        Container(
+          margin: EdgeInsets.only(
+              left: MediaQuery
+                  .of(context)
+                  .size
+                  .width * (16 / 360),
+              right: MediaQuery
+                  .of(context)
+                  .size
+                  .width * (4 / 360),
+              top: MediaQuery
+                  .of(context)
+                  .size
+                  .height * (29 / 667)),
+          padding: const EdgeInsets.all(4.0),
+          decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
+          child: Text(
+            vCode,
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(fontSize: 14, color: AppColor.red),
+          ),
+        ),
+      );
+    }
+    return Row(children: widget);
   }
 
+
   Widget _loading(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
-      ),
+    return Column(
+      children: <Widget>[
+        Container(
+          height: MediaQuery
+              .of(context)
+              .size
+              .height / 3,
+        ),
+        const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.indigo),
+          ),
+        ),
+      ],
     );
   }
 
@@ -261,25 +326,20 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     for (final Session element in sessionList) {
       if (result.isEmpty) {
         print('not fuck');
-        final SessionType a = SessionType(
-            versionCode: element.versionCode,
-            languageCode: element.languageCode,
-            sessionList: <Session>[]);
+        final SessionType a =
+        SessionType(versionCode: element.versionCode, languageCode: element.languageCode, sessionList: <Session>[]);
         a.sessionList.add(element);
         result.add(a);
       } else {
         for (int i = 0; i < result.length; i++) {
-          if (result[i].versionCode != element.versionCode ||
-              result[i].languageCode != element.languageCode) {
+          if (result[i].versionCode != element.versionCode || result[i].languageCode != element.languageCode) {
             check = true;
             index = i;
           }
         }
         if (check) {
           final SessionType a = SessionType(
-              versionCode: element.versionCode,
-              languageCode: element.languageCode,
-              sessionList: <Session>[]);
+              versionCode: element.versionCode, languageCode: element.languageCode, sessionList: <Session>[]);
           a.sessionList.add(element);
           print('fuck');
           result.add(a);

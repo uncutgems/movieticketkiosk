@@ -3,7 +3,7 @@ class Constant {
   static const String code = 'code';
   static const String response = 'response';
   static const String message = 'Message';
-  static const String contentType = 'contentType';
+  static const String contentType = 'Content-Type';
   static const String headerDOBODY6969 = 'DOBODY6969';
   static const String results = 'results';
   static const String error = 'error';
@@ -227,11 +227,26 @@ class Constant {
   static const String ticketNo = 'ticketNo';
   static const String lstPlan = 'lstPlan';
   static const String rows = 'rows';
-  static const String PlanId = 'PlanId';// this is the Session ID
+  static const String PlanId = 'PlanId'; // this is the Session ID
   static const String pjTime = 'pjTime';
   static const String nextDay = 'nextday';
   static const String listFilm = 'lstFilm';
   static const String location = 'Location';
   static const String day = 'Day';
+  static const String customerId = 'customerId';
+  static const String planScreenId = 'planScreenId';
+  static const String seatsF1 = 'seatsF1';
+  static const String listChairValueF1 = 'ListChairValueF1';
+  static const String customerFirstName = 'CustomerFirstName';
+  static const String customerLastName = 'CustomerLastName';
+  static const String paymentMethodSystemName = 'PaymentMethodSystemName';
+  static const String orderId = 'OrderId';
+  static const String orderTotal = 'OrderTotal';
   static const String category = 'Category';
+  static const String url = 'url';
+  static const String idQrCode = 'idQrCode';
+  static const String film = 'film';
+  static const String sessionId = 'sessionId';
+  static const String session = 'session';
+  static const String chosenList = 'chosenList';
 }

@@ -41,11 +41,10 @@ class _HomePageState extends State<HomePage> {
             padding: const EdgeInsets.all(16.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Text(
                   'Phim nổi bật',
-                  style: textTheme.bodyText2
-                      .copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
                 ),
 
                 GestureDetector(child: Image.asset('assets/iconfilm.png'),
