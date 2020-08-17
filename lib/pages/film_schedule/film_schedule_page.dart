@@ -95,20 +95,21 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         .size
         .height;
     final double _screenWidth = MediaQuery.of(context).size.width;
+    print('this is width $_screenWidth');
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
         elevation: 0.0,
         backgroundColor: Colors.transparent,
         centerTitle: true,
-        leading: IconButton(icon: const Icon(Icons.arrow_back), onPressed: () => Navigator.pop(context)),
+        leading: IconButton(icon:  Icon(Icons.arrow_back,size:16*_screenHeight/720,), onPressed: () => Navigator.pop(context)),
         title: Text(
           'Chọn suất chiếu',
           style: Theme
               .of(context)
               .textTheme
               .headline6
-              .copyWith(color: AppColor.white, fontSize: 16, fontWeight: FontWeight.w500),
+              .copyWith(color: AppColor.white, fontSize: 16*_screenHeight/720, fontWeight: FontWeight.w500),
         ),
       ),
       body: ListView(
@@ -116,7 +117,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           HorizontalCalendar(
             pressCalender: pressCalendar,
             initialSelectedDates: <DateTime>[DateTime.now()],
-            spacingBetweenDates: 8*_screenWidth/411.43,
+            spacingBetweenDates: 50*_screenWidth/720,
             onDateSelected: (DateTime date) {
               currentDate = date;
               bloc.add(FilmScheduleEventGetTime(convertDateToInput(date),this.widget.film.id));
@@ -131,24 +132,24 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
                 .of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.white),
+                .copyWith(color: AppColor.white,fontSize: 20*_screenWidth/720),
             weekDayTextStyle: Theme
                 .of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.white),
+                .copyWith(color: AppColor.white,fontSize: 20*_screenWidth/720),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 6)),
             selectedDateTextStyle: Theme
                 .of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.red),
+                .copyWith(color: AppColor.red,fontSize: 20*_screenWidth/720),
             selectedWeekDayTextStyle: Theme
                 .of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.red),
+                .copyWith(color: AppColor.red,fontSize: 20*_screenWidth/720),
           ),
           Container(
             height: MediaQuery.of(context).size.height * (11 / 667),
@@ -182,6 +183,11 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   Widget timeButton(BuildContext context, List<Session> sessionList) {
+    final double _screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double _screenWidth = MediaQuery.of(context).size.width;
     sessionList.sort(comparator);
     if (sessionList.isEmpty) {
       return Container();
@@ -205,7 +211,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
                 .of(context)
                 .textTheme
                 .button
-                .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+                .copyWith(fontWeight: FontWeight.w500, fontSize: 16*_screenHeight/720),
           ),
         ),
       ));
@@ -243,7 +249,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
                   .of(context)
                   .textTheme
                   .bodyText2
-                  .copyWith(fontSize: 14, color: AppColor.red),
+                  .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
             ),
           ),
         ],
@@ -264,6 +270,10 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 
   Widget versionCodeWidget(BuildContext context, String versionCode) {
     List<String> result = <String>[];
+    final double _screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
     if (versionCode.contains(',')) {
       result = versionCode.split(',');
     } else {
@@ -294,7 +304,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
                 .of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(fontSize: 14, color: AppColor.red),
+                .copyWith(fontSize: 14* _screenHeight/720, color: AppColor.red),
           ),
         ),
       );

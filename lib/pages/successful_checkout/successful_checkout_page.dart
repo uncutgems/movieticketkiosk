@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
 import 'package:ncckios/widgets/ticket/ticket_widget.dart';
@@ -11,11 +12,15 @@ class SuccessfulCheckoutPage extends StatefulWidget {
     @required this.film,
     @required this.session,
     @required this.seats,
+    this.customerFirstName,
+    this.customerLastName
   }) : super(key: key);
 
   final Film film;
   final Session session;
   final List<Seat> seats;
+  final String customerFirstName;
+  final String customerLastName;
 
   @override
   _SuccessfulCheckoutPageState createState() => _SuccessfulCheckoutPageState();
@@ -42,13 +47,13 @@ class _SuccessfulCheckoutPageState extends State<SuccessfulCheckoutPage> {
           Container(height: 24 / 667 * _screenHeight),
           TicketWidget(
             ticket: null,
-            name: '',
+            name: widget.customerLastName+' '+widget.customerFirstName,
             seat: convertSeatToString(widget.seats),
             version: widget.film.versionCode,
             languageCode: widget.film.languageCode,
-            projectDate: '',
-            projectTime: '',
-            cinemaId: '',
+            projectDate: convertTime('dd/MM/yyy',DateTime.parse(widget.session.projectDate).millisecondsSinceEpoch, false),
+            projectTime: convertTime('hh:mm',DateTime.parse(widget.session.projectTime).millisecondsSinceEpoch,false),
+            cinemaId: widget.session.roomName,
             filmName: widget.film.filmName,
           ),
         ],
