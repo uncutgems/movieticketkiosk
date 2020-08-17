@@ -43,8 +43,7 @@ class _DetailPageState extends State<DetailPage> {
           return _body(context, state);
         } else if (state is FailGetDataDetailState) {
           return _failToLoad(context, state);
-        }
-        else {
+        } else {
           return Container();
         }
       },
@@ -81,8 +80,8 @@ class _DetailPageState extends State<DetailPage> {
                   Container(
                     decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: NetworkImage(film.bannerUrl),
-                        )),
+                      image: NetworkImage(film.bannerUrl),
+                    )),
                     width: screenWidth,
                     height: screenHeight / 667 * 240,
                     child: Center(
@@ -341,17 +340,13 @@ class _DetailPageState extends State<DetailPage> {
                           padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 4),
                           child: Text(
                             versionCode,
-                            style:
-                                textTheme.bodyText2.copyWith(color: AppColor.red),
+                            style: textTheme.bodyText2.copyWith(color: AppColor.red),
                           ),
                         ),
                         decoration: BoxDecoration(
                           color: AppColor.backGround,
                           borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                              width: 1,
-                              color: AppColor.red,
-                              style: BorderStyle.solid),
+                          border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
                         ),
                       );
                     },
@@ -373,33 +368,44 @@ class _DetailPageState extends State<DetailPage> {
               title: 'ĐẶT VÉ',
               onPressed: () {
                 _navigateToFilmSchedule(context, film);
-
               })
         ],
       ),
     );
   }
 
-  void _navigateToFilmSchedule (BuildContext context, Film film) {
-    Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: film);
+  void _navigateToFilmSchedule(BuildContext context, Film film) {
+    Navigator.pushNamed(context, RoutesName.filmSchedulePage, arguments: <String, dynamic>{Constant.film: film});
   }
 
-  Widget _failToLoad (BuildContext context, FailGetDataDetailState state) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+  Widget _failToLoad(BuildContext context, FailGetDataDetailState state) {
+    final double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     return Container(
-      height: screenHeight/ 667*330,
+      height: screenHeight / 667 * 330,
       width: screenWidth,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(state.error, style: textTheme.headline6,),
+            Text(
+              state.error,
+              style: textTheme.headline6,
+            ),
             Container(
               height: 8,
             ),
             IconButton(
-              icon: const Icon(Icons.refresh, size: 36,),
+              icon: const Icon(
+                Icons.refresh,
+                size: 36,
+              ),
               onPressed: () {
                 bloc.add(GetDataDetailEvent(widget.id));
               },
@@ -409,9 +415,4 @@ class _DetailPageState extends State<DetailPage> {
       ),
     );
   }
-
-
-
- 
-
 }
