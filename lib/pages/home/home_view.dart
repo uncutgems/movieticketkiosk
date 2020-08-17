@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_view.dart';
 import 'package:ncckios/pages/home/home_bloc.dart';
@@ -38,16 +39,16 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 16) ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
                   'Phim nổi bật',
-                  style: textTheme.bodyText2.copyWith(fontSize: 18, fontWeight: FontWeight.w500),
+                  style: textTheme.bodyText2.copyWith(fontSize: AppSize.getFontSize(context, 18), fontWeight: FontWeight.w500),
                 ),
 
-                GestureDetector(child: Image.asset('assets/iconfilm.png'),
+                GestureDetector(child: Image.asset('assets/search.png',scale: 1.25,),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesName.findTicketPage);
                 },),
@@ -57,11 +58,11 @@ class _HomePageState extends State<HomePage> {
           PopularFilmWidget(),
           Image.asset('assets/divider.png'),
           Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 16) ),
             child: Text(
               'Phim sắp chiếu',
               style: textTheme.bodyText2.copyWith(
-                fontSize: 18,
+                fontSize: AppSize.getFontSize(context, 18),
                 fontWeight: FontWeight.w500,
               ),
             ),
