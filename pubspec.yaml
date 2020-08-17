@@ -25,6 +25,7 @@ dependencies:
   google_fonts: ^1.1.0
   flutter_svg: ^0.18.0
   carousel_slider: ^2.2.1
+  auto_size_text: ^2.1.0
 
 
 dev_dependencies:

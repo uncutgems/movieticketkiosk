@@ -13,6 +13,5 @@ class FindTicketBloc extends Bloc<FindTicketEvent, FindTicketState> {
   Stream<FindTicketState> mapEventToState(
     FindTicketEvent event,
   ) async* {
-    // TODO: implement mapEventToState
   }
 }

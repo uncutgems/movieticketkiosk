@@ -36,28 +36,29 @@ class _FindTicketPageState extends State<FindTicketPage> {
     final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: Text(
           'Tra cứu đặt vé',
           style: textTheme.bodyText1
-              .copyWith(color: AppColor.dark20, fontWeight: FontWeight.w500),
+              .copyWith(color: AppColor.dark20, fontWeight: FontWeight.w500, fontSize: screenHeight/667*16),
         ),
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon:  Icon(Icons.arrow_back, size: screenHeight/667*16,),
           onPressed: () {
             Navigator.pop(context);
           },
         ),
       ),
       body: ListView(
-        children: [
+        children: <Widget>[
           Padding(
-            padding: const EdgeInsets.all(24.0),
+            padding: EdgeInsets.symmetric(horizontal: screenHeight/667*24.0, vertical: screenWidth/360*24),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
                   'Vui lòng nhập mã vé để tra cứu thông tin',
-                  style: textTheme.bodyText2,
+                  style: textTheme.bodyText2.copyWith(fontSize:  screenHeight/667*14),
                 ),
                 Container(
                   height: screenHeight / 667 * 24,
@@ -96,12 +97,14 @@ class _FindTicketPageState extends State<FindTicketPage> {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: AVButtonFill(
+                          fontSize: screenHeight/667*16,
                           title: 'TRA CỨU THÔNG TIN VÉ',
                           onPressed: () {
                             bloc.add(CLickFindTicketEvent(_codeController.text));
                           },
                         ),
                       ),
+
                     ],
                   ),
                 ),
@@ -110,17 +113,20 @@ class _FindTicketPageState extends State<FindTicketPage> {
           ),
           Center(
             child: TicketWidget(
+              ticket: Ticket(ticketNo: '09744283'),
+              projectDate: '20/10/2020',
+              projectTime: '20h00',
+              cinemaId: 'Rạp 2',
+              languageCode: 'Phụ đề Việt',
+              name: 'Vân Đàm',
+              seat: '5G',
               version: '2D',
-              ticket: Ticket(ticketNo: '123435'),
-              seat: 'G5',
-              projectTime: '2h00',
-              name: 'Van Dam',
-              languageCode: 'PDV',
-              cinemaId: 'Phong 2',
-              projectDate: '20/12/2020',
-              filmName: 'Robin Hood',
+              filmName: 'Gone with the wind',
+
+
             ),
           ),
+
         ],
       ),
     );
