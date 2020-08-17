@@ -350,7 +350,8 @@ class Session {
       this.priceOfPosition2,
       this.priceOfPosition3,
       this.languageCode,
-      this.versionCode});
+      this.versionCode,
+      this.roomName});
 
   factory Session.fromJson(final Map<String, dynamic> data) {
     if (data == null) {
@@ -371,7 +372,10 @@ class Session {
         priceOfPosition2: getString(Constant.priceOfPosition2, data),
         priceOfPosition3: getString(Constant.priceOfPosition3, data),
         versionCode: getString(Constant.versionCode, data),
-        languageCode: getString(Constant.languageCode, data));
+        languageCode: getString(Constant.languageCode, data),
+      roomName: getString(Constant.roomName, data),
+    );
+
   }
 
   Session copyWith({
@@ -389,6 +393,7 @@ class Session {
     String priceOfPosition3,
     String versionCode,
     String languageCode,
+    String roomName,
   }) {
     if ((id == null || identical(id, this.id)) &&
         (planCinemaId == null || identical(planCinemaId, this.planCinemaId)) &&
@@ -398,16 +403,21 @@ class Session {
         (roomId == null || identical(roomId, this.roomId)) &&
         (dayPartId == null || identical(dayPartId, this.dayPartId)) &&
         (publishDate == null || identical(publishDate, this.publishDate)) &&
-        (isOnlineSelling == null || identical(isOnlineSelling, this.isOnlineSelling)) &&
-        (priceOfPosition == null || identical(priceOfPosition, this.priceOfPosition)) &&
-        (priceOfPosition2 == null || identical(priceOfPosition2, this.priceOfPosition2)) &&
-        (priceOfPosition3 == null || identical(priceOfPosition3, this.priceOfPosition3)) &&
+        (isOnlineSelling == null ||
+            identical(isOnlineSelling, this.isOnlineSelling)) &&
+        (priceOfPosition == null ||
+            identical(priceOfPosition, this.priceOfPosition)) &&
+        (priceOfPosition2 == null ||
+            identical(priceOfPosition2, this.priceOfPosition2)) &&
+        (priceOfPosition3 == null ||
+            identical(priceOfPosition3, this.priceOfPosition3)) &&
         (versionCode == null || identical(versionCode, this.versionCode)) &&
-        (languageCode == null || identical(languageCode, this.languageCode))) {
+        (languageCode == null || identical(languageCode, this.languageCode)) &&
+        (roomName == null || identical(roomName, this.roomName))) {
       return this;
     }
 
-    return Session(
+    return  Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -422,6 +432,7 @@ class Session {
       priceOfPosition3: priceOfPosition3 ?? this.priceOfPosition3,
       versionCode: versionCode ?? this.versionCode,
       languageCode: languageCode ?? this.languageCode,
+      roomName: roomName ?? this.roomName,
     );
   }
 
@@ -439,7 +450,7 @@ class Session {
   final String priceOfPosition3;
   final String versionCode;
   final String languageCode;
-
+  final String roomName;
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -456,6 +467,7 @@ class Session {
       Constant.priceOfPosition3: priceOfPosition3,
       Constant.versionCode: versionCode,
       Constant.languageCode: languageCode,
+      Constant.roomName: roomName,
     };
   }
 }

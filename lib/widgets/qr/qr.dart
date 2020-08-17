@@ -17,6 +17,11 @@ class _QRState extends State<QR> {
 
   QrBloc bloc=QrBloc();
   @override
+  void dispose() {
+    bloc.close();
+    super.dispose();
+  }
+  @override
   void initState() {
 //    bloc = BlocProvider.of(context);
     bloc.add(QREventCreateQrOrder(widget.orderId));
@@ -24,8 +29,8 @@ class _QRState extends State<QR> {
   }
   @override
   Widget build(BuildContext context) {
-    double height = MediaQuery.of(context).size.height;
-    double width = MediaQuery.of(context).size.width;
+    final double height = MediaQuery.of(context).size.height;
+//    double width = MediaQuery.of(context).size.width;
     print('This is size${MediaQuery.of(context).size}');
     return BlocBuilder<QrBloc,QrState>(
       cubit: bloc,
@@ -50,7 +55,7 @@ class _QRState extends State<QR> {
             onPressed: (){
               bloc.add(QREventCreateQrOrder(widget.orderId));
             },
-            child: Text('Xin thử lại!'),
+            child: const Text('Xin thử lại!'),
           );
         }
 
