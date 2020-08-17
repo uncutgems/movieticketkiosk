@@ -596,6 +596,7 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
+
 }
 
 @JsonSerializable(nullable: false)
@@ -643,6 +644,7 @@ class QRObject {
   Map<String, dynamic> toJson() {
     return <String, dynamic>{Constant.data: data, Constant.url: url, Constant.idQrCode: idQrCode};
   }
+
 }
 
 class OrderStatus{
@@ -668,3 +670,40 @@ class SessionType {
   final String languageCode;
   final List<Session> sessionList;
 }
+
+/*
+class Order {
+  Order(
+      {this.id,
+      this.customerId,
+      this.orderStatusId,
+      this.barCode,
+      this.customerFirstName,
+      this.customerLastName,
+      this.customerPhone,
+      this.customerEmail,
+      this.planScreenId,
+      this.seatsF1,
+      this.listChairValue,
+      this.paymentMethodSystemName});
+  
+  factory Order.fromJson(Map<String, dynamic> json) {
+    return Order(
+       id: getString(key, data)
+    );
+  }
+
+  final int id;
+  final int customerId;
+  final int orderStatusId;
+  final String barCode;
+  final String customerFirstName;
+  final String customerLastName;
+  final String customerPhone;
+  final String customerEmail;
+  final int planScreenId;
+  final String seatsF1;
+  final String listChairValue;
+  final String paymentMethodSystemName;
+}
+*/

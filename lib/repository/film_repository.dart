@@ -44,6 +44,7 @@ class FilmRepository {
 
       return listFilm;
     } else {
+      print('aaaaaaaa'+ result.message);
       throw APIException(result);
     }
   }

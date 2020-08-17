@@ -8,6 +8,7 @@ import 'package:ncckios/pages/check_out_page/check_out_page.dart';
 import 'package:ncckios/pages/default/default_page.dart';
 import 'package:ncckios/pages/detail/detail_view.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_page.dart';
+import 'package:ncckios/pages/find_ticket/find_ticket_view.dart';
 import 'package:ncckios/pages/select_seat/select_seat_screen.dart';
 import 'package:ncckios/pages/home/home_view.dart';
 import 'package:ncckios/pages/splash/splash_page.dart';
@@ -55,12 +56,11 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.checkOutPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) =>
-            CheckOutPage(
-              film: data[Constant.film] as Film,
-              session: data[Constant.session] as Session,
-              seats: data[Constant.chosenList] as List<Seat>,
-            ),
+        builder: (BuildContext context) => CheckOutPage(
+          film: data[Constant.film] as Film,
+          session: data[Constant.session] as Session,
+          seats: data[Constant.chosenList] as List<Seat>,
+        ),
         settings: const RouteSettings(name: RoutesName.checkOutPage),
       );
     case RoutesName.selectSeatPage:
@@ -85,6 +85,11 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
               id: data[Constant.filmId] as int,
             ),
         settings: const RouteSettings(name: RoutesName.detailPage),
+      );
+    case RoutesName.findTicketPage:
+      return MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => FindTicketPage(),
+        settings: const RouteSettings(name: RoutesName.findTicketPage),
       );
     case RoutesName.successfulCheckout:
       return MaterialPageRoute<dynamic>(
