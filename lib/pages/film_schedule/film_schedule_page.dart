@@ -346,7 +346,10 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
         for (int i = 0; i < result.length; i++) {
           if (result[i].versionCode != element.versionCode || result[i].languageCode != element.languageCode) {
             check = true;
+          }
+          else{
             index = i;
+            check=false;
           }
         }
         if (check) {
