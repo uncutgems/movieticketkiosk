@@ -10,6 +10,8 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/popularFilm/popular_film_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/loading/loading_widget.dart';
 
 class PopularFilmWidget extends StatefulWidget {
   @override
@@ -138,41 +140,12 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
                 Container(
                   height: AppSize.getHeight(context, 8),
                 ),
-                Container(
-                  height: AppSize.getHeight(context, 22),
-                  child: ListView.separated(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Container(width: AppSize.getWidth(context, 4)),
-                    itemCount: version.length,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (BuildContext context, int index) {
-                      final String versionCode = version[index];
-                      return Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: AppSize.getHeight(context, 3),
-                            horizontal: AppSize.getWidth(context, 4)),
-                        child: Center(
-                          child: Text(
-                            versionCode,
-                            style: textTheme.bodyText2.copyWith(
-                                color: AppColor.red,
-                                fontSize: AppSize.getFontSize(context, 14)),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.backGround,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(
-                              width: AppSize.getWidth(context, 1),
-                              color: AppColor.red,
-                              style: BorderStyle.solid),
-                        ),
-                      );
-                    },
-                  ),
+
+                VersionCodeContainer(
+                  context: context,
+                  versionCode: film.versionCode,
                 ),
+
                 Container(
                   height: AppSize.getHeight(context, 8),
                 ),

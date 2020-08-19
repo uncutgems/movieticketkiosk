@@ -9,6 +9,8 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/check_out_page/check_out_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/container/language_code_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
 import 'package:ncckios/widgets/qr/qr.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -142,7 +144,7 @@ class _CheckOutPageState extends State<CheckOutPage>
         padding:  EdgeInsets.only(top: AppSize.getHeight(context, 8)),
         children: <Widget>[
           Padding(
-            padding: const EdgeInsets.only(left: 32.0, right: 32),
+            padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16), right:  AppSize.getWidth(context, 16)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
 //            mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,7 +177,7 @@ class _CheckOutPageState extends State<CheckOutPage>
   Widget filmInfo(BuildContext context) {
     final double _screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0),
+      padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -184,37 +186,19 @@ class _CheckOutPageState extends State<CheckOutPage>
             style: Theme.of(context).textTheme.headline6.copyWith(
                 color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
-          Row(
-//          mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Container(
-                margin: const EdgeInsets.only(top: 24.0, bottom: 16),
-                padding: const EdgeInsets.all(3.0),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Text(
-                  widget.film.versionCode,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
+          Padding(
+            padding:  EdgeInsets.only(top: AppSize.getHeight(context, 8),bottom:AppSize.getHeight(context, 8)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+
+                VersionCodeContainer(context: context,versionCode: widget.film.versionCode,),
+                Container(
+                  width: AppSize.getWidth(context, 4),
                 ),
-              ),
-              Container(
-                margin: const EdgeInsets.only(left: 8, top: 24.0, bottom: 16),
-                padding: const EdgeInsets.all(3.0),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Text(
-                  widget.film.languageCode,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText2
-                      .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
-                ),
-              ),
-            ],
+                LanguageCodeContainer( languageCode:  widget.film.languageCode, ),
+              ],
+            ),
           ),
           Text(
             '•  ${convertTimeToDisplay(widget.session.projectTime)}',
@@ -239,7 +223,7 @@ class _CheckOutPageState extends State<CheckOutPage>
                   color: AppColor.white,
                 ),
           ),
-          Container(height: 8*_screenHeight/720,),
+          Container(height: AppSize.getHeight(context, 8)),
           Text(
             '•  Tổng cộng: ${currencyFormat(sumOfPrice(widget.seats),'đ')}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
@@ -271,14 +255,14 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
           child: nameBox(context, lastNameController, 'Họ'),
         ),
         Container(
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
           child: nameBox(context, firstNameController, 'Tên'),
         ),
         Container(
@@ -289,7 +273,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
           child: InkWell(
             onTap: () =>
                 launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
@@ -348,6 +332,7 @@ class _CheckOutPageState extends State<CheckOutPage>
 
           ),
         ),
+        Container(height: AppSize.getHeight(context, 20),),
       ],
     );
   }

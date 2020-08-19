@@ -16,3 +16,7 @@ class FailGetDataDetailState extends DetailState {
   final String error;
 
 }
+
+class LoadingDataDetailState extends DetailState{
+
+}

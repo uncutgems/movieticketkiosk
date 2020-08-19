@@ -7,10 +7,14 @@ import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/size.dart';
+import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/container/language_code_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/faling_widget/failing_widget.dart';
 
 import '../../model/entity.dart';
 
@@ -61,15 +65,24 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
+            icon: Icon(
+              Icons.arrow_back,
+              size: AppSize.getHeight(context, 20),
+            ),
             onPressed: () =>
                 Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
-        title: const Text('Chọn ghế'),
+        title: Text(
+          'Chọn ghế',
+          style: textTheme.bodyText1.copyWith(
+            color: AppColor.dark20,
+            fontWeight: FontWeight.w500,
+            fontSize: AppSize.getFontSize(context, 16),
+          ),
+        ),
         centerTitle: true,
       ),
       body: ListView(
@@ -92,7 +105,16 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               } else if (state is ReceiveSeatDataSelectSeatState) {
                 return _showSeat(context, state);
               } else if (state is FailToReceiveSeatDataSelectSeatState) {
-                _showError(context, state);
+                return FailingWidget(
+                  errorMessage: state.errorMessage,
+                  onPressed: (){
+                    bloc.add(GetSeatDataSelectSeatEvent(
+                        widget.session.id,
+                        //204907,
+                        _totalPrice(chosenSeatList),
+                        chosenSeatList));
+                  },
+                );
               }
               return Container();
             },
@@ -125,13 +147,12 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
     final List<Seat> seatList = state.seatList;
     final int maximumColumn = findMaxColumn(state.seatList) + 1;
-    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Column(
       children: <Widget>[
         /*    Vẽ rạp     */
         Padding(
-          padding: const EdgeInsets.only(right: 15, bottom: 4),
+          padding:  EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
           child: GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -148,10 +169,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         Container(
-          height: 24,
+          height: AppSize.getHeight(context, 24),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16),
+          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16),right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -174,10 +195,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         Container(
-          height: 8,
+          height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16, bottom: 32),
+          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16),right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -204,62 +225,43 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             ],
           ),
         ),
+
+        Container(
+          height: AppSize.getHeight(context, 32),
+        ),
+
         const Image(
           image: AssetImage('assets/line2.png'),
         ),
         Container(
-          height: 8,
+          height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(children: <Widget>[
-            Text(
-              widget.film.filmName,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(color: AppColor.white),
-            ),
-            Container(),
-          ]),
+          padding:
+              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Text(
+            widget.film.filmName,
+            style: Theme.of(context)
+                .textTheme
+                .headline5
+                .copyWith(color: AppColor.white),
+          ),
         ),
+        Container(),
         Padding(
           padding:
               const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
           child: Row(
             children: <Widget>[
-              Container(
-                width: AppSize.getWidth(context, 26),
-                height: AppSize.getHeight(context, 22),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Center(
-                  child: Text(
-                    widget.session.versionCode,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontSize: 18, color: AppColor.red),
-                  ),
-                ),
+              VersionCodeContainer(
+                context: context,
+                versionCode: widget.session.versionCode,
               ),
               Container(
                 width: AppSize.getWidth(context, 4),
               ),
-              Container(
-                width: AppSize.getWidth(context, 26),
-                height: AppSize.getHeight(context, 22),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Center(
-                  child: Text(
-                    widget.session.languageCode,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontSize: 18, color: AppColor.red),
-                  ),
-                ),
+              LanguageCodeContainer(
+                languageCode: widget.session.languageCode,
               ),
             ],
           ),
@@ -510,7 +512,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required String text,
     bool check,
   }) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -535,13 +536,11 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           style: Theme.of(context)
               .textTheme
               .subtitle2
-              .copyWith(color: AppColor.white, fontSize: 18),
+              .copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 14)),
         ),
       ],
     );
   }
-
-
 }
 
 int findMaxColumn(List<Seat> myList) {

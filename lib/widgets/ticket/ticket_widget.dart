@@ -1,6 +1,6 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
@@ -71,8 +71,8 @@ class TicketWidget extends StatelessWidget {
                         children: <Widget>[
                           Container(
                             padding: EdgeInsets.symmetric(
-                                vertical: screenHeight / 667 * 3,
-                                horizontal: screenWidth / 360 * 4),
+                                vertical: AppSize.getHeight(context, 3),
+                                horizontal: AppSize.getWidth(context, 4)),
                             child: Text(
                               version,
                               style: textTheme.bodyText2
@@ -92,7 +92,7 @@ class TicketWidget extends StatelessWidget {
                           Container(
                             child: Padding(
                               padding: EdgeInsets.symmetric(
-                                  vertical: screenHeight / 667 * 3,
+                                  vertical: AppSize.getHeight(context, 3),
                                   horizontal: screenWidth / 360 * 4),
                               child: Text(
                                 convertLanguageCode(languageCode),

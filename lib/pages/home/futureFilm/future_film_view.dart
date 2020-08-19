@@ -7,6 +7,8 @@ import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_bloc.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/loading/loading_widget.dart';
 
 class FutureFilmWidget extends StatefulWidget {
   @override
@@ -127,27 +129,32 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                                 final List<String> version =
                                     futureFilm.versionCode.split('/');
                                 final String versionCode = version[index];
-                                return Container(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: AppSize.getHeight(context, 3),
-                                      horizontal: AppSize.getWidth(context, 4)),
-                                  child: Center(
-                                    child: Text(
-                                      versionCode,
-                                      style: textTheme.bodyText2.copyWith(
-                                          color: AppColor.red,
-                                          fontSize:
-                                              AppSize.getFontSize(context, 14)),
-                                    ),
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color: AppColor.backGround,
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(
-                                        width: AppSize.getWidth(context, 1),
-                                        color: AppColor.red,
-                                        style: BorderStyle.solid),
-                                  ),
+                                return
+//                                  Container(
+//                                  padding: EdgeInsets.symmetric(
+//                                      vertical: AppSize.getHeight(context, 3),
+//                                      horizontal: AppSize.getWidth(context, 4)),
+//                                  child: Center(
+//                                    child: Text(
+//                                      versionCode,
+//                                      style: textTheme.bodyText2.copyWith(
+//                                          color: AppColor.red,
+//                                          fontSize:
+//                                              AppSize.getFontSize(context, 14)),
+//                                    ),
+//                                  ),
+//                                  decoration: BoxDecoration(
+//                                    color: AppColor.backGround,
+//                                    borderRadius: BorderRadius.circular(4),
+//                                    border: Border.all(
+//                                        width: AppSize.getWidth(context, 1),
+//                                        color: AppColor.red,
+//                                        style: BorderStyle.solid),
+//                                  ),
+//                                );
+                                    VersionCodeContainer(
+                                  context: context,
+                                  versionCode: versionCode,
                                 );
                               },
                             ),
