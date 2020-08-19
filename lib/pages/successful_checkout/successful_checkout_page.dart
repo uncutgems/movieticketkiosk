@@ -47,7 +47,7 @@ class _SuccessfulCheckoutPageState extends State<SuccessfulCheckoutPage> {
           ),
           Container(height: 24 / 667 * _screenHeight),
           TicketWidget(
-            ticket: null,
+            orderId: null,
             name: widget.customerLastName+' '+widget.customerFirstName,
             seat: convertSeatToString(widget.seats),
             version: widget.film.versionCode,

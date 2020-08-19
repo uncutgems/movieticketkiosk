@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/style.dart';
@@ -66,7 +67,10 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
+                      futureFilm.id == null
+                          ? print('not yet')
+                          : bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
+
                     },
                     child: Container(
                         width: AppSize.getWidth(context, 160),
@@ -182,7 +186,9 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
 
   void _navigateToDetail(
       BuildContext context, NavigateDetailFutureFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic> {
+      Constant.filmId: state.id
+    });
   }
 
   Widget _failToLoad(BuildContext context, FailGetDataFutureFilmState state) {

@@ -447,30 +447,36 @@ class _DetailPageState extends State<DetailPage> {
   Widget _failToLoad(BuildContext context, FailGetDataDetailState state) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      height: screenHeight / 667 * 330,
-      width: screenWidth,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              state.error,
-              style: textTheme.headline6,
-            ),
-            Container(
-              height: 8,
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.refresh,
-                size: 36,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Thông tin phim'),
+      ),
+      body: Container(
+        height: screenHeight / 667 * 330,
+        width: screenWidth,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                state.error,
+                style: textTheme.headline6,
               ),
-              onPressed: () {
-                bloc.add(GetDataDetailEvent(widget.id));
-              },
-            )
-          ],
+              Container(
+                height: 8,
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.refresh,
+                  size: 36,
+                ),
+                onPressed: () {
+                  bloc.add(GetDataDetailEvent(widget.id));
+                },
+              )
+            ],
+          ),
         ),
       ),
     );
