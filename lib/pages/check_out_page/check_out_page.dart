@@ -139,7 +139,7 @@ class _CheckOutPageState extends State<CheckOutPage>
         ),
       ),
       body: ListView(
-        padding: const EdgeInsets.all(0),
+        padding:  EdgeInsets.only(top: AppSize.getHeight(context, 8)),
         children: <Widget>[
           Padding(
             padding: const EdgeInsets.only(left: 32.0, right: 32),
