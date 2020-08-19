@@ -4,7 +4,17 @@ part of 'find_ticket_bloc.dart';
 abstract class FindTicketState {}
 
 class FindTicketInitial extends FindTicketState {}
-class GetTicketSuccessFindTicketState extends FindTicketState {
 
+class GetTicketSuccessFindTicketState extends FindTicketState {
+  GetTicketSuccessFindTicketState(this.orderInfo);
+
+  final OrderInfo orderInfo;
 }
-class GetTicketFailFindTicketState extends FindTicketState {}
+
+class GetTicketFailFindTicketState extends FindTicketState {
+  GetTicketFailFindTicketState(this.error);
+
+  final String error;
+}
+
+class ShowLoadingFindTicketState extends FindTicketState{}
