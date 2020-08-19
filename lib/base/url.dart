@@ -8,4 +8,5 @@ class URL {
   static const String detailFilm = baseURL + 'Films';
   static const String createQrOrder = baseURL+'CreateQrOrder';
   static const String checkOrder = baseURL+'CheckOrder';
+  static const String ticketDetail = baseURL+'TicketDetail';
 }

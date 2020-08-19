@@ -359,23 +359,22 @@ class Session {
     }
 
     return Session(
-        id: getInt(Constant.id, data),
-        planCinemaId: getInt(Constant.planCinemaId, data),
-        projectDate: getString(Constant.projectDate, data),
-        projectTime: getString(Constant.projectTime, data),
-        filmId: getInt(Constant.filmId, data),
-        roomId: getInt(Constant.roomId, data),
-        dayPartId: getInt(Constant.dayPartId, data),
-        publishDate: getString(Constant.publishDate, data),
-        isOnlineSelling: getInt(Constant.isOnlineSelling, data),
-        priceOfPosition: getString(Constant.priceOfPosition, data),
-        priceOfPosition2: getString(Constant.priceOfPosition2, data),
-        priceOfPosition3: getString(Constant.priceOfPosition3, data),
-        versionCode: getString(Constant.versionCode, data),
-        languageCode: getString(Constant.languageCode, data),
+      id: getInt(Constant.id, data),
+      planCinemaId: getInt(Constant.planCinemaId, data),
+      projectDate: getString(Constant.projectDate, data),
+      projectTime: getString(Constant.projectTime, data),
+      filmId: getInt(Constant.filmId, data),
+      roomId: getInt(Constant.roomId, data),
+      dayPartId: getInt(Constant.dayPartId, data),
+      publishDate: getString(Constant.publishDate, data),
+      isOnlineSelling: getInt(Constant.isOnlineSelling, data),
+      priceOfPosition: getString(Constant.priceOfPosition, data),
+      priceOfPosition2: getString(Constant.priceOfPosition2, data),
+      priceOfPosition3: getString(Constant.priceOfPosition3, data),
+      versionCode: getString(Constant.versionCode, data),
+      languageCode: getString(Constant.languageCode, data),
       roomName: getString(Constant.roomName, data),
     );
-
   }
 
   Session copyWith({
@@ -417,7 +416,7 @@ class Session {
       return this;
     }
 
-    return  Session(
+    return Session(
       id: id ?? this.id,
       planCinemaId: planCinemaId ?? this.planCinemaId,
       projectDate: projectDate ?? this.projectDate,
@@ -451,6 +450,7 @@ class Session {
   final String versionCode;
   final String languageCode;
   final String roomName;
+
   Map<String, dynamic> toJson() {
     return <String, dynamic>{
       Constant.id: id,
@@ -596,7 +596,6 @@ class Ticket {
       Constant.ticketNo: ticketNo,
     };
   }
-
 }
 
 @JsonSerializable(nullable: false)
@@ -642,26 +641,29 @@ class QRObject {
   final String idQrCode;
 
   Map<String, dynamic> toJson() {
-    return <String, dynamic>{Constant.data: data, Constant.url: url, Constant.idQrCode: idQrCode};
+    return <String, dynamic>{
+      Constant.data: data,
+      Constant.url: url,
+      Constant.idQrCode: idQrCode
+    };
   }
-
 }
 
-class OrderStatus{
+class OrderStatus {
   OrderStatus({this.barCode, this.code});
-  factory OrderStatus.fromJson(final Map<String,dynamic> response){
-    if(response==null){
+
+  factory OrderStatus.fromJson(final Map<String, dynamic> response) {
+    if (response == null) {
       return OrderStatus();
     }
     return OrderStatus(
-      barCode: getString(Constant.barCode,response),
-      code: getString(Constant.code, response)
-    );
+        barCode: getString(Constant.barCode, response),
+        code: getString(Constant.code, response));
   }
+
   final String barCode;
   final String code;
 }
-
 
 class SessionType {
   SessionType({this.versionCode, this.languageCode, this.sessionList});
@@ -671,39 +673,94 @@ class SessionType {
   final List<Session> sessionList;
 }
 
-/*
-class Order {
-  Order(
-      {this.id,
-      this.customerId,
-      this.orderStatusId,
-      this.barCode,
-      this.customerFirstName,
-      this.customerLastName,
-      this.customerPhone,
-      this.customerEmail,
-      this.planScreenId,
-      this.seatsF1,
-      this.listChairValue,
-      this.paymentMethodSystemName});
-  
-  factory Order.fromJson(Map<String, dynamic> json) {
-    return Order(
-       id: getString(key, data)
+class OrderInfo {
+  OrderInfo( {
+    this.languageCode,
+    this.filmName,
+    this.versionCode,
+    this.customerName,
+    this.projectTime,
+    this.projectDate,
+    this.roomName,
+    this.seats,
+    this.barCode,
+  });
+
+  factory OrderInfo.fromJson(Map<String, dynamic> json) {
+    if (json == null) {
+      return OrderInfo();
+    }
+    return OrderInfo(
+      filmName: getString(Constant.filmName, json),
+      versionCode: getString(Constant.versionCode, json),
+      customerName: getString(Constant.customerName, json),
+      projectDate: getString(Constant.projectDate, json),
+      projectTime: getString(Constant.projectTime, json),
+      roomName: getString(Constant.roomName, json),
+      seats: getString(Constant.seats, json),
+      barCode: getString(Constant.barCode, json),
+      languageCode: getString(Constant.languageCode, json),
     );
   }
 
-  final int id;
-  final int customerId;
-  final int orderStatusId;
-  final String barCode;
-  final String customerFirstName;
-  final String customerLastName;
-  final String customerPhone;
-  final String customerEmail;
-  final int planScreenId;
-  final String seatsF1;
-  final String listChairValue;
-  final String paymentMethodSystemName;
+  Map<String, dynamic>toJson() {
+    return <String, dynamic> {
+      Constant.filmName: filmName,
+      Constant.versionCode: versionCode,
+      Constant.customerName: customerName,
+      Constant.projectDate: projectDate,
+      Constant.projectTime: projectTime,
+      Constant.roomName: roomName,
+      Constant.seats: seats,
+      Constant.barCode: barCode,
+      Constant.languageCode: languageCode,
+    };
+
 }
-*/
+
+  OrderInfo copyWith({
+    String filmName,
+    String languageCode,
+    String versionCode,
+    String barCode,
+    String customerName,
+    String projectTime,
+    String projectDate,
+    String roomName,
+    String seats,
+  }) {
+    if ((filmName == null || identical(filmName, this.filmName)) &&
+        (languageCode == null || identical(languageCode, this.languageCode)) &&
+        (versionCode == null || identical(versionCode, this.versionCode)) &&
+        (barCode == null || identical(barCode, this.barCode)) &&
+        (customerName == null || identical(customerName, this.customerName)) &&
+        (projectTime == null || identical(projectTime, this.projectTime)) &&
+        (projectDate == null || identical(projectDate, this.projectDate)) &&
+        (roomName == null || identical(roomName, this.roomName)) &&
+        (seats == null || identical(seats, this.seats))) {
+      return this;
+    }
+
+    return OrderInfo(
+      filmName: filmName ?? this.filmName,
+      languageCode: languageCode ?? this.languageCode,
+      versionCode: versionCode ?? this.versionCode,
+      barCode: barCode ?? this.barCode,
+      customerName: customerName ?? this.customerName,
+      projectTime: projectTime ?? this.projectTime,
+      projectDate: projectDate ?? this.projectDate,
+      roomName: roomName ?? this.roomName,
+      seats: seats ?? this.seats,
+    );
+  }
+
+  final String filmName;
+  final String languageCode;
+  final String versionCode;
+  final String barCode;
+  final String customerName;
+  final String projectTime;
+  final String projectDate;
+  final String roomName;
+  final String seats;
+}

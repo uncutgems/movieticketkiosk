@@ -63,4 +63,18 @@ class OrderRepository {
       throw APIException(response);
     }
   }
+  Future<OrderInfo> ticketDetail(String orderId) async{
+    final Map<String, dynamic> body = <String, dynamic>{};
+    final AVResponse response =
+    await callPOST(path: '${URL.ticketDetail}?OrderId=$orderId',body: body);
+    if (response.isOK) {
+      print('It works Status');
+      final OrderInfo orderInfo =
+      OrderInfo.fromJson(response.response as Map<String, dynamic>);
+      return orderInfo;
+    }
+    else{
+      throw APIException(response);
+    }
+  }
 }

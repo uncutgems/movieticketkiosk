@@ -79,7 +79,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
             final Film film = filmList[index];
             return GestureDetector(
               onTap: () {
-                bloc.add(ClickToDetailPopularFilmEvent(film.id));
+                film.id == null
+                    ? print('not yet')
+                    : bloc.add(ClickToDetailPopularFilmEvent(film.id));
               },
               child: Container(
                 decoration: filmBoxDecoration.copyWith(
@@ -161,7 +163,9 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
           AVButtonFill(
               title: 'ĐẶT VÉ',
               onPressed: () {
-                bloc.add(ClickToDetailPopularFilmEvent(film.id));
+                film.id == null
+                    ? print('not yet')
+                    : bloc.add(ClickToDetailPopularFilmEvent(film.id));
               })
         ],
       ),
