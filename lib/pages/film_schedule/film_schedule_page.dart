@@ -6,11 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
+import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/film_schedule/film_schedule_bloc.dart';
 import 'package:ncckios/widgets/calendar/date_helper.dart';
 import 'package:ncckios/widgets/calendar/horizontal_calendar.dart';
+import 'package:ncckios/widgets/container/language_code_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/faling_widget/failing_widget.dart';
 import 'package:ncckios/widgets/shortcut/shortcut.dart';
 
 class FilmSchedulePage extends StatefulWidget {
@@ -26,10 +31,12 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   DateTime currentDate = DateTime.now();
   FilmScheduleBloc bloc = FilmScheduleBloc();
 
-  final Comparator<Session> comparator = (Session a, Session b) => DateTime.parse(a.projectTime)
-      .millisecondsSinceEpoch
-      .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
-  bool pressCalendar =false;
+  final Comparator<Session> comparator = (Session a, Session b) =>
+      DateTime.parse(a.projectTime)
+          .millisecondsSinceEpoch
+          .compareTo(DateTime.parse(b.projectTime).millisecondsSinceEpoch);
+  bool pressCalendar = false;
+
   @override
   void dispose() {
     bloc.close();
@@ -38,7 +45,8 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
 
   @override
   void initState() {
-    bloc.add(FilmScheduleEventGetTime(convertDateToInput(DateTime.now()), widget.film.id));
+    bloc.add(FilmScheduleEventGetTime(
+        convertDateToInput(DateTime.now()), widget.film.id));
     super.initState();
   }
 
@@ -47,15 +55,12 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return BlocBuilder<FilmScheduleBloc, FilmScheduleState>(
       cubit: bloc,
       buildWhen: (FilmScheduleState prev, FilmScheduleState state) {
-        if (state is FilmScheduleStateFail) {
-          fail(state.errorMess, context);
-          return false;
-        } else if (state is FilmScheduleStateToSelectSeatPage) {
-          Navigator.pushNamed(context, RoutesName.selectSeatPage, arguments: <String, dynamic>{
-
-            Constant.session: state.session,
-            Constant.film: widget.film,
-          });
+        if (state is FilmScheduleStateToSelectSeatPage) {
+          Navigator.pushNamed(context, RoutesName.selectSeatPage,
+              arguments: <String, dynamic>{
+                Constant.session: state.session,
+                Constant.film: widget.film,
+              });
           return false;
         }
         return true;
@@ -63,14 +68,24 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
       builder: (BuildContext context, FilmScheduleState state) {
         if (state is FilmScheduleInitial) {
           return mainScreen(context, Container());
+        } else if (state is FilmScheduleStateFail) {
+          return mainScreen(
+              context,
+              FailingWidget(
+                  errorMessage: state.errorMess,
+                  onPressed: () {
+                    bloc.add(FilmScheduleEventGetTime(
+                        convertDateToInput(currentDate), widget.film.id));
+                  }));
         } else if (state is FilmScheduleStateGetTime) {
-          pressCalendar=true;
-          return mainScreen(context, _columnSessionShowing(context, state.sessionList));
+          pressCalendar = true;
+          return mainScreen(
+              context, _columnSessionShowing(context, state.sessionList));
         } else if (state is FilmScheduleStateLoading) {
-          pressCalendar=false;
+          pressCalendar = false;
           return mainScreen(context, _loading(context));
         } else if (state is FilmScheduleStateEmpty) {
-          pressCalendar=true;
+          pressCalendar = true;
           return mainScreen(
             context,
             Container(
@@ -78,7 +93,10 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
               child: Center(
                 child: Text(
                   'Xin lỗi bạn ngày này chưa có lịch chiếu',
-                  style: Theme.of(context).textTheme.headline6.copyWith(color: AppColor.white),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
                 ),
               ),
             ),
@@ -90,66 +108,62 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   Widget mainScreen(BuildContext context, Widget widget) {
-    final double _screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
+    final double _screenHeight = MediaQuery.of(context).size.height;
     final double _screenWidth = MediaQuery.of(context).size.width;
     print('this is width $_screenWidth');
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(
+              Icons.arrow_back,
+              size: AppSize.getHeight(context, 20),
+            ),
+            onPressed: () =>
+                Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
-        backgroundColor: Colors.transparent,
-        centerTitle: true,
-        leading: IconButton(icon:  Icon(Icons.arrow_back,size:16*_screenHeight/720,), onPressed: () => Navigator.pop(context)),
         title: Text(
           'Chọn suất chiếu',
-          style: Theme
-              .of(context)
-              .textTheme
-              .headline6
-              .copyWith(color: AppColor.white, fontSize: 16*_screenHeight/720, fontWeight: FontWeight.w500),
+          style: textTheme.bodyText1.copyWith(
+            color: AppColor.dark20,
+            fontWeight: FontWeight.w500,
+            fontSize: AppSize.getFontSize(context, 32),
+          ),
         ),
+        centerTitle: true,
       ),
       body: ListView(
         children: <Widget>[
           HorizontalCalendar(
             pressCalender: pressCalendar,
             initialSelectedDates: <DateTime>[DateTime.now()],
-            spacingBetweenDates: 50*_screenWidth/720,
+            spacingBetweenDates: 50 * _screenWidth / 720,
             onDateSelected: (DateTime date) {
               currentDate = date;
-              bloc.add(FilmScheduleEventGetTime(convertDateToInput(date),this.widget.film.id));
+              bloc.add(FilmScheduleEventGetTime(
+                  convertDateToInput(date), this.widget.film.id));
             },
             height: 40 * _screenHeight / 736,
-
             padding: const EdgeInsets.all(0),
             labelOrder: const <LabelType>[LabelType.weekday, LabelType.date],
             weekDayFormat: 'EEEE',
             dateFormat: 'dd/MM',
-            dateTextStyle: Theme
-                .of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: AppColor.white,fontSize: 20*_screenWidth/720),
-            weekDayTextStyle: Theme
-                .of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: AppColor.white,fontSize: 20*_screenWidth/720),
+            dateTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(
+                color: AppColor.white, fontSize: 20 * _screenWidth / 720),
+            weekDayTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(
+                color: AppColor.white, fontSize: 20 * _screenWidth / 720),
             firstDate: DateTime.now(),
             lastDate: DateTime.now().add(const Duration(days: 6)),
-            selectedDateTextStyle: Theme
-                .of(context)
+            selectedDateTextStyle: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.red,fontSize: 20*_screenWidth/720),
-            selectedWeekDayTextStyle: Theme
-                .of(context)
+                .copyWith(
+                    color: AppColor.red, fontSize: 20 * _screenWidth / 720),
+            selectedWeekDayTextStyle: Theme.of(context)
                 .textTheme
                 .bodyText2
-                .copyWith(color: AppColor.red,fontSize: 20*_screenWidth/720),
+                .copyWith(
+                    color: AppColor.red, fontSize: 20 * _screenWidth / 720),
           ),
           Container(
             height: MediaQuery.of(context).size.height * (11 / 667),
@@ -170,8 +184,12 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   List<Widget> _sessionShowing(BuildContext context, List<Session> session) {
     final List<SessionType> sessionTypeList = categorizeSession(session);
     final List<List<Session>> sessionLists = <List<Session>>[];
-    sessionLists.addAll(sessionTypeList.map((SessionType sessionType) => sessionType.sessionList).toList());
-    return sessionLists.map((List<Session> sessions) => timeButton(context, sessions)).toList();
+    sessionLists.addAll(sessionTypeList
+        .map((SessionType sessionType) => sessionType.sessionList)
+        .toList());
+    return sessionLists
+        .map((List<Session> sessions) => timeButton(context, sessions))
+        .toList();
 //    for (final SessionType sessionType in sessionTypeList) {
 //      sessionLists.add(sessionType.sessionList);
 //    }
@@ -183,11 +201,6 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
   }
 
   Widget timeButton(BuildContext context, List<Session> sessionList) {
-    final double _screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final double _screenWidth = MediaQuery.of(context).size.width;
     sessionList.sort(comparator);
     if (sessionList.isEmpty) {
       return Container();
@@ -196,63 +209,48 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     final String languageCode = sessionList.first.languageCode;
     final List<Widget> listWidget = <Widget>[];
     for (final Session element in sessionList) {
+      final bool check = DateTime.parse(element.projectTime).millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch;
       listWidget.add(Padding(
-        padding: const EdgeInsets.only(right: 8.0, top: 8),
+        padding: EdgeInsets.only(
+            right: AppSize.getWidth(context, 8),
+            top: AppSize.getHeight(context, 4)),
         child: RaisedButton(
           color: AppColor.white,
-          onPressed: () {
+          disabledColor: AppColor.disableColor,
+          onPressed: check?null:() {
             bloc.add(FilmScheduleEventClickTimeBox(element));
           },
-          padding: const EdgeInsets.all(10),
+          padding: EdgeInsets.all(AppSize.getWidth(context, 10).toDouble()),
           elevation: 0,
           child: Text(
             element.projectTime.substring(11, element.projectTime.length - 3),
-            style: Theme
-                .of(context)
-                .textTheme
-                .button
-                .copyWith(fontWeight: FontWeight.w500, fontSize: 16*_screenHeight/720),
+            style: Theme.of(context).textTheme.button.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: AppSize.getFontSize(context, 14)),
           ),
         ),
       ));
     }
     final Widget result = Column(children: <Widget>[
-      Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          versionCodeWidget(context, versionCode),
-//          Container(
-//            margin: EdgeInsets.only(
-//                left: MediaQuery.of(context).size.width * (16 / 360),
-//                right: MediaQuery.of(context).size.width * (4 / 360),
-//                top: MediaQuery.of(context).size.height * (29 / 667)),
-//            padding: const EdgeInsets.all(4.0),
-//            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-//            child: Text(
-//              versionCode,
-//              style: Theme.of(context)
-//                  .textTheme
-//                  .bodyText2
-//                  .copyWith(fontSize: 14, color: AppColor.red),
-//            ),
-//          ),
-          Container(
-            margin: EdgeInsets.only(top: MediaQuery
-                .of(context)
-                .size
-                .height * (29 / 667)),
-            padding: const EdgeInsets.all(4.0),
-            decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-            child: Text(
-              languageCode,
-              style: Theme
-                  .of(context)
-                  .textTheme
-                  .bodyText2
-                  .copyWith(fontSize: 14*_screenHeight/720, color: AppColor.red),
+      Padding(
+        padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * (16 / 360),
+          top: AppSize.getHeight(context, 27),
+          bottom: AppSize.getHeight(context, 16),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            // versionCodeWidget(context, versionCode),
+            VersionCodeContainer(context: context, versionCode: versionCode),
+            Container(
+              width: AppSize.getWidth(context, 4),
             ),
-          ),
-        ],
+            LanguageCodeContainer(
+              languageCode: languageCode,
+            ),
+          ],
+        ),
       ),
       GridView.count(
         crossAxisCount: 4,
@@ -268,59 +266,11 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     return result;
   }
 
-  Widget versionCodeWidget(BuildContext context, String versionCode) {
-    List<String> result = <String>[];
-    final double _screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    if (versionCode.contains(',')) {
-      result = versionCode.split(',');
-    } else {
-      result.add(versionCode);
-    }
-    final List<Widget> widget = <Widget>[];
-    for (final String vCode in result) {
-      widget.add(
-        Container(
-          margin: EdgeInsets.only(
-              left: MediaQuery
-                  .of(context)
-                  .size
-                  .width * (16 / 360),
-              right: MediaQuery
-                  .of(context)
-                  .size
-                  .width * (4 / 360),
-              top: MediaQuery
-                  .of(context)
-                  .size
-                  .height * (29 / 667)),
-          padding: const EdgeInsets.all(4.0),
-          decoration: BoxDecoration(border: Border.all(color: AppColor.red)),
-          child: Text(
-            vCode,
-            style: Theme
-                .of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(fontSize: 14* _screenHeight/720, color: AppColor.red),
-          ),
-        ),
-      );
-    }
-    return Row(children: widget);
-  }
-
-
   Widget _loading(BuildContext context) {
     return Column(
       children: <Widget>[
         Container(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height / 3,
+          height: MediaQuery.of(context).size.height / 3,
         ),
         const Center(
           child: CircularProgressIndicator(
@@ -338,23 +288,27 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     for (final Session element in sessionList) {
       if (result.isEmpty) {
         print('not fuck');
-        final SessionType a =
-        SessionType(versionCode: element.versionCode, languageCode: element.languageCode, sessionList: <Session>[]);
+        final SessionType a = SessionType(
+            versionCode: element.versionCode,
+            languageCode: element.languageCode,
+            sessionList: <Session>[]);
         a.sessionList.add(element);
         result.add(a);
       } else {
         for (int i = 0; i < result.length; i++) {
-          if (result[i].versionCode != element.versionCode || result[i].languageCode != element.languageCode) {
+          if (result[i].versionCode != element.versionCode ||
+              result[i].languageCode != element.languageCode) {
             check = true;
-          }
-          else{
+          } else {
             index = i;
-            check=false;
+            check = false;
           }
         }
         if (check) {
           final SessionType a = SessionType(
-              versionCode: element.versionCode, languageCode: element.languageCode, sessionList: <Session>[]);
+              versionCode: element.versionCode,
+              languageCode: element.languageCode,
+              sessionList: <Session>[]);
           a.sessionList.add(element);
           print('fuck');
           result.add(a);
@@ -367,5 +321,4 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     print('This is ${result.length}');
     return result;
   }
-
 }

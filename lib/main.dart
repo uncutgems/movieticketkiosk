@@ -81,6 +81,7 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       return MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => DetailPage(
           id: data[Constant.filmId] as int,
+          isPLayNow: data[Constant.isPlayNow] as bool,
         ),
         settings: const RouteSettings(name: RoutesName.detailPage),
       );

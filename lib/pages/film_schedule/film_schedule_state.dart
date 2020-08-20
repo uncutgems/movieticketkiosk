@@ -18,3 +18,5 @@ class FilmScheduleStateToSelectSeatPage extends FilmScheduleState{
   FilmScheduleStateToSelectSeatPage(this.session);
   final Session session;
 }
+
+

@@ -4,15 +4,17 @@ part of 'future_film_bloc.dart';
 abstract class FutureFilmState {}
 
 class InitialFutureFilmState extends FutureFilmState {}
+
 class SuccessGetDataFutureFilmState extends FutureFilmState {
   SuccessGetDataFutureFilmState(this.listFilm);
-  final List<Film> listFilm;
 
+  final List<Film> listFilm;
 }
+
 class FailGetDataFutureFilmState extends FutureFilmState {
   FailGetDataFutureFilmState(this.error);
-  final String error;
 
+  final String error;
 }
 
 class NavigateDetailFutureFilmState extends FutureFilmState {

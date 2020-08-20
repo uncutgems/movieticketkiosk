@@ -16,3 +16,5 @@ class FailGetDataHomeState extends HomeState {
 
   final String error;
 }
+
+

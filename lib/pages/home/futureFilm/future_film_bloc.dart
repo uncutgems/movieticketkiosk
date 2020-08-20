@@ -20,6 +20,7 @@ class FutureFilmBloc extends Bloc<FutureFilmEvent, FutureFilmState> {
   ) async* {
     if (event is GetDataFutureFilmEvent) {
       try {
+        yield SuccessGetDataFutureFilmState(<Film>[Film(), Film(), Film()]);
         final List<Film> filmList = await _filmRepository.getFutureFilm();
         yield SuccessGetDataFutureFilmState(filmList);
       } on APIException catch(e) {

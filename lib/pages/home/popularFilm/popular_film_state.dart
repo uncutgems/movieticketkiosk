@@ -18,6 +18,8 @@ class FailGetDataPopularFilmState extends PopularFilmState {
   final String error;
 }
 
+
+
 class PageChangedPopularFilmState extends PopularFilmState {
   PageChangedPopularFilmState(this.filmList);
 
