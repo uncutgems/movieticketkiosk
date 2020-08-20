@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
@@ -38,12 +37,15 @@ class _CheckOutPageState extends State<CheckOutPage>
   Seat seat = Seat();
   CheckOutBloc bloc = CheckOutBloc();
   AnimationController _animationController;
-  int levelClock = 10;
+  int levelClock = 5 * 60;
 
   int orderId;
+
   @override
   void dispose() {
-    _animationController.dispose();
+    if (_animationController != null) {
+      _animationController.dispose();
+    }
     bloc.close();
     firstNameController.dispose();
     lastNameController.dispose();
@@ -66,6 +68,20 @@ class _CheckOutPageState extends State<CheckOutPage>
         if (state is CheckOutStateTimeOut) {
           _timeOut();
           return false;
+        } else if (state is CheckOutStateSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            RoutesName.successfulCheckout,
+            ModalRoute.withName(RoutesName.homePage),
+            arguments: <String, dynamic>{
+              Constant.film: widget.film,
+              Constant.session: widget.session,
+              Constant.chosenList: widget.seats,
+              Constant.customerFirstName: firstNameController.text,
+              Constant.customerLastName: lastNameController.text,
+            },
+          );
+          return false;
         } else {
           return true;
         }
@@ -83,9 +99,10 @@ class _CheckOutPageState extends State<CheckOutPage>
               context,
               GestureDetector(
                 child: QR(orderId: state.order.orderId),
-                onTap: () => Navigator.pushNamed(
+                onTap: () => Navigator.pushNamedAndRemoveUntil(
                   context,
                   RoutesName.successfulCheckout,
+                  ModalRoute.withName(RoutesName.homePage),
                   arguments: <String, dynamic>{
                     Constant.film: widget.film,
                     Constant.session: widget.session,
@@ -96,19 +113,6 @@ class _CheckOutPageState extends State<CheckOutPage>
                 ),
               ),
             ),
-          );
-        }
-        else if(state is CheckOutStateSuccess){
-          Navigator.pushNamed(
-            context,
-            RoutesName.successfulCheckout,
-            arguments: <String, dynamic>{
-              Constant.film: widget.film,
-              Constant.session: widget.session,
-              Constant.chosenList: widget.seats,
-              Constant.customerFirstName: firstNameController.text,
-              Constant.customerLastName: lastNameController.text,
-            },
           );
         }
 
@@ -141,10 +145,12 @@ class _CheckOutPageState extends State<CheckOutPage>
         ),
       ),
       body: ListView(
-        padding:  EdgeInsets.only(top: AppSize.getHeight(context, 8)),
+        padding: EdgeInsets.only(top: AppSize.getHeight(context, 8)),
         children: <Widget>[
           Padding(
-            padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16), right:  AppSize.getWidth(context, 16)),
+            padding: EdgeInsets.only(
+                left: AppSize.getWidth(context, 16),
+                right: AppSize.getWidth(context, 16)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
 //            mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -177,7 +183,7 @@ class _CheckOutPageState extends State<CheckOutPage>
   Widget filmInfo(BuildContext context) {
     final double _screenHeight = MediaQuery.of(context).size.height;
     return Padding(
-      padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16)),
+      padding: EdgeInsets.only(left: AppSize.getWidth(context, 16)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
@@ -187,49 +193,59 @@ class _CheckOutPageState extends State<CheckOutPage>
                 color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
           Padding(
-            padding:  EdgeInsets.only(top: AppSize.getHeight(context, 8),bottom:AppSize.getHeight(context, 8)),
+            padding: EdgeInsets.only(
+                top: AppSize.getHeight(context, 8),
+                bottom: AppSize.getHeight(context, 8)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-
-                VersionCodeContainer(context: context,versionCode: widget.film.versionCode,),
+                VersionCodeContainer(
+                  context: context,
+                  versionCode: widget.film.versionCode,
+                ),
                 Container(
                   width: AppSize.getWidth(context, 4),
                 ),
-                LanguageCodeContainer( languageCode:  widget.film.languageCode, ),
+                LanguageCodeContainer(
+                  languageCode: widget.film.languageCode,
+                ),
               ],
             ),
           ),
           Text(
             '•  ${convertTimeToDisplay(widget.session.projectTime)}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
-                  fontSize: 16*_screenHeight/720,
+                  fontSize: 16 * _screenHeight / 720,
                   color: AppColor.white,
                 ),
           ),
-          Container(height: 8*_screenHeight/720,),
+          Container(
+            height: 8 * _screenHeight / 720,
+          ),
           Text(
             '•  Phòng chiếu số ${widget.session.roomName}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
-              fontSize: 16*_screenHeight/720,
-              color: AppColor.white,
-            ),
+                  fontSize: 16 * _screenHeight / 720,
+                  color: AppColor.white,
+                ),
           ),
-          Container(height: 8*_screenHeight/720,),
+          Container(
+            height: 8 * _screenHeight / 720,
+          ),
           Text(
             '•  Ghế: ${convertSeatToString(widget.seats)}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
-                  fontSize: 16*_screenHeight/720,
+                  fontSize: 16 * _screenHeight / 720,
                   color: AppColor.white,
                 ),
           ),
           Container(height: AppSize.getHeight(context, 8)),
           Text(
-            '•  Tổng cộng: ${currencyFormat(sumOfPrice(widget.seats),'đ')}',
+            '•  Tổng cộng: ${currencyFormat(sumOfPrice(widget.seats), 'đ')}',
             style: Theme.of(context).textTheme.bodyText2.copyWith(
-              fontSize: 16*_screenHeight/720,
-              color: AppColor.white,
-            ),
+                  fontSize: 16 * _screenHeight / 720,
+                  color: AppColor.white,
+                ),
           ),
         ],
       ),
@@ -245,24 +261,26 @@ class _CheckOutPageState extends State<CheckOutPage>
         Center(
           child: Text(
             'Vui lòng nhập thông tin đặt vé',
-            style: Theme.of(context)
-                .textTheme
-                .bodyText2
-                .copyWith(color: AppColor.white,fontSize: 16*_screenHeight/720),
+            style: Theme.of(context).textTheme.bodyText2.copyWith(
+                color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
         ),
         Container(
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 24),
+              right: AppSize.getWidth(context, 24)),
           child: nameBox(context, lastNameController, 'Họ'),
         ),
         Container(
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 24),
+              right: AppSize.getWidth(context, 24)),
           child: nameBox(context, firstNameController, 'Tên'),
         ),
         Container(
@@ -273,30 +291,28 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 24), right:AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 24),
+              right: AppSize.getWidth(context, 24)),
           child: InkWell(
             onTap: () =>
                 launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
             child: RichText(
               text: TextSpan(
                 text: 'Tôi đồng ý với ',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2
-                    .copyWith(color: AppColor.white,fontSize: 14*_screenHeight/720),
+                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                    color: AppColor.white, fontSize: 14 * _screenHeight / 720),
                 children: <TextSpan>[
                   TextSpan(
                       text: 'điều khoản sử dụng',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText2
-                          .copyWith(color: AppColor.red,fontSize: 14*_screenHeight/720)),
+                      style: Theme.of(context).textTheme.bodyText2.copyWith(
+                          color: AppColor.red,
+                          fontSize: 14 * _screenHeight / 720)),
                   TextSpan(
                     text: ' và đang mua vé cho người có độ tuổi phù hợp',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(color: AppColor.white,fontSize: 14*_screenHeight/720),
+                    style: Theme.of(context).textTheme.bodyText2.copyWith(
+                        color: AppColor.white,
+                        fontSize: 14 * _screenHeight / 720),
                   ),
                 ],
               ),
@@ -307,9 +323,11 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (17 / 667),
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 24.0, right: 24.0),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 24),
+              right: AppSize.getWidth(context, 24)),
           child: AVButtonFill(
-            height:AppSize.getHeight(context, 48) ,
+            height: AppSize.getHeight(context, 48),
             width: AppSize.getWidth(context, 312),
             onPressed: () {
               String listChairValueF1 = '';
@@ -329,10 +347,11 @@ class _CheckOutPageState extends State<CheckOutPage>
                   paymentMethodSystemName: 'VNPAY'));
             },
             title: 'Tiến hành thanh toán',
-
           ),
         ),
-        Container(height: AppSize.getHeight(context, 20),),
+        Container(
+          height: AppSize.getHeight(context, 20),
+        ),
       ],
     );
   }
@@ -347,10 +366,9 @@ class _CheckOutPageState extends State<CheckOutPage>
         Center(
             child: Text(
           'Vui lòng quét mã QR để tiến hành thanh toán',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2
-              .copyWith(color: AppColor.white,fontSize: AppSize.getFontSize(context, 14)),
+          style: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: AppColor.white,
+              fontSize: AppSize.getFontSize(context, 14)),
         )),
         Container(height: AppSize.getHeight(context, 8)),
         Center(
@@ -363,7 +381,9 @@ class _CheckOutPageState extends State<CheckOutPage>
             ).animate(_animationController),
           ),
         ),
-        Container(height: AppSize.getHeight(context, 8),),
+        Container(
+          height: AppSize.getHeight(context, 8),
+        ),
         qrCode,
       ],
     );
@@ -376,14 +396,12 @@ class _CheckOutPageState extends State<CheckOutPage>
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12)
-          ),
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           backgroundColor: AppColor.white,
-          contentTextStyle: Theme.of(context)
-              .textTheme
-              .bodyText2
-              .copyWith(color: AppColor.black,fontSize: AppSize.getFontSize(context, 14)),
+          contentTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: AppColor.black,
+              fontSize: AppSize.getFontSize(context, 14)),
 //          titlePadding: EdgeInsets.all(24),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -397,7 +415,9 @@ class _CheckOutPageState extends State<CheckOutPage>
               child: Text(
                 'Đồng ý',
                 style: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: AppColor.blueLight, fontWeight: FontWeight.normal,fontSize: AppSize.getFontSize(context, 14)),
+                    color: AppColor.blueLight,
+                    fontWeight: FontWeight.normal,
+                    fontSize: AppSize.getFontSize(context, 14)),
               ),
               onPressed: () {
                 Navigator.of(context)
@@ -410,21 +430,22 @@ class _CheckOutPageState extends State<CheckOutPage>
     );
   }
 }
-String convertSeatToString(List<Seat> seatList){
+
+String convertSeatToString(List<Seat> seatList) {
   String result = '';
-  for (final Seat seat in seatList){
-    result+=seat.code+',';
+  for (final Seat seat in seatList) {
+    result += seat.code + ',';
   }
-  result = result.substring(0,result.length-1);
+  result = result.substring(0, result.length - 1);
   print(result);
 
   return result;
 }
 
-int sumOfPrice(List<Seat> seatList){
+int sumOfPrice(List<Seat> seatList) {
   int sum = 0;
-  for (final Seat seat in seatList){
-    sum=sum + seat.price.toInt();
+  for (final Seat seat in seatList) {
+    sum = sum + seat.price.toInt();
   }
   return sum;
 }
@@ -443,10 +464,8 @@ class Countdown extends AnimatedWidget {
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     if (animation.value > 0) {
       return Text('(Thời thạn thanh toán: $timerText s)',
-          style: Theme.of(context)
-              .textTheme
-              .bodyText2
-              .copyWith(color: AppColor.red,fontSize: AppSize.getFontSize(context, 14)));
+          style: Theme.of(context).textTheme.bodyText2.copyWith(
+              color: AppColor.red, fontSize: AppSize.getFontSize(context, 14)));
     } else {
       bloc.add(CheckOutEventShowTimeOut());
       controller.reset();

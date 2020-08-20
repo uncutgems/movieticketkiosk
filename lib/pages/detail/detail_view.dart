@@ -14,9 +14,9 @@ import 'package:ncckios/widgets/loading/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key key, @required this.id}) : super(key: key);
+  const DetailPage({Key key, @required this.id, this.isPLayNow}) : super(key: key);
   final int id;
-
+  final bool isPLayNow;
   @override
   _DetailPageState createState() => _DetailPageState();
 }
@@ -54,7 +54,7 @@ class _DetailPageState extends State<DetailPage> {
           style: textTheme.bodyText1.copyWith(
             color: AppColor.dark20,
             fontWeight: FontWeight.w500,
-            fontSize: AppSize.getFontSize(context, 16),
+            fontSize: AppSize.getFontSize(context, 32),
           ),
         ),
         centerTitle: true,
@@ -347,6 +347,7 @@ class _DetailPageState extends State<DetailPage> {
 
   Widget _filmInfo(BuildContext context, Film film) {
     final List<String> version = film.versionCode.split('/');
+    final bool check = widget.isPLayNow;
 
     return Padding(
       padding: EdgeInsets.symmetric(
@@ -426,9 +427,9 @@ class _DetailPageState extends State<DetailPage> {
           ),
           AVButtonFill(
               title: 'ĐẶT VÉ',
-              onPressed: () {
-                _navigateToFilmSchedule(context, film);
-              })
+              onPressed:  check ? () {
+                _navigateToFilmSchedule(context, film) ;
+              }: null)
         ],
       ),
     );

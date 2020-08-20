@@ -194,7 +194,7 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
   void _navigateToDetail(
       BuildContext context, NavigateDetailFutureFilmState state) {
     Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic> {
-      Constant.filmId: state.id
+      Constant.filmId: state.id , Constant.isPlayNow : false,
     });
   }
 

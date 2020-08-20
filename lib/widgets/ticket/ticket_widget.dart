@@ -128,113 +128,117 @@ class TicketWidget extends StatelessWidget {
                         horizontal: screenHeight / 667 * 24.0,
                         vertical: screenWidth / 360 * 16),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Người đặt',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              name,
-                              style: textTheme.subtitle1.copyWith(
-                                  fontSize: screenHeight / 667 * 16,
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                            Text(
-                              'Ca chiếu',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              projectTime,
-                              style: textTheme.subtitle1.copyWith(
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: screenHeight / 667 * 16),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                            Text(
-                              'Phòng chiếu',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              cinemaId,
-                              style: textTheme.subtitle1.copyWith(
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: screenHeight / 667 * 16),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Người đặt',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                name,
+                                style: textTheme.subtitle1.copyWith(
+                                    fontSize: AppSize.getFontSize(context, 16),
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                              Text(
+                                'Ca chiếu',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                projectTime,
+                                style: textTheme.subtitle1.copyWith(
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppSize.getFontSize(context, 16)),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                              Text(
+                                'Phòng chiếu',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                cinemaId,
+                                style: textTheme.subtitle1.copyWith(
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppSize.getFontSize(context, 16)),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                            ],
+                          ),
                         ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Mã vé',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              orderId ?? '',
-                              style: textTheme.subtitle1.copyWith(
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: screenHeight / 667 * 16),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                            Text(
-                              'Ngày chiếu',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              projectDate,
-                              style: textTheme.subtitle1.copyWith(
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: screenHeight / 667 * 16),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                            Text(
-                              'Ghế',
-                              style: textTheme.subtitle2.copyWith(
-                                  color: AppColor.title,
-                                  fontSize: screenHeight / 667 * 14),
-                            ),
-                            Text(
-                              seat,
-                              style: textTheme.subtitle1.copyWith(
-                                  color: AppColor.backGround,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: screenHeight / 667 * 16),
-                            ),
-                            Container(
-                              height: screenHeight / 667 * 16,
-                            ),
-                          ],
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Mã vé',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                orderId ?? '',
+                                style: textTheme.subtitle1.copyWith(
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppSize.getFontSize(context, 16)),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                              Text(
+                                'Ngày chiếu',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                projectDate,
+                                style: textTheme.subtitle1.copyWith(
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppSize.getFontSize(context, 16)),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                              Text(
+                                'Ghế',
+                                style: textTheme.subtitle2.copyWith(
+                                    color: AppColor.title,
+                                    fontSize: AppSize.getFontSize(context, 14)),
+                              ),
+                              Text(
+                                seat,
+                                style: textTheme.subtitle1.copyWith(
+                                    color: AppColor.backGround,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: AppSize.getFontSize(context, 16)),
+                              ),
+                              Container(
+                                height: AppSize.getHeight(context, 16),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

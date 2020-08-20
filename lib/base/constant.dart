@@ -254,4 +254,5 @@ class Constant {
   static const String seats ='Seats';
 
   static const String barCode='barCode';
+  static const String isPlayNow = 'isPlayNow';
 }

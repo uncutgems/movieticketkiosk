@@ -22,6 +22,10 @@ class PopularFilmBloc extends Bloc<PopularFilmEvent, PopularFilmState> {
       try {
         yield SuccessGetDataPopularFilmState(<Film>[Film()], 0);
         final List<Film> filmList = await _filmRepository.getFilmList();
+        if (filmList.isEmpty)
+          {
+            yield FailGetDataPopularFilmState('Không có dữ liệu');
+          }else
         yield SuccessGetDataPopularFilmState(filmList, 0);
       } on APIException catch(e) {
         print('hhaaaaaaaa' + e.message());

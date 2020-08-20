@@ -103,10 +103,12 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
         Container(
           height: AppSize.getHeight(context, 8),
         ),
+
+
         if (filmList[0].id != null)
-          _filmInfo(context, filmList, state.index)
+        _filmInfo(context, filmList, state.index)
         else
-          Container()
+          Container(),
       ],
     );
   }
@@ -176,7 +178,7 @@ class _PopularFilmWidgetState extends State<PopularFilmWidget> {
       BuildContext context, NavigateDetailPopularFilmState state) {
     Navigator.pushNamed(context, RoutesName.detailPage,
         arguments: <String, dynamic>{
-          Constant.filmId: state.id,
+          Constant.filmId: state.id, Constant.isPlayNow : true,
         });
   }
 

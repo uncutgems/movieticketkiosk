@@ -127,7 +127,7 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
           style: textTheme.bodyText1.copyWith(
             color: AppColor.dark20,
             fontWeight: FontWeight.w500,
-            fontSize: AppSize.getFontSize(context, 16),
+            fontSize: AppSize.getFontSize(context, 32),
           ),
         ),
         centerTitle: true,
@@ -209,14 +209,18 @@ class _FilmSchedulePageState extends State<FilmSchedulePage> {
     final String languageCode = sessionList.first.languageCode;
     final List<Widget> listWidget = <Widget>[];
     for (final Session element in sessionList) {
+      final bool check = DateTime.parse(element.projectTime).millisecondsSinceEpoch < DateTime.now().millisecondsSinceEpoch;
       listWidget.add(Padding(
-        padding:  EdgeInsets.only(right: AppSize.getWidth(context, 8), top: AppSize.getHeight(context, 4)),
+        padding: EdgeInsets.only(
+            right: AppSize.getWidth(context, 8),
+            top: AppSize.getHeight(context, 4)),
         child: RaisedButton(
           color: AppColor.white,
-          onPressed: () {
+          disabledColor: AppColor.disableColor,
+          onPressed: check?null:() {
             bloc.add(FilmScheduleEventClickTimeBox(element));
           },
-          padding:  EdgeInsets.all(AppSize.getWidth(context, 10).toDouble()),
+          padding: EdgeInsets.all(AppSize.getWidth(context, 10).toDouble()),
           elevation: 0,
           child: Text(
             element.projectTime.substring(11, element.projectTime.length - 3),

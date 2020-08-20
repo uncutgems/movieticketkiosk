@@ -36,6 +36,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
   List<Seat> checkChosenSeatList = <Seat>[];
+  List<Seat> coupleSeatList = <Seat>[];
 
 //  final int sessionId2 = 246813; //246773 //204907 //246844 //246840 //246813
 
@@ -80,7 +81,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           style: textTheme.bodyText1.copyWith(
             color: AppColor.dark20,
             fontWeight: FontWeight.w500,
-            fontSize: AppSize.getFontSize(context, 16),
+            fontSize: AppSize.getFontSize(context, 32),
           ),
         ),
         centerTitle: true,
@@ -103,11 +104,12 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               if (state is LoadSeatDataSelectSeatState) {
                 return _loading(context);
               } else if (state is ReceiveSeatDataSelectSeatState) {
+                coupleSeatList = countCoupleSeat(state.seatList);
                 return _showSeat(context, state);
               } else if (state is FailToReceiveSeatDataSelectSeatState) {
                 return FailingWidget(
                   errorMessage: state.errorMessage,
-                  onPressed: (){
+                  onPressed: () {
                     bloc.add(GetSeatDataSelectSeatEvent(
                         widget.session.id,
                         //204907,
@@ -147,12 +149,12 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
     final List<Seat> seatList = state.seatList;
     final int maximumColumn = findMaxColumn(state.seatList) + 1;
-
     return Column(
       children: <Widget>[
         /*    Vẽ rạp     */
         Padding(
-          padding:  EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
+          padding:
+              EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
           child: GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -164,6 +166,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 chosenList: chosenSeatList,
                 maximum: maximumColumn,
                 seatList: state.seatList,
+                coupleSeatList: coupleSeatList,
               );
             }).toList(),
           ),
@@ -172,7 +175,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           height: AppSize.getHeight(context, 24),
         ),
         Padding(
-          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16),right: AppSize.getWidth(context, 16)),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 16),
+              right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -198,7 +203,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding:  EdgeInsets.only(left: AppSize.getWidth(context, 16),right: AppSize.getWidth(context, 16)),
+          padding: EdgeInsets.only(
+              left: AppSize.getWidth(context, 16),
+              right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -225,11 +232,9 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             ],
           ),
         ),
-
         Container(
           height: AppSize.getHeight(context, 32),
         ),
-
         const Image(
           image: AssetImage('assets/line2.png'),
         ),
@@ -237,14 +242,17 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
-          child: Text(
-            widget.film.filmName,
-            style: Theme.of(context)
-                .textTheme
-                .headline5
-                .copyWith(color: AppColor.white),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16)),
+          child: Row(
+            children: <Widget>[
+              Text(
+                widget.film.filmName,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline5
+                    .copyWith(color: AppColor.white),
+              ),
+            ],
           ),
         ),
         Container(),
@@ -362,6 +370,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required List<Seat> chosenList,
     @required List<Seat> seatList,
     @required int maximum,
+    @required List<Seat> coupleSeatList,
   }) {
     for (final Seat s in chosenList) {
       if (seat.code == s.code && seat.type == SeatType.vipSeat) {
@@ -374,13 +383,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           checker: true,
         );
       } else if (seat.code == s.code && seat.type == SeatType.coupleSeat) {
-        return _seatContainer(
+        return coupleSeatContainer(
           context: context,
           seat: seat,
           chosenList: chosenList,
           seatList: seatList,
           color: AppColor.red,
           checker: true,
+          coupleSeatList: coupleSeatList,
         );
       } else if (seat.code == s.code && seat.type == SeatType.normalSeat) {
         return _seatContainer(
@@ -409,12 +419,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         seatList: seatList,
       );
     } else if (seat.type == SeatType.coupleSeat) {
-      return _seatContainer(
-          context: context,
-          color: AppColor.red100,
-          seat: seat,
-          chosenList: chosenList,
-          seatList: seatList);
+      return coupleSeatContainer(
+        context: context,
+        color: AppColor.red100,
+        seat: seat,
+        chosenList: chosenList,
+        seatList: seatList,
+        coupleSeatList: coupleSeatList,
+      );
     } else if (seat.type == SeatType.numberTheSeat && seat.column == 0) {
       return Container();
     } else if (seat.type == SeatType.numberTheSeat) {
@@ -445,13 +457,53 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         child: checker ?? false
             ? const Icon(
                 Icons.check,
-                color: AppColor.green,
+                color: AppColor.black,
               )
             : null,
-        //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
+//        child: Text(
+//          '${seat.rows} - ${seat.column}',
+//          style: const TextStyle(color: AppColor.blue),
+//        ),
         onTap: () {
           const bool check = true;
           checkValidSeat(chosenList, seat, check);
+          bloc.add(UpdateSeatDataSelectSeatEvent(
+              seatList, _totalPrice(chosenList), chosenList));
+        },
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+      duration: const Duration(milliseconds: 100),
+    );
+  }
+
+  Widget coupleSeatContainer({
+    @required BuildContext context,
+    @required Color color,
+    @required Seat seat,
+    @required List<Seat> chosenList,
+    @required List<Seat> seatList,
+    @required List<Seat> coupleSeatList,
+    bool checker,
+  }) {
+    print('Hello======' + coupleSeatList.length.toString());
+    print('HIIIIIII  ${coupleSeatList.first.column} ');
+    print('HIIIIIII  ${coupleSeatList.last.column} ');
+    return AnimatedContainer(
+      child: GestureDetector(
+        child: checker ?? false
+            ? const Icon(
+                Icons.check,
+                color: AppColor.black,
+              )
+            : null,
+        onTap: () {
+          const bool check = true;
+          checkCoupleSeatValidSeat(
+              chosenList, seat, check, seatList, coupleSeatList);
           bloc.add(UpdateSeatDataSelectSeatEvent(
               seatList, _totalPrice(chosenList), chosenList));
         },
@@ -471,7 +523,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required Seat seat,
   }) {
     return Container(
-      //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),
@@ -533,13 +584,22 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Text(
           text,
-          style: Theme.of(context)
-              .textTheme
-              .subtitle2
-              .copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 14)),
+          style: Theme.of(context).textTheme.subtitle2.copyWith(
+              color: AppColor.white,
+              fontSize: AppSize.getFontSize(context, 14)),
         ),
       ],
     );
+  }
+
+  List<Seat> countCoupleSeat(List<Seat> seatList) {
+    List<Seat> result = <Seat>[];
+    for (Seat seat in seatList) {
+      if (seat.type == SeatType.coupleSeat) {
+        result.add(seat);
+      }
+    }
+    return result;
   }
 }
 
@@ -574,6 +634,76 @@ void checkValidSeat(List<Seat> chosenList, Seat seat, bool check) {
     }
   } else {
     chosenList.add(seat);
+  }
+  print(seat.code);
+  print('$chosenList');
+  print(_totalPrice(chosenList));
+}
+
+void checkCoupleSeatValidSeat(List<Seat> chosenList, Seat seat, bool check,
+    List<Seat> seatList, List<Seat> coupleSeatList) {
+  bool check = false;
+  if (chosenList.isNotEmpty) {
+    for (final Seat s in chosenList) {
+      if (seat.rows == s.rows && seat.column == s.column) {
+        check = true;
+      }
+    }
+    if (!check) {
+      if (coupleSeatList.first.column.isEven) {
+        if (seat.column.isEven) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+        }
+      } else {
+        if (seat.column.isEven) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+        }
+      }
+    } else if (check) {
+      if (coupleSeatList.first.column.isEven) {
+        if (seat.column.isEven) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) + 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) - 1)]);
+        }
+      } else {
+        if (seat.column.isEven) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) - 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) + 1)]);
+        }
+      }
+    }
+  } else {
+    if (coupleSeatList.first.column.isEven) {
+      if (seat.column.isEven) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+      } else if (seat.column.isOdd) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+      }
+    } else {
+      if (seat.column.isEven) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+      } else if (seat.column.isOdd) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+      }
+    }
   }
   print(seat.code);
   print('$chosenList');

@@ -44,14 +44,14 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
     } else if (event is CheckOutEventCheckPaymentStatus) {
       print('event CheckOutEventCheckPaymentStatus');
       try {
-        Future<dynamic>.delayed(const Duration(seconds: 15), () {
+        Future<dynamic>.delayed(const Duration(minutes: 5), () {
           if (statusTimer != null) {
             statusTimer.cancel();
             print('stop');
           }
         });
         statusTimer =
-            Timer.periodic(const Duration(seconds: 5), (Timer timer) async {
+            Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
           if (statusTimer.isActive) {
             final OrderStatus orderStatus =
                 await orderRepository.checkOrder(event.orderId);
