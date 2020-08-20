@@ -29,8 +29,7 @@ class CheckOutPage extends StatefulWidget {
   _CheckOutPageState createState() => _CheckOutPageState();
 }
 
-class _CheckOutPageState extends State<CheckOutPage>
-    with TickerProviderStateMixin {
+class _CheckOutPageState extends State<CheckOutPage> with TickerProviderStateMixin {
   final TextEditingController firstNameController = TextEditingController();
   final TextEditingController lastNameController = TextEditingController();
 
@@ -54,8 +53,7 @@ class _CheckOutPageState extends State<CheckOutPage>
 
   @override
   void initState() {
-    _animationController = AnimationController(
-        vsync: this, duration: Duration(seconds: levelClock));
+    _animationController = AnimationController(vsync: this, duration: Duration(seconds: levelClock));
 
     super.initState();
   }
@@ -97,21 +95,7 @@ class _CheckOutPageState extends State<CheckOutPage>
             context,
             bottomQR(
               context,
-              GestureDetector(
-                child: QR(orderId: state.order.orderId),
-                onTap: () => Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  RoutesName.successfulCheckout,
-                  ModalRoute.withName(RoutesName.homePage),
-                  arguments: <String, dynamic>{
-                    Constant.film: widget.film,
-                    Constant.session: widget.session,
-                    Constant.chosenList: widget.seats,
-                    Constant.customerFirstName: firstNameController.text,
-                    Constant.customerLastName: lastNameController.text,
-                  },
-                ),
-              ),
+              QR(orderId: state.order.orderId),
             ),
           );
         }
@@ -122,16 +106,15 @@ class _CheckOutPageState extends State<CheckOutPage>
   }
 
   Widget mainScreen(BuildContext context, Widget widget) {
-    print(' hello ${this.widget.film.toJson()}');
-    final double _screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       backgroundColor: AppColor.primaryColor,
       appBar: AppBar(
         elevation: 0.0,
+        toolbarHeight: AppSize.getHeight(context, 48),
         leading: IconButton(
             icon: Icon(
               Icons.arrow_back,
-              size: 16 * _screenHeight / 720,
+              size: AppSize.getFontSize(context, 20),
             ),
             onPressed: () => Navigator.pop(context)),
         backgroundColor: Colors.transparent,
@@ -139,27 +122,35 @@ class _CheckOutPageState extends State<CheckOutPage>
         title: Text(
           'Thanh Toán',
           style: Theme.of(context).textTheme.headline6.copyWith(
-              color: AppColor.white,
-              fontSize: 16 * _screenHeight / 720,
-              fontWeight: FontWeight.w500),
+                color: AppColor.white,
+                fontSize: AppSize.getFontSize(context, 20),
+                fontWeight: FontWeight.w500,
+              ),
         ),
       ),
       body: ListView(
         padding: EdgeInsets.only(top: AppSize.getHeight(context, 8)),
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(
-                left: AppSize.getWidth(context, 16),
-                right: AppSize.getWidth(context, 16)),
+            padding: EdgeInsets.only(left: AppSize.getWidth(context, 16), right: AppSize.getWidth(context, 16)),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
 //            mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Image.network(
-                  this.widget.film.imageUrl,
-                  width: 0.33 * MediaQuery.of(context).size.width,
-                  height: 0.27 * MediaQuery.of(context).size.height,
+                ClipRRect(
+                  child: Image.network(
+                    this.widget.film.imageUrl,
+                    width: 0.33 * MediaQuery
+                        .of(context)
+                        .size
+                        .width,
+                    height: 0.27 * MediaQuery
+                        .of(context)
+                        .size
+                        .height,
+                  ),
+                  borderRadius: BorderRadius.circular(8),
                 ),
                 Expanded(
                   child: filmInfo(context),
@@ -189,13 +180,14 @@ class _CheckOutPageState extends State<CheckOutPage>
         children: <Widget>[
           Text(
             widget.film.filmName,
-            style: Theme.of(context).textTheme.headline6.copyWith(
-                color: AppColor.white, fontSize: 16 * _screenHeight / 720),
+            style: Theme
+                .of(context)
+                .textTheme
+                .headline6
+                .copyWith(color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
           Padding(
-            padding: EdgeInsets.only(
-                top: AppSize.getHeight(context, 8),
-                bottom: AppSize.getHeight(context, 8)),
+            padding: EdgeInsets.only(top: AppSize.getHeight(context, 8), bottom: AppSize.getHeight(context, 8)),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
@@ -261,26 +253,25 @@ class _CheckOutPageState extends State<CheckOutPage>
         Center(
           child: Text(
             'Vui lòng nhập thông tin đặt vé',
-            style: Theme.of(context).textTheme.bodyText2.copyWith(
-                color: AppColor.white, fontSize: 16 * _screenHeight / 720),
+            style: Theme
+                .of(context)
+                .textTheme
+                .bodyText2
+                .copyWith(color: AppColor.white, fontSize: 16 * _screenHeight / 720),
           ),
         ),
         Container(
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 24),
-              right: AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 24), right: AppSize.getWidth(context, 24)),
           child: nameBox(context, lastNameController, 'Họ'),
         ),
         Container(
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 24),
-              right: AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 24), right: AppSize.getWidth(context, 24)),
           child: nameBox(context, firstNameController, 'Tên'),
         ),
         Container(
@@ -291,28 +282,32 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (24 / 667),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 24),
-              right: AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 24), right: AppSize.getWidth(context, 24)),
           child: InkWell(
-            onTap: () =>
-                launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
+            onTap: () => launch('https://chieuphimquocgia.com.vn/t/chinhsachmuave'),
             child: RichText(
               text: TextSpan(
                 text: 'Tôi đồng ý với ',
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
-                    color: AppColor.white, fontSize: 14 * _screenHeight / 720),
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(color: AppColor.white, fontSize: 14 * _screenHeight / 720),
                 children: <TextSpan>[
                   TextSpan(
                       text: 'điều khoản sử dụng',
-                      style: Theme.of(context).textTheme.bodyText2.copyWith(
-                          color: AppColor.red,
-                          fontSize: 14 * _screenHeight / 720)),
+                      style: Theme
+                          .of(context)
+                          .textTheme
+                          .bodyText2
+                          .copyWith(color: AppColor.red, fontSize: 14 * _screenHeight / 720)),
                   TextSpan(
                     text: ' và đang mua vé cho người có độ tuổi phù hợp',
-                    style: Theme.of(context).textTheme.bodyText2.copyWith(
-                        color: AppColor.white,
-                        fontSize: 14 * _screenHeight / 720),
+                    style: Theme
+                        .of(context)
+                        .textTheme
+                        .bodyText2
+                        .copyWith(color: AppColor.white, fontSize: 14 * _screenHeight / 720),
                   ),
                 ],
               ),
@@ -323,9 +318,7 @@ class _CheckOutPageState extends State<CheckOutPage>
           height: MediaQuery.of(context).size.height * (17 / 667),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 24),
-              right: AppSize.getWidth(context, 24)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 24), right: AppSize.getWidth(context, 24)),
           child: AVButtonFill(
             height: AppSize.getHeight(context, 48),
             width: AppSize.getWidth(context, 312),
@@ -340,8 +333,7 @@ class _CheckOutPageState extends State<CheckOutPage>
                   customerFirstName: firstNameController.text,
                   customerId: 1,
                   customerLastName: lastNameController.text,
-                  listChairValueF1: listChairValueF1.substring(
-                      0, listChairValueF1.length - 1),
+                  listChairValueF1: listChairValueF1.substring(0, listChairValueF1.length - 1),
                   seatsF1: seatsF1.substring(0, seatsF1.length - 1),
                   planScreenId: widget.session.id,
                   paymentMethodSystemName: 'VNPAY'));
@@ -365,10 +357,12 @@ class _CheckOutPageState extends State<CheckOutPage>
       children: <Widget>[
         Center(
             child: Text(
-          'Vui lòng quét mã QR để tiến hành thanh toán',
-          style: Theme.of(context).textTheme.bodyText2.copyWith(
-              color: AppColor.white,
-              fontSize: AppSize.getFontSize(context, 14)),
+              'Vui lòng quét mã QR để tiến hành thanh toán',
+              style: Theme
+                  .of(context)
+                  .textTheme
+                  .bodyText2
+                  .copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 14)),
         )),
         Container(height: AppSize.getHeight(context, 8)),
         Center(
@@ -396,32 +390,33 @@ class _CheckOutPageState extends State<CheckOutPage>
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
           backgroundColor: AppColor.white,
-          contentTextStyle: Theme.of(context).textTheme.bodyText2.copyWith(
-              color: AppColor.black,
-              fontSize: AppSize.getFontSize(context, 14)),
+          contentTextStyle: Theme
+              .of(context)
+              .textTheme
+              .bodyText2
+              .copyWith(color: AppColor.black, fontSize: AppSize.getFontSize(context, 14)),
 //          titlePadding: EdgeInsets.all(24),
           content: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const <Widget>[
-              Text('Thời gian phiên đặt vé của bạn đã hết'),
-              Text('Vui lòng chọn lại ghế')
-            ],
+            children: const <Widget>[Text('Thời gian phiên đặt vé của bạn đã hết'), Text('Vui lòng chọn lại ghế')],
           ),
           actions: <Widget>[
             FlatButton(
               child: Text(
                 'Đồng ý',
-                style: Theme.of(context).textTheme.bodyText2.copyWith(
+                style: Theme
+                    .of(context)
+                    .textTheme
+                    .bodyText2
+                    .copyWith(
                     color: AppColor.blueLight,
                     fontWeight: FontWeight.normal,
                     fontSize: AppSize.getFontSize(context, 14)),
               ),
               onPressed: () {
-                Navigator.of(context)
-                    .popUntil(ModalRoute.withName(RoutesName.detailPage));
+                Navigator.of(context).popUntil(ModalRoute.withName(RoutesName.detailPage));
               },
             ),
           ],
@@ -451,8 +446,7 @@ int sumOfPrice(List<Seat> seatList) {
 }
 
 class Countdown extends AnimatedWidget {
-  const Countdown({Key key, this.animation, this.bloc, this.controller})
-      : super(key: key, listenable: animation);
+  const Countdown({Key key, this.animation, this.bloc, this.controller}) : super(key: key, listenable: animation);
   final Animation<int> animation;
   final AnimationController controller;
   final CheckOutBloc bloc;
@@ -464,8 +458,11 @@ class Countdown extends AnimatedWidget {
         '${clockTimer.inMinutes.remainder(60).toString()}:${clockTimer.inSeconds.remainder(60).toString().padLeft(2, '0')}';
     if (animation.value > 0) {
       return Text('(Thời thạn thanh toán: $timerText s)',
-          style: Theme.of(context).textTheme.bodyText2.copyWith(
-              color: AppColor.red, fontSize: AppSize.getFontSize(context, 14)));
+          style: Theme
+              .of(context)
+              .textTheme
+              .bodyText2
+              .copyWith(color: AppColor.red, fontSize: AppSize.getFontSize(context, 14)));
     } else {
       bloc.add(CheckOutEventShowTimeOut());
       controller.reset();

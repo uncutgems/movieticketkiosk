@@ -50,16 +50,14 @@ class CheckOutBloc extends Bloc<CheckOutEvent, CheckOutState> {
             print('stop');
           }
         });
-        statusTimer =
-            Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
+        statusTimer = Timer.periodic(const Duration(seconds: 10), (Timer timer) async {
           if (statusTimer.isActive) {
-            final OrderStatus orderStatus =
-                await orderRepository.checkOrder(event.orderId);
+            final OrderStatus orderStatus = await orderRepository.checkOrder(event.orderId);
             print('Coders $orderStatus.code');
             add(PaymentStatusChangeCheckOutEvent(orderStatus));
           }
         });
-      } on APIException catch (error) {
+      } on APIException {
         statusTimer.cancel();
         yield CheckOutStateTimeOut();
       }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ncckios/base/size.dart';
 
 import 'color.dart';
 
 // chuyển thời gian từ millisecond sang định dạng format
 String convertTime(String format, int time, bool isUTC) {
-  return DateFormat(format, 'vi')
-      .format(DateTime.fromMillisecondsSinceEpoch(time, isUtc: isUTC));
+  return DateFormat(format, 'vi').format(DateTime.fromMillisecondsSinceEpoch(time, isUtc: isUTC));
 }
 
 int convertNewDayStyleToMillisecond(int time) {
@@ -26,11 +26,8 @@ String currencyFormat(int param, String unit) {
 
 class CurrencyInputFormatter extends TextInputFormatter {
   @override
-  TextEditingValue formatEditUpdate(
-      TextEditingValue oldValue, TextEditingValue newValue) {
-    return newValue.copyWith(
-        text:
-            currencyFormat(int.parse(newValue.text.toString().trim()), 'VNĐ'));
+  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
+    return newValue.copyWith(text: currencyFormat(int.parse(newValue.text.toString().trim()), 'VNĐ'));
   }
 }
 
@@ -337,18 +334,19 @@ void showMaterialDialog({
   showDialog<dynamic>(
       context: context,
       builder: (_) => AlertDialog(
-            title: Text(
+        title: Text(
               title ?? 'Chú ý',
               style: Theme.of(context)
                   .textTheme
                   .subtitle2
-                  .copyWith(color: AppColor.white, fontSize: 30),
+                  .copyWith(color: AppColor.black, fontSize: AppSize.getFontSize(context, 14)),
             ),
+            backgroundColor: AppColor.white,
             content: Text(content,
                 style: Theme.of(context)
                     .textTheme
                     .subtitle2
-                    .copyWith(color: AppColor.white, fontSize: 17)),
+                    .copyWith(color: AppColor.black, fontSize: AppSize.getFontSize(context, 12))),
             actions: action,
           ));
 }

@@ -73,18 +73,18 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               Icons.arrow_back,
               size: AppSize.getHeight(context, 20),
             ),
-            onPressed: () =>
-                Navigator.pop(context, RoutesName.filmSchedulePage)),
+            onPressed: () => Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
         title: Text(
           'Chọn ghế',
           style: textTheme.bodyText1.copyWith(
             color: AppColor.dark20,
             fontWeight: FontWeight.w500,
-            fontSize: AppSize.getFontSize(context, 32),
+            fontSize: AppSize.getFontSize(context, 20),
           ),
         ),
         centerTitle: true,
+        toolbarHeight: AppSize.getHeight(context, 48),
       ),
       body: ListView(
         children: <Widget>[
@@ -126,26 +126,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     );
   }
 
-  Widget _showError(
-      BuildContext context, FailToReceiveSeatDataSelectSeatState state) {
-    return Column(children: <Widget>[
-      Text(
-        state.errorMessage,
-        style: const TextStyle(color: AppColor.white),
-      ),
-      RaisedButton(
-        color: AppColor.red100,
-        onPressed: () {
-          bloc.add(GetSeatDataSelectSeatEvent(
-              widget.session.id,
-              //204907,
-              _totalPrice(chosenSeatList),
-              chosenSeatList));
-        },
-      ),
-    ]);
-  }
-
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
     final List<Seat> seatList = state.seatList;
     final int maximumColumn = findMaxColumn(state.seatList) + 1;
@@ -153,8 +133,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       children: <Widget>[
         /*    Vẽ rạp     */
         Padding(
-          padding:
-              EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
+          padding: EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
           child: GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -175,9 +154,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           height: AppSize.getHeight(context, 24),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 16),
-              right: AppSize.getWidth(context, 16)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16), right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -203,9 +180,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding: EdgeInsets.only(
-              left: AppSize.getWidth(context, 16),
-              right: AppSize.getWidth(context, 16)),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16), right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -247,18 +222,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             children: <Widget>[
               Text(
                 widget.film.filmName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline5
-                    .copyWith(color: AppColor.white),
+                style: Theme.of(context).textTheme.headline5.copyWith(color: AppColor.white),
               ),
             ],
           ),
         ),
         Container(),
         Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
           child: Row(
             children: <Widget>[
               VersionCodeContainer(
@@ -276,89 +247,96 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      state.chosenList.length.toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                    Text(
-                      ' ghế - ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                    Text(
-                      currencyFormat(state.totalPrice.toInt(), 'VND'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                  ],
+                Text(
+                  state.chosenList.length.toString(),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
                 ),
-                AVButtonFill(
-                    width: AppSize.getWidth(context, 117),
-                    height: AppSize.getHeight(context, 48),
-                    title: 'ĐẶT VÉ',
-                    onPressed: () {
-                      if (state.chosenList.isEmpty) {
-                        showMaterialDialog(
-                          context: context,
-                          title: 'Bạn chưa chọn ghế nào!',
-                          content: 'Vui Lòng chọn ghế để tiếp tục',
-                          action: <Widget>[
-                            FlatButton(
-                              child: Text('Chọn ghế!',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .copyWith(
-                                          color: AppColor.white, fontSize: 17)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        );
-                      } else if (checkChosenList(state.chosenList)) {
-                        Navigator.pushNamed(
-                          context,
-                          RoutesName.checkOutPage,
-                          arguments: <String, dynamic>{
-                            Constant.chosenList: state.chosenList,
-                            Constant.session: widget.session,
-                            Constant.film: widget.film,
+                Text(
+                  ' ghế - ',
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
+                ),
+                Text(
+                  currencyFormat(state.totalPrice.toInt(), 'VND'),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
+                ),
+              ],
+            ),
+            AVButtonFill(
+                width: AppSize.getWidth(context, 117),
+                height: AppSize.getHeight(context, 48),
+                title: 'ĐẶT VÉ',
+                onPressed: () {
+                  if (state.chosenList.isEmpty) {
+                    showMaterialDialog(
+                      context: context,
+                      title: 'Bạn chưa chọn ghế nào!',
+                      content: 'Vui Lòng chọn ghế để tiếp tục',
+                      action: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            'Chọn ghế!',
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .subtitle2
+                                .copyWith(
+                              color: AppColor.blue,
+                              fontSize: AppSize.getFontSize(context, 12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
-                        );
-                      } else {
-                        showMaterialDialog(
-                          context: context,
-                          content: 'Vui Lòng không để ghế trống ở giữa',
-                          action: <Widget>[
-                            FlatButton(
-                              child: Text('Chọn lại!',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .subtitle2
-                                      .copyWith(
-                                          color: AppColor.white, fontSize: 17)),
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                            )
-                          ],
-                        );
-                      }
-                    }),
-              ]),
+                        )
+                      ],
+                    );
+                  } else if (checkChosenList(state.chosenList)) {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesName.checkOutPage,
+                      arguments: <String, dynamic>{
+                        Constant.chosenList: state.chosenList,
+                        Constant.session: widget.session,
+                        Constant.film: widget.film,
+                      },
+                    );
+                  } else {
+                    showMaterialDialog(
+                      context: context,
+                      content: 'Vui Lòng không để ghế trống ở giữa',
+                      action: <Widget>[
+                        FlatButton(
+                          child: Text('Chọn lại!',
+                              style:
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(color: AppColor.white, fontSize: 17)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                }),
+          ]),
         ),
       ],
     );
@@ -408,8 +386,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       return Container();
     }
     if (seat.status == 1) {
-      return _soldSeatContainer(
-          context: context, color: AppColor.dark60, seat: seat);
+      return _soldSeatContainer(context: context, color: AppColor.dark60, seat: seat);
     } else if (seat.type == SeatType.vipSeat) {
       return _seatContainer(
         context: context,
@@ -467,8 +444,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         onTap: () {
           const bool check = true;
           checkValidSeat(chosenList, seat, check);
-          bloc.add(UpdateSeatDataSelectSeatEvent(
-              seatList, _totalPrice(chosenList), chosenList));
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
         },
       ),
       decoration: BoxDecoration(
@@ -502,10 +478,8 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             : null,
         onTap: () {
           const bool check = true;
-          checkCoupleSeatValidSeat(
-              chosenList, seat, check, seatList, coupleSeatList);
-          bloc.add(UpdateSeatDataSelectSeatEvent(
-              seatList, _totalPrice(chosenList), chosenList));
+          checkCoupleSeatValidSeat(chosenList, seat, check, seatList, coupleSeatList);
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
         },
       ),
       decoration: BoxDecoration(
@@ -584,17 +558,19 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Text(
           text,
-          style: Theme.of(context).textTheme.subtitle2.copyWith(
-              color: AppColor.white,
-              fontSize: AppSize.getFontSize(context, 14)),
+          style: Theme
+              .of(context)
+              .textTheme
+              .subtitle2
+              .copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 14)),
         ),
       ],
     );
   }
 
   List<Seat> countCoupleSeat(List<Seat> seatList) {
-    List<Seat> result = <Seat>[];
-    for (Seat seat in seatList) {
+    final List<Seat> result = <Seat>[];
+    for (final Seat seat in seatList) {
       if (seat.type == SeatType.coupleSeat) {
         result.add(seat);
       }
@@ -640,8 +616,8 @@ void checkValidSeat(List<Seat> chosenList, Seat seat, bool check) {
   print(_totalPrice(chosenList));
 }
 
-void checkCoupleSeatValidSeat(List<Seat> chosenList, Seat seat, bool check,
-    List<Seat> seatList, List<Seat> coupleSeatList) {
+void checkCoupleSeatValidSeat(List<Seat> chosenList, Seat seat, bool check, List<Seat> seatList,
+    List<Seat> coupleSeatList) {
   bool check = false;
   if (chosenList.isNotEmpty) {
     for (final Seat s in chosenList) {

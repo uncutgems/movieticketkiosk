@@ -9,7 +9,6 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_bloc.dart';
 import 'package:ncckios/widgets/container/version_code_container.dart';
-import 'package:ncckios/widgets/loading/loading_widget.dart';
 
 class FutureFilmWidget extends StatefulWidget {
   @override
@@ -69,10 +68,7 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      futureFilm.id == null
-                          ? print('not yet')
-                          : bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
-
+                      futureFilm.id == null ? print('not yet') : bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
                     },
                     child: Container(
                         width: AppSize.getWidth(context, 160),
@@ -103,8 +99,7 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                         if (futureFilm.id != null)
                           SizedBox(
                             child: Text(
-                              futureFilm.filmName.substring(
-                                  0, futureFilm.filmName.indexOf('-')),
+                              futureFilm.filmName.substring(0, futureFilm.filmName.indexOf('-')),
                               style: textTheme.bodyText2.copyWith(
                                   color: AppColor.white,
                                   fontWeight: FontWeight.w500,
@@ -122,16 +117,12 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                             height: AppSize.getHeight(context, 22),
                             width: AppSize.getWidth(context, 36),
                             child: ListView.separated(
-                              separatorBuilder:
-                                  (BuildContext context, int index) =>
-                                      Container(
-                                          width: AppSize.getWidth(context, 4)),
-                              itemCount:
-                                  futureFilm.versionCode.split('/').length,
+                              separatorBuilder: (BuildContext context, int index) =>
+                                  Container(width: AppSize.getWidth(context, 4)),
+                              itemCount: futureFilm.versionCode.split('/').length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
-                                final List<String> version =
-                                    futureFilm.versionCode.split('/');
+                                final List<String> version = futureFilm.versionCode.split('/');
                                 final String versionCode = version[index];
                                 return
 //                                  Container(
@@ -170,10 +161,11 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                         ),
                         if (futureFilm.id != null)
                           Text(
-                            '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime.parse(futureFilm.premieredDay).millisecondsSinceEpoch, false)}',
-                            style: textTheme.bodyText2.copyWith(
-                                color: AppColor.borderTrip,
-                                fontSize: AppSize.getFontSize(context, 14)),
+                            '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime
+                                .parse(futureFilm.premieredDay)
+                                .millisecondsSinceEpoch, false)}',
+                            style: textTheme.bodyText2
+                                .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                           )
                         else
                           Container(),
@@ -183,7 +175,8 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                 ],
               );
             },
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
+            separatorBuilder: (BuildContext context, int index) =>
+                SizedBox(
                   width: AppSize.getWidth(context, 16),
                 ),
             itemCount: futureFilmList.length),
@@ -191,10 +184,10 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
     );
   }
 
-  void _navigateToDetail(
-      BuildContext context, NavigateDetailFutureFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic> {
-      Constant.filmId: state.id , Constant.isPlayNow : false,
+  void _navigateToDetail(BuildContext context, NavigateDetailFutureFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
+      Constant.filmId: state.id,
+      Constant.isPlayNow: false,
     });
   }
 

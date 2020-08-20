@@ -46,45 +46,41 @@ class _FindTicketPageState extends State<FindTicketPage> {
   }
 
   Widget _body(BuildContext context, Widget widget) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    final double screenHeight = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
           'Tra cứu đặt vé',
           style: textTheme.bodyText1.copyWith(
-              color: AppColor.dark20,
-              fontWeight: FontWeight.w500,
-              fontSize: screenHeight / 667 * 16),
+              color: AppColor.dark20, fontWeight: FontWeight.w500, fontSize: AppSize.getFontSize(context, 20)),
         ),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back,
-            size: screenHeight / 667 * 16,
+            size: AppSize.getFontSize(context, 20),
           ),
           onPressed: () {
-            Navigator.popUntil(
-                context, ModalRoute.withName(RoutesName.homePage));
+            Navigator.popUntil(context, ModalRoute.withName(RoutesName.homePage));
           },
         ),
+        toolbarHeight: AppSize.getHeight(context, 48),
       ),
       body: ListView(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
-                horizontal: screenHeight / 667 * 24.0,
-                vertical: screenWidth / 360 * 24),
+              horizontal: AppSize.getWidth(context, 24),
+              vertical: AppSize.getHeight(context, 24),
+            ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Text(
                   'Vui lòng nhập mã vé để tra cứu thông tin',
-                  style: textTheme.bodyText2
-                      .copyWith(fontSize: screenHeight / 667 * 14),
+                  style: textTheme.bodyText2.copyWith(fontSize: AppSize.getFontSize(context, 14)),
                 ),
                 Container(
-                  height: screenHeight / 667 * 24,
+                  height: AppSize.getHeight(context, 24),
                 ),
                 Form(
                   key: _formKey,
@@ -105,27 +101,26 @@ class _FindTicketPageState extends State<FindTicketPage> {
                               disabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none),
                         ),
-                        height: screenHeight / 667 * 48,
-                        width: screenWidth / 360 * 312,
+                        height: AppSize.getHeight(context, 40),
+                        width: AppSize.getWidth(context, 312),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                           color: AppColor.white,
                         ),
                       ),
                       Container(
-                        height: screenHeight / 667 * 16,
+                        height: AppSize.getHeight(context, 16),
                       ),
                       Container(
-                        height: screenHeight / 667 * 48,
-                        width: screenWidth / 360 * 312,
+                        height: AppSize.getHeight(context, 48),
+                        width: AppSize.getWidth(context, 312),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: AVButtonFill(
                           title: 'TRA CỨU THÔNG TIN VÉ',
                           onPressed: () {
-                            bloc.add(
-                                CLickFindTicketEvent(_codeController.text));
+                            bloc.add(CLickFindTicketEvent(_codeController.text));
                           },
                         ),
                       ),
@@ -144,15 +139,12 @@ class _FindTicketPageState extends State<FindTicketPage> {
   Widget _ticket(BuildContext context, GetTicketSuccessFindTicketState state) {
     final OrderInfo order = state.orderInfo;
     if (state.orderInfo.filmName == null) {
-      return  Center(
+      return Center(
         child: SizedBox(
           width: AppSize.getWidth(context, 40),
           height: AppSize.getHeight(context, 40),
-
           child: const CircularProgressIndicator(
             strokeWidth: 10,
-
-
             backgroundColor: AppColor.blue,
           ),
         ),
@@ -166,10 +158,8 @@ class _FindTicketPageState extends State<FindTicketPage> {
         name: order.customerName,
         languageCode: order.languageCode,
         cinemaId: order.roomName,
-        projectDate: convertTime('dd/MM/yyy',
-            DateTime.parse(order.projectDate).millisecondsSinceEpoch, false),
-        projectTime: convertTime('hh:mm',
-            DateTime.parse(order.projectTime).millisecondsSinceEpoch, false),
+        projectDate: convertTime('dd/MM/yyy', DateTime.parse(order.projectDate).millisecondsSinceEpoch, false),
+        projectTime: convertTime('hh:mm', DateTime.parse(order.projectTime).millisecondsSinceEpoch, false),
       );
     }
   }
@@ -181,9 +171,7 @@ class _FindTicketPageState extends State<FindTicketPage> {
         children: <Widget>[
           Text(
             state.error,
-            style: textTheme.headline6.copyWith(
-                color: AppColor.white,
-                fontSize: AppSize.getFontSize(context, 18)),
+            style: textTheme.headline6.copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 18)),
           ),
         ],
       ),
