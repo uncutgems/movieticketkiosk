@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:ncckios/base/size.dart';
+
+import 'color.dart';
 
 // chuyển thời gian từ millisecond sang định dạng format
 String convertTime(String format, int time, bool isUTC) {
@@ -297,18 +300,19 @@ String convertAccent(String text) {
   }
   return result;
 }
+
 String convertDateToInput(DateTime date) {
   final String result = DateFormat('MM%2Fdd%2Fyyyy', 'vi').format(date);
   return result;
 }
-String convertTimeToDisplay(String date){
+
+String convertTimeToDisplay(String date) {
   final DateTime dateTime = DateTime.parse(date);
   final String result = DateFormat('hh:mm - dd/MM/yyyy').format(dateTime);
   return result;
 }
 
-
-String convertLanguageCode (String code) {
+String convertLanguageCode(String code) {
   switch (code) {
     case 'PDV':
       return 'Phụ đề Việt';
@@ -318,5 +322,31 @@ String convertLanguageCode (String code) {
       return 'Thuyết minh tiếng Việt';
     default:
       return code;
-  }}
+  }
+}
 
+void showMaterialDialog({
+  @required BuildContext context,
+  String title,
+  @required String content,
+  @required List<Widget> action,
+}) {
+  showDialog<dynamic>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: Text(
+              title ?? 'Chú ý',
+              style: Theme.of(context)
+                  .textTheme
+                  .subtitle2
+                  .copyWith(color: AppColor.black, fontSize: AppSize.getFontSize(context, 14)),
+            ),
+            backgroundColor: AppColor.white,
+            content: Text(content,
+                style: Theme.of(context)
+                    .textTheme
+                    .subtitle2
+                    .copyWith(color: AppColor.black, fontSize: AppSize.getFontSize(context, 12))),
+            actions: action,
+          ));
+}

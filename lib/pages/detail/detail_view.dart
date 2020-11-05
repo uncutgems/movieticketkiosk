@@ -3,16 +3,20 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/detail/detail_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/loading/loading_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class DetailPage extends StatefulWidget {
-  const DetailPage({Key key, @required this.id}) : super(key: key);
+  const DetailPage({Key key, @required this.id, this.isPLayNow}) : super(key: key);
   final int id;
+  final bool isPLayNow;
 
   @override
   _DetailPageState createState() => _DetailPageState();
@@ -36,43 +40,56 @@ class _DetailPageState extends State<DetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<DetailBloc, DetailState>(
-      cubit: bloc,
-      builder: (BuildContext context, DetailState state) {
-        if (state is SuccessGetDataDetailState) {
-          return _body(context, state);
-        } else if (state is FailGetDataDetailState) {
-          return _failToLoad(context, state);
-        } else {
-          return Container();
-        }
-      },
+    final AppBar appBar = AppBar(
+      leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            size: AppSize.getHeight(context, 20),
+          ),
+          onPressed: () => Navigator.pop(context, RoutesName.filmSchedulePage)),
+      elevation: 0.0,
+      title: Text(
+        'Thông tin phim',
+        style: textTheme.bodyText1.copyWith(
+          color: AppColor.dark20,
+          fontWeight: FontWeight.w500,
+          fontSize: AppSize.getFontSize(context, 16),
+        ),
+      ),
+      centerTitle: true,
+      toolbarHeight: AppSize.getFontSize(context, 48),
+    );
+    return Scaffold(
+      appBar: appBar,
+      body: BlocBuilder<DetailBloc, DetailState>(
+        cubit: bloc,
+        builder: (BuildContext context, DetailState state) {
+          if (state is LoadingDataDetailState) {
+            return LoadingWidget();
+          } else if (state is SuccessGetDataDetailState) {
+            return _body(context, state);
+          } else if (state is FailGetDataDetailState) {
+            return _failToLoad(context, state);
+          } else {
+            return Container();
+          }
+        },
+      ),
     );
   }
 
   Widget _body(BuildContext context, SuccessGetDataDetailState state) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
     final Film film = state.film;
-    const EdgeInsets _padding = EdgeInsets.only(right: 16, top: 8, bottom: 8);
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Thông tin phim',
-          style: textTheme.bodyText1.copyWith(color: AppColor.dark20, fontWeight: FontWeight.w500),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
-      body: Column(
+    final EdgeInsets _padding = EdgeInsets.only(
+        right: AppSize.getWidth(context, 16),
+        top: AppSize.getHeight(context, 8),
+        bottom: AppSize.getHeight(context, 8));
+    return SafeArea(
+      child: Column(
         children: <Widget>[
           Container(
-            height: screenHeight / 667 * 327,
-            width: screenWidth,
+            height: AppSize.getHeight(context, 327),
+            width: AppSize.getWidth(context, 360),
             color: AppColor.white,
             child: Stack(
               children: <Widget>[
@@ -82,8 +99,8 @@ class _DetailPageState extends State<DetailPage> {
                         image: DecorationImage(
                       image: NetworkImage(film.bannerUrl),
                     )),
-                    width: screenWidth,
-                    height: screenHeight / 667 * 240,
+                    width: AppSize.getWidth(context, 360),
+                    height: AppSize.getHeight(context, 240),
                     child: Center(
                       child: FloatingActionButton(
                         child: const Icon(Icons.play_arrow),
@@ -106,13 +123,12 @@ class _DetailPageState extends State<DetailPage> {
                     decoration: const BoxDecoration(
                         color: AppColor.primaryColor,
                         borderRadius: BorderRadius.vertical(top: Radius.circular(24), bottom: Radius.circular(0))),
-                    height: screenHeight / 667 * 125,
-                    width: screenWidth,
+                    width: AppSize.getWidth(context, 360),
                     child: film.id != null
                         ? _filmInfo(context, film)
                         : const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                            child: CircularProgressIndicator(),
+                          ),
                   ),
                 )
               ],
@@ -127,8 +143,8 @@ class _DetailPageState extends State<DetailPage> {
                 children: <Widget>[
                   Padding(
                     padding: EdgeInsets.symmetric(
-                      horizontal: screenWidth / 340 * 16,
-                      vertical: screenHeight / 667 * 8,
+                      horizontal: AppSize.getWidth(context, 16),
+                      vertical: AppSize.getHeight(context, 8),
                     ),
                     child: Table(
                       columnWidths: const <int, TableColumnWidth>{0: FractionColumnWidth(0.4)},
@@ -140,14 +156,16 @@ class _DetailPageState extends State<DetailPage> {
                               child: Text(
                                 'Kiểm duỵệt',
                                 textAlign: TextAlign.end,
-                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                                style: textTheme.subtitle2
+                                    .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                             Padding(
                               padding: _padding,
                               child: Text(
                                 film.description,
-                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                                style: textTheme.bodyText2
+                                    .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                           ],
@@ -159,7 +177,8 @@ class _DetailPageState extends State<DetailPage> {
                               child: Text(
                                 'Khởi chiếu',
                                 textAlign: TextAlign.end,
-                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                                style: textTheme.subtitle2
+                                    .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                             Padding(
@@ -169,7 +188,8 @@ class _DetailPageState extends State<DetailPage> {
                                     'dd/MM/yyyy', DateTime
                                     .parse(film.premieredDay)
                                     .millisecondsSinceEpoch, false),
-                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                                style: textTheme.bodyText2
+                                    .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                           ],
@@ -180,14 +200,16 @@ class _DetailPageState extends State<DetailPage> {
                             child: Text(
                               'Thể loại',
                               textAlign: TextAlign.end,
-                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              style: textTheme.subtitle2
+                                  .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                           Padding(
                             padding: _padding,
                             child: Text(
                               film.category,
-                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              style: textTheme.bodyText2
+                                  .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                         ]),
@@ -197,14 +219,16 @@ class _DetailPageState extends State<DetailPage> {
                             child: Text(
                               'Đạo diễn',
                               textAlign: TextAlign.end,
-                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              style: textTheme.subtitle2
+                                  .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                           Padding(
                             padding: _padding,
                             child: Text(
                               film.director,
-                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              style: textTheme.bodyText2
+                                  .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                         ]),
@@ -215,14 +239,16 @@ class _DetailPageState extends State<DetailPage> {
                               child: Text(
                                 'Diễn viên',
                                 textAlign: TextAlign.end,
-                                style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                                style: textTheme.subtitle2
+                                    .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                             Padding(
                               padding: _padding,
                               child: Text(
                                 film.actors,
-                                style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                                style: textTheme.bodyText2
+                                    .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                               ),
                             ),
                           ],
@@ -233,14 +259,16 @@ class _DetailPageState extends State<DetailPage> {
                             child: Text(
                               'Thời lượng',
                               textAlign: TextAlign.end,
-                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              style: textTheme.subtitle2
+                                  .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                           Padding(
                             padding: _padding,
                             child: Text(
                               film.duration.toString() + ' phút',
-                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              style: textTheme.bodyText2
+                                  .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                         ]),
@@ -250,14 +278,16 @@ class _DetailPageState extends State<DetailPage> {
                             child: Text(
                               'Ngôn ngữ',
                               textAlign: TextAlign.end,
-                              style: textTheme.subtitle2.copyWith(color: AppColor.borderTrip),
+                              style: textTheme.subtitle2
+                                  .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                           Padding(
                             padding: _padding,
                             child: Text(
                               convertLanguageCode(film.languageCode),
-                              style: textTheme.bodyText2.copyWith(color: AppColor.border),
+                              style: textTheme.bodyText2
+                                  .copyWith(color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                             ),
                           ),
                         ]),
@@ -266,12 +296,12 @@ class _DetailPageState extends State<DetailPage> {
                   ),
                   Image.asset('assets/divider.png'),
                   Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth / 360 * 16, vertical: screenHeight / 667 * 8),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 8)),
                     child: Text(
                       film.introduction,
                       style: textTheme.bodyText2.copyWith(
-                        color: AppColor.border,
-                      ),
+                          height: 20 / 14, color: AppColor.border, fontSize: AppSize.getFontSize(context, 14)),
                     ),
                   )
                 ],
@@ -293,82 +323,90 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _filmInfo(BuildContext context, Film film) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
     final List<String> version = film.versionCode.split('/');
+    final bool check = widget.isPLayNow;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding:
+      EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 16)),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[
           Container(
-            width: screenWidth / 11 * 5,
+            width: AppSize.getWidth(context, 163),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 Text(
-                  film.filmName.substring(0, film.filmName.indexOf('-')),
-                  style: textTheme.bodyText1.copyWith(
-                    color: AppColor.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  film.filmName,
+                  style: textTheme.bodyText2.copyWith(
+                      color: AppColor.white, fontWeight: FontWeight.w500, fontSize: AppSize.getFontSize(context, 16)),
                   maxLines: 2,
                 ),
                 Container(
-                  height: screenHeight / 667 * 8,
+                  height: AppSize.getHeight(context, 8),
                 ),
                 Container(
-                  height: screenHeight / 667 * 22,
-                  width: screenWidth / 10 * 1,
+                  height: AppSize.getHeight(context, 22),
                   child: ListView.separated(
                     physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(
-                      width: 4,
-                    ),
+                        Container(width: AppSize.getWidth(context, 4)),
                     itemCount: version.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (BuildContext context, int index) {
                       final String versionCode = version[index];
-
-                      return Container(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 4),
-                          child: Text(
-                            versionCode,
-                            style: textTheme.bodyText2.copyWith(color: AppColor.red),
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColor.backGround,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(width: 1, color: AppColor.red, style: BorderStyle.solid),
-                        ),
+                      return
+//                        Container(
+//                        padding: EdgeInsets.symmetric(
+//                            vertical: AppSize.getHeight(context, 3),
+//                            horizontal: AppSize.getWidth(context, 4)),
+//                        child: Center(
+//                          child: Text(
+//                            versionCode,
+//                            style: textTheme.bodyText2.copyWith(
+//                                color: AppColor.red,
+//                                fontSize: AppSize.getFontSize(context, 14)),
+//                          ),
+//                        ),
+//                        decoration: BoxDecoration(
+//                          color: AppColor.backGround,
+//                          borderRadius: BorderRadius.circular(4),
+//                          border: Border.all(
+//                              width: AppSize.getWidth(context, 1),
+//                              color: AppColor.red,
+//                              style: BorderStyle.solid),
+//                        ),
+//                      );
+                          VersionCodeContainer(
+                        context: context,
+                        versionCode: versionCode,
                       );
                     },
                   ),
                 ),
                 Container(
-                  height: screenHeight / 667 * 8,
+                  height: AppSize.getHeight(context, 8),
                 ),
                 Text(
-                  '${film.duration.toString()} p  - ${convertTime('dd/MM/yyyy', DateTime
+                  '${film.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime
                       .parse(film.premieredDay)
                       .millisecondsSinceEpoch, false)}',
-                  style: textTheme.bodyText2.copyWith(color: AppColor.borderTrip),
+                  style: textTheme.bodyText2
+                      .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
                 ),
               ],
             ),
           ),
           AVButtonFill(
               title: 'ĐẶT VÉ',
-              onPressed: () {
+              onPressed: check
+                  ? () {
                 _navigateToFilmSchedule(context, film);
-              })
+              }
+                  : null)
         ],
       ),
     );
@@ -379,38 +417,39 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   Widget _failToLoad(BuildContext context, FailGetDataDetailState state) {
-    final double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
-    return Container(
-      height: screenHeight / 667 * 330,
-      width: screenWidth,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              state.error,
-              style: textTheme.headline6,
-            ),
-            Container(
-              height: 8,
-            ),
-            IconButton(
-              icon: const Icon(
-                Icons.refresh,
-                size: 36,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Thông tin phim'),
+      ),
+      body: Container(
+        height: AppSize.getHeight(context, 330),
+        width: MediaQuery
+            .of(context)
+            .size
+            .width,
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                state.error,
+                style: textTheme.headline6,
               ),
-              onPressed: () {
-                bloc.add(GetDataDetailEvent(widget.id));
-              },
-            )
-          ],
+              Container(
+                height: 8,
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.refresh,
+                  size: 36,
+                ),
+                onPressed: () {
+                  bloc.add(GetDataDetailEvent(widget.id));
+                },
+              )
+            ],
+          ),
         ),
       ),
     );

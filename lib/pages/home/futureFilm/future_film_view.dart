@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
+import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
 import 'package:ncckios/base/style.dart';
+import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_bloc.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
 
 class FutureFilmWidget extends StatefulWidget {
   @override
@@ -19,25 +23,26 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
     bloc.add(GetDataFutureFilmEvent());
     super.initState();
   }
-@override
+
+  @override
   void dispose() {
     bloc.close();
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FutureFilmBloc, FutureFilmState>(
-      cubit: bloc,
-      builder: (BuildContext context, FutureFilmState state) {
-        if (state is SuccessGetDataFutureFilmState) {
-          return _body(context, state);
-        } else if (state is FailGetDataFutureFilmState) {
-          return _failToLoad(context, state);
-        }
-        else {
-          return Container();
-        }
-      },
+        cubit: bloc,
+        builder: (BuildContext context, FutureFilmState state) {
+          if (state is SuccessGetDataFutureFilmState) {
+            return _body(context, state);
+          } else if (state is FailGetDataFutureFilmState) {
+            return _failToLoad(context, state);
+          } else {
+            return Container();
+          }
+        },
         buildWhen: (FutureFilmState prev, FutureFilmState current) {
           if (current is NavigateDetailFutureFilmState) {
             _navigateToDetail(context, current);
@@ -49,14 +54,12 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
   }
 
   Widget _body(BuildContext context, SuccessGetDataFutureFilmState state) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
     final List<Film> futureFilmList = state.listFilm;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: screenWidth / 360 * 16),
+      padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16)),
       child: Container(
-        height: screenHeight / 667 * 350,
-        child:  ListView.separated(
+        height: AppSize.getHeight(context, 350),
+        child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
               final Film futureFilm = futureFilmList[index];
@@ -65,11 +68,11 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
+                      futureFilm.id == null ? print('not yet') : bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
                     },
                     child: Container(
-                        width: screenWidth / 9 * 4,
-                        height: screenHeight / 667 * 240,
+                        width: AppSize.getWidth(context, 160),
+                        height: AppSize.getHeight(context, 240),
                         decoration: filmBoxDecoration.copyWith(
                             color: AppColor.primaryDarkColor,
                             image: futureFilm.imageUrl != null
@@ -85,106 +88,129 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                             : null),
                   ),
                   Container(
-                    height: screenHeight / 667 * 8,
+                    height: AppSize.getHeight(context, 8),
                   ),
                   Container(
-                    width: screenWidth / 11 * 5,
+                    width: AppSize.getWidth(context, 163),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-
-                        if (futureFilm.id != null) SizedBox(
-                          height: screenHeight / 667 * 32,
-                          child: Text(
-                            futureFilm.filmName
-                                .substring(0, futureFilm.filmName.indexOf('-')),
-                            style: textTheme.bodyText2.copyWith(
-                                color: AppColor.white,
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ) else Container(),
+                        if (futureFilm.id != null)
+                          SizedBox(
+                            child: Text(
+                              futureFilm.filmName.substring(0, futureFilm.filmName.indexOf('-')),
+                              style: textTheme.bodyText2.copyWith(
+                                  color: AppColor.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: AppSize.getFontSize(context, 16)),
+                              maxLines: 2,
+                            ),
+                          )
+                        else
+                          Container(),
                         Container(
-                          height: screenHeight / 667 * 8,
+                          height: AppSize.getHeight(context, 8),
                         ),
-                        if (futureFilm.id != null) Container(
-                          height: screenHeight / 667 * 20,
-                          width: screenWidth / 10 * 1,
-                          child: ListView.separated(
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                Container(width: 4),
-                            itemCount: futureFilm.versionCode.split('/').length,
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (BuildContext context, int index) {
-                              final List<String> version = futureFilm.versionCode.split('/');
-                              final String versionCode = version[index];
-                              return Container(
-                                child: Text(
-                                  versionCode,
-                                  style: textTheme.bodyText2
-                                      .copyWith(color: AppColor.red),
-                                ),
-                                height: screenHeight / 667 * 16,
-                                decoration: BoxDecoration(
-                                  color: AppColor.backGround,
-                                  borderRadius: BorderRadius.circular(4),
-                                  border: Border.all(
-                                      width: 1,
-                                      color: AppColor.red,
-                                      style: BorderStyle.solid),
-                                ),
-                              );
-                            },
-                          ),
-                        ) else Container(),
+                        if (futureFilm.id != null)
+                          Container(
+                            height: AppSize.getHeight(context, 22),
+                            width: AppSize.getWidth(context, 36),
+                            child: ListView.separated(
+                              separatorBuilder: (BuildContext context, int index) =>
+                                  Container(width: AppSize.getWidth(context, 4)),
+                              itemCount: futureFilm.versionCode.split('/').length,
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (BuildContext context, int index) {
+                                final List<String> version = futureFilm.versionCode.split('/');
+                                final String versionCode = version[index];
+                                return
+//                                  Container(
+//                                  padding: EdgeInsets.symmetric(
+//                                      vertical: AppSize.getHeight(context, 3),
+//                                      horizontal: AppSize.getWidth(context, 4)),
+//                                  child: Center(
+//                                    child: Text(
+//                                      versionCode,
+//                                      style: textTheme.bodyText2.copyWith(
+//                                          color: AppColor.red,
+//                                          fontSize:
+//                                              AppSize.getFontSize(context, 14)),
+//                                    ),
+//                                  ),
+//                                  decoration: BoxDecoration(
+//                                    color: AppColor.backGround,
+//                                    borderRadius: BorderRadius.circular(4),
+//                                    border: Border.all(
+//                                        width: AppSize.getWidth(context, 1),
+//                                        color: AppColor.red,
+//                                        style: BorderStyle.solid),
+//                                  ),
+//                                );
+                                    VersionCodeContainer(
+                                  context: context,
+                                  versionCode: versionCode,
+                                );
+                              },
+                            ),
+                          )
+                        else
+                          Container(),
                         Container(
-                          height: screenHeight / 667 * 8,
+                          height: AppSize.getHeight(context, 8),
                         ),
-                        if (futureFilm.id != null) Text(
-                          futureFilm.duration.toString() +
-                              'p'
-                                  '-' +
-                              futureFilm.premieredDay.substring(
-                                  0, futureFilm.premieredDay.indexOf('T')),
-                          style: textTheme.bodyText2
-                              .copyWith(color: AppColor.borderTrip),
-                        ) else Container(),
-
+                        if (futureFilm.id != null)
+                          Text(
+                            '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime
+                                .parse(futureFilm.premieredDay)
+                                .millisecondsSinceEpoch, false)}',
+                            style: textTheme.bodyText2
+                                .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
+                          )
+                        else
+                          Container(),
                       ],
                     ),
                   ),
                 ],
               );
             },
-            separatorBuilder: (BuildContext context, int index) => SizedBox(
-                  width: screenWidth / 90 * 4,
+            separatorBuilder: (BuildContext context, int index) =>
+                SizedBox(
+                  width: AppSize.getWidth(context, 16),
                 ),
             itemCount: futureFilmList.length),
       ),
     );
   }
-  void _navigateToDetail(
-      BuildContext context, NavigateDetailFutureFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: state.id);
+
+  void _navigateToDetail(BuildContext context, NavigateDetailFutureFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
+      Constant.filmId: state.id,
+      Constant.isPlayNow: false,
+    });
   }
 
-  Widget _failToLoad (BuildContext context, FailGetDataFutureFilmState state) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+  Widget _failToLoad(BuildContext context, FailGetDataFutureFilmState state) {
     return Container(
-      height: screenHeight/ 667*310,
-      width: screenWidth,
+      height: AppSize.getHeight(context, 310),
+      width: AppSize.getWidth(context, 360),
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text(state.error, style: textTheme.headline6,),
+            Text(
+              state.error,
+              style: textTheme.headline6,
+            ),
             Container(
-              height: 8,
+              height: AppSize.getHeight(context, 8),
             ),
             IconButton(
-              icon: const Icon(Icons.refresh, size: 36,),
+              icon: Icon(
+                Icons.refresh,
+                size: AppSize.getHeight(context, 36),
+              ),
               onPressed: () {
                 bloc.add(GetDataFutureFilmEvent());
               },
@@ -194,6 +220,4 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
       ),
     );
   }
-
-
 }

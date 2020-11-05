@@ -11,6 +11,7 @@ class SeatRepository {
   Future<List<Seat>> getSeat(int planId) async {
     final List<Seat> seatList = <Seat>[];
 
+
     final String _url = '${URL.getSeatURL}?${Constant.PlanId}=$planId';
     final AVResponse response = await callGET(_url);
 
@@ -55,6 +56,8 @@ class SeatRepository {
                 code: (check ? maximumColumn - i + 1 : i).toString()));
         //columnIndex--;
       }
+
+
 
       print(maximumColumn.toString());
 

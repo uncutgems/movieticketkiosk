@@ -31,7 +31,8 @@ class FilmRepository {
     if (result.isOK) {
       print(result.response);
       result.response[Constant.nextDay].forEach((final dynamic itemJson) {
-         final NextDay nextDay =
+        print('check check check $itemJson');
+        final NextDay nextDay =
             NextDay.fromJson(itemJson as Map<String, dynamic>);
 
         nextDayList.add(nextDay);

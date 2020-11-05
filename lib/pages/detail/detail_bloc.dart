@@ -20,6 +20,7 @@ class DetailBloc extends Bloc<DetailEvent, DetailState> {
   ) async* {
     if (event is GetDataDetailEvent) {
       try {
+        yield LoadingDataDetailState();
         final Film film = await _filmRepository.getDetailFilm(event.id);
         yield SuccessGetDataDetailState(film);
       } on APIException catch(e) {

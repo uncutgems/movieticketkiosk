@@ -65,11 +65,10 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.selectSeatPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) =>
-            SelectSeatPage(
-              film: data[Constant.film] as Film,
-              session: data[Constant.session] as Session,
-            ),
+        builder: (BuildContext context) => SelectSeatPage(
+          film: data[Constant.film] as Film,
+          session: data[Constant.session] as Session,
+        ),
         settings: const RouteSettings(name: RoutesName.selectSeatPage),
       );
 
@@ -80,27 +79,25 @@ MaterialPageRoute<dynamic> routeSettings(RouteSettings settings) {
       );
     case RoutesName.detailPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) =>
-            DetailPage(
-              id: data[Constant.filmId] as int,
-            ),
+        builder: (BuildContext context) => DetailPage(
+          id: data[Constant.filmId] as int,
+          isPLayNow: data[Constant.isPlayNow] as bool,
+        ),
         settings: const RouteSettings(name: RoutesName.detailPage),
       );
     case RoutesName.findTicketPage:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => FindTicketPage(),
-        settings: const RouteSettings(name: RoutesName.findTicketPage),
-      );
+          builder: (BuildContext context) => FindTicketPage(),
+          settings: const RouteSettings(name: RoutesName.findTicketPage));
     case RoutesName.successfulCheckout:
       return MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) =>
-            SuccessfulCheckoutPage(
-              session: data[Constant.session] as Session,
-              film: data[Constant.film] as Film,
-              seats: data[Constant.chosenList] as List<Seat>,
-              customerFirstName: data[Constant.customerFirstName] as String,
-              customerLastName: data[Constant.customerLastName] as String,
-            ),
+        builder: (BuildContext context) => SuccessfulCheckoutPage(
+          session: data[Constant.session] as Session,
+          film: data[Constant.film] as Film,
+          seats: data[Constant.chosenList] as List<Seat>,
+          customerFirstName: data[Constant.customerFirstName] as String,
+          customerLastName: data[Constant.customerLastName] as String,
+        ),
         settings: const RouteSettings(name: RoutesName.successfulCheckout),
       );
 

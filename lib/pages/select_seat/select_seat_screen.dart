@@ -7,10 +7,14 @@ import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/constant.dart';
 import 'package:ncckios/base/route.dart';
 import 'package:ncckios/base/size.dart';
+import 'package:ncckios/base/style.dart';
 import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/enum.dart';
 import 'package:ncckios/pages/select_seat/select_seat_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/container/language_code_widget.dart';
+import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/faling_widget/failing_widget.dart';
 
 import '../../model/entity.dart';
 
@@ -32,6 +36,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
   SelectSeatBloc bloc = SelectSeatBloc();
   List<Seat> chosenSeatList = <Seat>[];
   List<Seat> checkChosenSeatList = <Seat>[];
+  List<Seat> coupleSeatList = <Seat>[];
 
 //  final int sessionId2 = 246813; //246773 //204907 //246844 //246840 //246813
 
@@ -61,16 +66,25 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () =>
-                Navigator.pop(context, RoutesName.filmSchedulePage)),
+            icon: Icon(
+              Icons.arrow_back,
+              size: AppSize.getHeight(context, 20),
+            ),
+            onPressed: () => Navigator.pop(context, RoutesName.filmSchedulePage)),
         elevation: 0.0,
-        title: const Text('Chọn ghế'),
+        title: Text(
+          'Chọn ghế',
+          style: textTheme.bodyText1.copyWith(
+            color: AppColor.dark20,
+            fontWeight: FontWeight.w500,
+            fontSize: AppSize.getFontSize(context, 20),
+          ),
+        ),
         centerTitle: true,
+        toolbarHeight: AppSize.getHeight(context, 48),
       ),
       body: ListView(
         children: <Widget>[
@@ -78,7 +92,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             child: Container(
               width: AppSize.getWidth(context, 264),
               child: Image.asset(
-                'assets/screen.png',
+                'assets/screen2.png',
                 fit: BoxFit.fitWidth,
               ),
             ),
@@ -90,9 +104,19 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
               if (state is LoadSeatDataSelectSeatState) {
                 return _loading(context);
               } else if (state is ReceiveSeatDataSelectSeatState) {
+                coupleSeatList = countCoupleSeat(state.seatList);
                 return _showSeat(context, state);
               } else if (state is FailToReceiveSeatDataSelectSeatState) {
-                _showError(context, state);
+                return FailingWidget(
+                  errorMessage: state.errorMessage,
+                  onPressed: () {
+                    bloc.add(GetSeatDataSelectSeatEvent(
+                        widget.session.id,
+                        //204907,
+                        _totalPrice(chosenSeatList),
+                        chosenSeatList));
+                  },
+                );
               }
               return Container();
             },
@@ -102,36 +126,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     );
   }
 
-  Widget _showError(
-      BuildContext context, FailToReceiveSeatDataSelectSeatState state) {
-    return Column(children: <Widget>[
-      Text(
-        state.errorMessage,
-        style: const TextStyle(color: AppColor.white),
-      ),
-      RaisedButton(
-        color: AppColor.red100,
-        onPressed: () {
-          bloc.add(GetSeatDataSelectSeatEvent(
-              widget.session.id,
-              //204907,
-              _totalPrice(chosenSeatList),
-              chosenSeatList));
-        },
-      ),
-    ]);
-  }
-
   Widget _showSeat(BuildContext context, ReceiveSeatDataSelectSeatState state) {
     final List<Seat> seatList = state.seatList;
     final int maximumColumn = findMaxColumn(state.seatList) + 1;
-    final double screenWidth = MediaQuery.of(context).size.width;
-
     return Column(
       children: <Widget>[
         /*    Vẽ rạp     */
         Padding(
-          padding: const EdgeInsets.only(right: 15, bottom: 4),
+          padding: EdgeInsets.only(right: AppSize.getWidth(context, 15), bottom: 4),
           child: GridView.count(
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -143,15 +145,16 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
                 chosenList: chosenSeatList,
                 maximum: maximumColumn,
                 seatList: state.seatList,
+                coupleSeatList: coupleSeatList,
               );
             }).toList(),
           ),
         ),
         Container(
-          height: 24,
+          height: AppSize.getHeight(context, 24),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16), right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -174,10 +177,10 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           ),
         ),
         Container(
-          height: 8,
+          height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 16, left: 16, bottom: 32),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16), right: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
               Expanded(
@@ -204,119 +207,136 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
             ],
           ),
         ),
+        Container(
+          height: AppSize.getHeight(context, 32),
+        ),
         const Image(
-          image: AssetImage('assets/line1.png'),
+          image: AssetImage('assets/line2.png'),
         ),
         Container(
-          height: 8,
+          height: AppSize.getHeight(context, 8),
         ),
         Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Row(children: <Widget>[
-            Text(
-              widget.film.filmName,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline5
-                  .copyWith(color: AppColor.white),
-            ),
-            Container(),
-          ]),
-        ),
-        Padding(
-          padding:
-              const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          padding: EdgeInsets.only(left: AppSize.getWidth(context, 16)),
           child: Row(
             children: <Widget>[
-              Container(
-                width: AppSize.getWidth(context, 26),
-                height: AppSize.getHeight(context, 22),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Center(
-                  child: Text(
-                    widget.session.versionCode,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontSize: 18, color: AppColor.red),
-                  ),
-                ),
+              Text(
+                widget.film.filmName,
+                style: Theme.of(context).textTheme.headline5.copyWith(color: AppColor.white),
+              ),
+            ],
+          ),
+        ),
+        Container(),
+        Padding(
+          padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
+          child: Row(
+            children: <Widget>[
+              VersionCodeContainer(
+                context: context,
+                versionCode: widget.session.versionCode,
               ),
               Container(
                 width: AppSize.getWidth(context, 4),
               ),
-              Container(
-                width: AppSize.getWidth(context, 26),
-                height: AppSize.getHeight(context, 22),
-                decoration:
-                    BoxDecoration(border: Border.all(color: AppColor.red)),
-                child: Center(
-                  child: Text(
-                    widget.session.languageCode,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText2
-                        .copyWith(fontSize: 18, color: AppColor.red),
-                  ),
-                ),
+              LanguageCodeContainer(
+                languageCode: widget.session.languageCode,
               ),
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 16, bottom: 16, right: 16),
-          child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: <Widget>[
+            Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      state.chosenList.length.toString(),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                    Text(
-                      ' ghế - ',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                    Text(
-                      currencyFormat(state.totalPrice.toInt(), 'VND'),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6
-                          .copyWith(color: AppColor.white),
-                    ),
-                  ],
+                Text(
+                  state.chosenList.length.toString(),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
                 ),
-                AVButtonFill(
-                    width: AppSize.getWidth(context, 117),
-                    height: AppSize.getHeight(context, 48),
-                    title: 'ĐẶT VÉ',
-                    fontsize: 20,
-                    onPressed: () {
-                      if (state.chosenList.isEmpty) {
-                        _showMaterialDialog1();
-                      } else if (checkChosenList(state.chosenList)) {
-                        Navigator.pushNamed(
-                          context,
-                          RoutesName.checkOutPage,
-                          arguments: <String, dynamic>{
-                            Constant.chosenList: state.chosenList,
-                            Constant.session: widget.session,
-                            Constant.film: widget.film,
+                Text(
+                  ' ghế - ',
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
+                ),
+                Text(
+                  currencyFormat(state.totalPrice.toInt(), 'VND'),
+                  style: Theme
+                      .of(context)
+                      .textTheme
+                      .headline6
+                      .copyWith(color: AppColor.white),
+                ),
+              ],
+            ),
+            AVButtonFill(
+                width: AppSize.getWidth(context, 117),
+                height: AppSize.getHeight(context, 48),
+                title: 'ĐẶT VÉ',
+                onPressed: () {
+                  if (state.chosenList.isEmpty) {
+                    showMaterialDialog(
+                      context: context,
+                      title: 'Bạn chưa chọn ghế nào!',
+                      content: 'Vui Lòng chọn ghế để tiếp tục',
+                      action: <Widget>[
+                        FlatButton(
+                          child: Text(
+                            'Chọn ghế!',
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .subtitle2
+                                .copyWith(
+                              color: AppColor.blue,
+                              fontSize: AppSize.getFontSize(context, 12),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.of(context).pop();
                           },
-                        );
-                      } else {
-                        _showMaterialDialog();
-                      }
-                    }),
-              ]),
+                        )
+                      ],
+                    );
+                  } else if (checkChosenList(state.chosenList)) {
+                    Navigator.pushNamed(
+                      context,
+                      RoutesName.checkOutPage,
+                      arguments: <String, dynamic>{
+                        Constant.chosenList: state.chosenList,
+                        Constant.session: widget.session,
+                        Constant.film: widget.film,
+                      },
+                    );
+                  } else {
+                    showMaterialDialog(
+                      context: context,
+                      content: 'Vui Lòng không để ghế trống ở giữa',
+                      action: <Widget>[
+                        FlatButton(
+                          child: Text('Chọn lại!',
+                              style:
+                              Theme
+                                  .of(context)
+                                  .textTheme
+                                  .subtitle2
+                                  .copyWith(color: AppColor.white, fontSize: 17)),
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                        )
+                      ],
+                    );
+                  }
+                }),
+          ]),
         ),
       ],
     );
@@ -328,6 +348,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required List<Seat> chosenList,
     @required List<Seat> seatList,
     @required int maximum,
+    @required List<Seat> coupleSeatList,
   }) {
     for (final Seat s in chosenList) {
       if (seat.code == s.code && seat.type == SeatType.vipSeat) {
@@ -340,13 +361,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
           checker: true,
         );
       } else if (seat.code == s.code && seat.type == SeatType.coupleSeat) {
-        return _seatContainer(
+        return coupleSeatContainer(
           context: context,
           seat: seat,
           chosenList: chosenList,
           seatList: seatList,
           color: AppColor.red,
           checker: true,
+          coupleSeatList: coupleSeatList,
         );
       } else if (seat.code == s.code && seat.type == SeatType.normalSeat) {
         return _seatContainer(
@@ -364,8 +386,7 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
       return Container();
     }
     if (seat.status == 1) {
-      return _soldSeatContainer(
-          context: context, color: AppColor.dark60, seat: seat);
+      return _soldSeatContainer(context: context, color: AppColor.dark60, seat: seat);
     } else if (seat.type == SeatType.vipSeat) {
       return _seatContainer(
         context: context,
@@ -375,12 +396,14 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         seatList: seatList,
       );
     } else if (seat.type == SeatType.coupleSeat) {
-      return _seatContainer(
-          context: context,
-          color: AppColor.red100,
-          seat: seat,
-          chosenList: chosenList,
-          seatList: seatList);
+      return coupleSeatContainer(
+        context: context,
+        color: AppColor.red100,
+        seat: seat,
+        chosenList: chosenList,
+        seatList: seatList,
+        coupleSeatList: coupleSeatList,
+      );
     } else if (seat.type == SeatType.numberTheSeat && seat.column == 0) {
       return Container();
     } else if (seat.type == SeatType.numberTheSeat) {
@@ -406,20 +429,22 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required List<Seat> seatList,
     bool checker,
   }) {
-    return Container(
+    return AnimatedContainer(
       child: GestureDetector(
         child: checker ?? false
             ? const Icon(
                 Icons.check,
-                color: AppColor.green,
+                color: AppColor.black,
               )
             : null,
-        //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
+//        child: Text(
+//          '${seat.rows} - ${seat.column}',
+//          style: const TextStyle(color: AppColor.blue),
+//        ),
         onTap: () {
           const bool check = true;
           checkValidSeat(chosenList, seat, check);
-          bloc.add(UpdateSeatDataSelectSeatEvent(
-              seatList, _totalPrice(chosenList), chosenList));
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
         },
       ),
       decoration: BoxDecoration(
@@ -427,6 +452,42 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         borderRadius: BorderRadius.circular(4),
         color: color,
       ),
+      duration: const Duration(milliseconds: 100),
+    );
+  }
+
+  Widget coupleSeatContainer({
+    @required BuildContext context,
+    @required Color color,
+    @required Seat seat,
+    @required List<Seat> chosenList,
+    @required List<Seat> seatList,
+    @required List<Seat> coupleSeatList,
+    bool checker,
+  }) {
+    print('Hello======' + coupleSeatList.length.toString());
+    print('HIIIIIII  ${coupleSeatList.first.column} ');
+    print('HIIIIIII  ${coupleSeatList.last.column} ');
+    return AnimatedContainer(
+      child: GestureDetector(
+        child: checker ?? false
+            ? const Icon(
+                Icons.check,
+                color: AppColor.black,
+              )
+            : null,
+        onTap: () {
+          const bool check = true;
+          checkCoupleSeatValidSeat(chosenList, seat, check, seatList, coupleSeatList);
+          bloc.add(UpdateSeatDataSelectSeatEvent(seatList, _totalPrice(chosenList), chosenList));
+        },
+      ),
+      decoration: BoxDecoration(
+        border: Border.all(),
+        borderRadius: BorderRadius.circular(4),
+        color: color,
+      ),
+      duration: const Duration(milliseconds: 100),
     );
   }
 
@@ -436,7 +497,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required Seat seat,
   }) {
     return Container(
-      //child: Text(seat.code + '-${seat.rows} + ${seat.column}',style: const TextStyle(color: AppColor.blue),),
       decoration: BoxDecoration(
         border: Border.all(),
         borderRadius: BorderRadius.circular(4),
@@ -477,7 +537,6 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
     @required String text,
     bool check,
   }) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     return Row(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
@@ -499,47 +558,24 @@ class _SelectSeatPageState extends State<SelectSeatPage> {
         ),
         Text(
           text,
-          style: Theme.of(context)
+          style: Theme
+              .of(context)
               .textTheme
               .subtitle2
-              .copyWith(color: AppColor.white),
+              .copyWith(color: AppColor.white, fontSize: AppSize.getFontSize(context, 14)),
         ),
       ],
     );
   }
 
-  void _showMaterialDialog() {
-    showDialog<dynamic>(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: const Text('Chú ý'),
-              content: const Text('Vui Lòng không để ghế trống ở giữa'),
-              actions: <Widget>[
-                FlatButton(
-                  child: const Text('Chọn lại!'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
-  }
-
-  void _showMaterialDialog1() {
-    showDialog<dynamic>(
-        context: context,
-        builder: (_) => AlertDialog(
-              title: const Text('Bạn chưa chọn ghế nào!'),
-              content: const Text('Vui Lòng chọn ghế để tiếp tục'),
-              actions: <Widget>[
-                FlatButton(
-                  child: const Text('Chọn ghế!'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                )
-              ],
-            ));
+  List<Seat> countCoupleSeat(List<Seat> seatList) {
+    final List<Seat> result = <Seat>[];
+    for (final Seat seat in seatList) {
+      if (seat.type == SeatType.coupleSeat) {
+        result.add(seat);
+      }
+    }
+    return result;
   }
 }
 
@@ -574,6 +610,76 @@ void checkValidSeat(List<Seat> chosenList, Seat seat, bool check) {
     }
   } else {
     chosenList.add(seat);
+  }
+  print(seat.code);
+  print('$chosenList');
+  print(_totalPrice(chosenList));
+}
+
+void checkCoupleSeatValidSeat(List<Seat> chosenList, Seat seat, bool check, List<Seat> seatList,
+    List<Seat> coupleSeatList) {
+  bool check = false;
+  if (chosenList.isNotEmpty) {
+    for (final Seat s in chosenList) {
+      if (seat.rows == s.rows && seat.column == s.column) {
+        check = true;
+      }
+    }
+    if (!check) {
+      if (coupleSeatList.first.column.isEven) {
+        if (seat.column.isEven) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+        }
+      } else {
+        if (seat.column.isEven) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.add(seat);
+          chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+        }
+      }
+    } else if (check) {
+      if (coupleSeatList.first.column.isEven) {
+        if (seat.column.isEven) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) + 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) - 1)]);
+        }
+      } else {
+        if (seat.column.isEven) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) - 1)]);
+        } else if (seat.column.isOdd) {
+          chosenList.remove(seat);
+          chosenList.remove(seatList[(seatList.indexOf(seat) + 1)]);
+        }
+      }
+    }
+  } else {
+    if (coupleSeatList.first.column.isEven) {
+      if (seat.column.isEven) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+      } else if (seat.column.isOdd) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+      }
+    } else {
+      if (seat.column.isEven) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) - 1)]);
+      } else if (seat.column.isOdd) {
+        chosenList.add(seat);
+        chosenList.add(seatList[(seatList.indexOf(seat) + 1)]);
+      }
+    }
   }
   print(seat.code);
   print('$chosenList');
