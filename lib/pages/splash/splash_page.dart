@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:ncckios/base/color.dart';
 import 'package:ncckios/base/route.dart';
+import 'package:ncckios/base/size.dart';
+import 'package:ncckios/base/style.dart';
 
 import '../../base/route.dart';
 
@@ -24,7 +26,7 @@ class _SplashPageState extends State<SplashPage> {
       body: Center(
         child: Image.asset(
           'assets/logo.png',
-          width: MediaQuery.of(context).size.width / 3 * 2,
+          width: AppSize.getWidth(context, 200),
           fit: BoxFit.fitWidth,
         ),
       ),
@@ -33,11 +35,11 @@ class _SplashPageState extends State<SplashPage> {
         children: <Widget>[
           Container(
             color: AppColor.primaryDarkColor,
-            padding: const EdgeInsets.all(4),
+            padding: EdgeInsets.all(AppSize.getWidth(context, 4)),
             child: Center(
               child: Text(
                 'Developed by AN VUI',
-                style: Theme.of(context).textTheme.bodyText2.copyWith(color: AppColor.white),
+                style: textTheme.bodyText2.copyWith(color: AppColor.white),
               ),
             ),
           ),

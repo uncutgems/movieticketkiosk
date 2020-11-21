@@ -8,6 +8,7 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/find_ticket/find_ticket_bloc.dart';
 import 'package:ncckios/widgets/button/button_widget.dart';
+import 'package:ncckios/widgets/loading/loading_widget.dart';
 import 'package:ncckios/widgets/ticket/ticket_widget.dart';
 
 class FindTicketPage extends StatefulWidget {
@@ -33,11 +34,11 @@ class _FindTicketPageState extends State<FindTicketPage> {
       cubit: bloc,
       builder: (BuildContext context, FindTicketState state) {
         if (state is FindTicketInitial) {
-          return _body(context, Container());
+          return _body(context, Container(), _formKey);
         } else if (state is GetTicketSuccessFindTicketState) {
-          return _body(context, _ticket(context, state));
+          return _body(context, _ticket(context, state), _formKey);
         } else if (state is GetTicketFailFindTicketState) {
-          return _body(context, _error(context, state));
+          return _body(context, _error(context, state), _formKey);
         } else {
           return Container();
         }
@@ -45,7 +46,7 @@ class _FindTicketPageState extends State<FindTicketPage> {
     );
   }
 
-  Widget _body(BuildContext context, Widget widget) {
+  Widget _body(BuildContext context, Widget widget, GlobalKey formKey) {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -63,14 +64,14 @@ class _FindTicketPageState extends State<FindTicketPage> {
             Navigator.popUntil(context, ModalRoute.withName(RoutesName.homePage));
           },
         ),
-        toolbarHeight: AppSize.getHeight(context, 48),
+        toolbarHeight: AppSize.getWidth(context, 48),
       ),
       body: ListView(
         children: <Widget>[
           Padding(
             padding: EdgeInsets.symmetric(
               horizontal: AppSize.getWidth(context, 24),
-              vertical: AppSize.getHeight(context, 24),
+              vertical: AppSize.getWidth(context, 24),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,10 +81,10 @@ class _FindTicketPageState extends State<FindTicketPage> {
                   style: textTheme.bodyText2.copyWith(fontSize: AppSize.getFontSize(context, 14)),
                 ),
                 Container(
-                  height: AppSize.getHeight(context, 24),
+                  height: AppSize.getWidth(context, 24),
                 ),
                 Form(
-                  key: _formKey,
+                  key: formKey,
                   child: Column(
                     children: <Widget>[
                       Container(
@@ -101,21 +102,21 @@ class _FindTicketPageState extends State<FindTicketPage> {
                               disabledBorder: InputBorder.none,
                               errorBorder: InputBorder.none),
                         ),
-                        height: AppSize.getHeight(context, 40),
+                        height: AppSize.getWidth(context, 40),
                         width: AppSize.getWidth(context, 312),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppSize.getWidth(context, 12)),
                           color: AppColor.white,
                         ),
                       ),
                       Container(
-                        height: AppSize.getHeight(context, 16),
+                        height: AppSize.getWidth(context, 16),
                       ),
                       Container(
-                        height: AppSize.getHeight(context, 48),
+                        height: AppSize.getWidth(context, 48),
                         width: AppSize.getWidth(context, 312),
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(AppSize.getWidth(context, 12)),
                         ),
                         child: AVButtonFill(
                           title: 'TRA CỨU THÔNG TIN VÉ',
@@ -142,11 +143,8 @@ class _FindTicketPageState extends State<FindTicketPage> {
       return Center(
         child: SizedBox(
           width: AppSize.getWidth(context, 40),
-          height: AppSize.getHeight(context, 40),
-          child: const CircularProgressIndicator(
-            strokeWidth: 10,
-            backgroundColor: AppColor.blue,
-          ),
+          height: AppSize.getWidth(context, 40),
+          child: LoadingWidget(),
         ),
       );
     } else {

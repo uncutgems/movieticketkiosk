@@ -39,7 +39,7 @@ class _HomePageState extends State<HomePage> {
       body: ListView(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 16) ),
+            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getWidth(context, 4) ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
                   style: textTheme.bodyText2.copyWith(fontSize: AppSize.getFontSize(context, 18), fontWeight: FontWeight.w500),
                 ),
 
-                GestureDetector(child: Image.asset('assets/search.png',scale: 1.25,),
+                GestureDetector(child: Image.asset('assets/search.png',scale: AppSize.getWidth(context, 1.25),),
                 onTap: () {
                   Navigator.pushNamed(context, RoutesName.findTicketPage);
                 },),
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
           PopularFilmWidget(),
           Image.asset('assets/divider.png'),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getHeight(context, 16) ),
+            padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16), vertical: AppSize.getWidth(context, 16) ),
             child: Text(
               'Phim sắp chiếu',
               style: textTheme.bodyText2.copyWith(

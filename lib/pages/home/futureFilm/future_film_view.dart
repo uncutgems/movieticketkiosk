@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:ncckios/base/color.dart';
@@ -9,6 +10,7 @@ import 'package:ncckios/base/tool.dart';
 import 'package:ncckios/model/entity.dart';
 import 'package:ncckios/pages/home/futureFilm/future_film_bloc.dart';
 import 'package:ncckios/widgets/container/version_code_container.dart';
+import 'package:ncckios/widgets/loading/loading_widget.dart';
 
 class FutureFilmWidget extends StatefulWidget {
   @override
@@ -58,21 +60,23 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: AppSize.getWidth(context, 16)),
       child: Container(
-        height: AppSize.getHeight(context, 350),
+        height: AppSize.getWidth(context, 400),
         child: ListView.separated(
             scrollDirection: Axis.horizontal,
             itemBuilder: (BuildContext context, int index) {
               final Film futureFilm = futureFilmList[index];
               return Column(
-                mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
-                      futureFilm.id == null ? print('not yet') : bloc.add(ClickToDetailFutureFilmEvent(futureFilm.id));
+                      futureFilm.id == null
+                          ? print('not yet')
+                          : bloc
+                              .add(ClickToDetailFutureFilmEvent(futureFilm.id));
                     },
                     child: Container(
                         width: AppSize.getWidth(context, 160),
-                        height: AppSize.getHeight(context, 240),
+                        height: AppSize.getWidth(context, 200),
                         decoration: filmBoxDecoration.copyWith(
                             color: AppColor.primaryDarkColor,
                             image: futureFilm.imageUrl != null
@@ -82,13 +86,13 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                                   )
                                 : null),
                         child: futureFilm.id == null
-                            ? const Center(
-                                child: CircularProgressIndicator(),
+                            ? Center(
+                                child: LoadingWidget(),
                               )
                             : null),
                   ),
                   Container(
-                    height: AppSize.getHeight(context, 8),
+                    height: AppSize.getWidth(context, 8),
                   ),
                   Container(
                     width: AppSize.getWidth(context, 163),
@@ -99,55 +103,38 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                         if (futureFilm.id != null)
                           SizedBox(
                             child: Text(
-                              futureFilm.filmName.substring(0, futureFilm.filmName.indexOf('-')),
+                              futureFilm.filmName.substring(
+                                  0, futureFilm.filmName.indexOf('-')),
                               style: textTheme.bodyText2.copyWith(
                                   color: AppColor.white,
                                   fontWeight: FontWeight.w500,
                                   fontSize: AppSize.getFontSize(context, 16)),
-                              maxLines: 2,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           )
                         else
                           Container(),
                         Container(
-                          height: AppSize.getHeight(context, 8),
+                          height: AppSize.getWidth(context, 8),
                         ),
                         if (futureFilm.id != null)
                           Container(
-                            height: AppSize.getHeight(context, 22),
+                            height: AppSize.getWidth(context, 32),
                             width: AppSize.getWidth(context, 36),
                             child: ListView.separated(
-                              separatorBuilder: (BuildContext context, int index) =>
-                                  Container(width: AppSize.getWidth(context, 4)),
-                              itemCount: futureFilm.versionCode.split('/').length,
+                              separatorBuilder:
+                                  (BuildContext context, int index) =>
+                                      Container(
+                                          width: AppSize.getWidth(context, 4)),
+                              itemCount:
+                                  futureFilm.versionCode.split('/').length,
                               scrollDirection: Axis.horizontal,
                               itemBuilder: (BuildContext context, int index) {
-                                final List<String> version = futureFilm.versionCode.split('/');
+                                final List<String> version =
+                                    futureFilm.versionCode.split('/');
                                 final String versionCode = version[index];
-                                return
-//                                  Container(
-//                                  padding: EdgeInsets.symmetric(
-//                                      vertical: AppSize.getHeight(context, 3),
-//                                      horizontal: AppSize.getWidth(context, 4)),
-//                                  child: Center(
-//                                    child: Text(
-//                                      versionCode,
-//                                      style: textTheme.bodyText2.copyWith(
-//                                          color: AppColor.red,
-//                                          fontSize:
-//                                              AppSize.getFontSize(context, 14)),
-//                                    ),
-//                                  ),
-//                                  decoration: BoxDecoration(
-//                                    color: AppColor.backGround,
-//                                    borderRadius: BorderRadius.circular(4),
-//                                    border: Border.all(
-//                                        width: AppSize.getWidth(context, 1),
-//                                        color: AppColor.red,
-//                                        style: BorderStyle.solid),
-//                                  ),
-//                                );
-                                    VersionCodeContainer(
+                                return VersionCodeContainer(
                                   context: context,
                                   versionCode: versionCode,
                                 );
@@ -157,15 +144,14 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                         else
                           Container(),
                         Container(
-                          height: AppSize.getHeight(context, 8),
+                          height: AppSize.getWidth(context, 8),
                         ),
                         if (futureFilm.id != null)
                           Text(
-                            '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime
-                                .parse(futureFilm.premieredDay)
-                                .millisecondsSinceEpoch, false)}',
-                            style: textTheme.bodyText2
-                                .copyWith(color: AppColor.borderTrip, fontSize: AppSize.getFontSize(context, 14)),
+                            '${futureFilm.duration.toString()}p  - ${convertTime('dd/MM/yyyy', DateTime.parse(futureFilm.premieredDay).millisecondsSinceEpoch, false)}',
+                            style: textTheme.bodyText2.copyWith(
+                                color: AppColor.borderTrip,
+                                fontSize: AppSize.getFontSize(context, 14)),
                           )
                         else
                           Container(),
@@ -175,8 +161,7 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
                 ],
               );
             },
-            separatorBuilder: (BuildContext context, int index) =>
-                SizedBox(
+            separatorBuilder: (BuildContext context, int index) => SizedBox(
                   width: AppSize.getWidth(context, 16),
                 ),
             itemCount: futureFilmList.length),
@@ -184,16 +169,18 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
     );
   }
 
-  void _navigateToDetail(BuildContext context, NavigateDetailFutureFilmState state) {
-    Navigator.pushNamed(context, RoutesName.detailPage, arguments: <String, dynamic>{
-      Constant.filmId: state.id,
-      Constant.isPlayNow: false,
-    });
+  void _navigateToDetail(
+      BuildContext context, NavigateDetailFutureFilmState state) {
+    Navigator.pushNamed(context, RoutesName.detailPage,
+        arguments: <String, dynamic>{
+          Constant.filmId: state.id,
+          Constant.isPlayNow: false,
+        });
   }
 
   Widget _failToLoad(BuildContext context, FailGetDataFutureFilmState state) {
     return Container(
-      height: AppSize.getHeight(context, 310),
+      height: AppSize.getWidth(context, 310),
       width: AppSize.getWidth(context, 360),
       child: Center(
         child: Column(
@@ -204,12 +191,12 @@ class _FutureFilmWidgetState extends State<FutureFilmWidget> {
               style: textTheme.headline6,
             ),
             Container(
-              height: AppSize.getHeight(context, 8),
+              height: AppSize.getWidth(context, 8),
             ),
             IconButton(
               icon: Icon(
                 Icons.refresh,
-                size: AppSize.getHeight(context, 36),
+                size: AppSize.getWidth(context, 36),
               ),
               onPressed: () {
                 bloc.add(GetDataFutureFilmEvent());
